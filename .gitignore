@@ -1,0 +1,19 @@
+# Gradle
+.gradle/
+build/
+out/
+gradle/libs.versions.toml.lock
+
+# IDE files
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# OS metadata
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/

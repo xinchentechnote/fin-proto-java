@@ -1,0 +1,33 @@
+allprojects {
+    apply plugin: 'java-library'
+    apply plugin: 'maven-publish'
+
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(17)
+        }
+    }
+
+    repositories {
+        // AliCloud Mirror (for main dependencies)
+        maven { url 'https://maven.aliyun.com/repository/public' }
+        // Huawei Mirror (backup)
+        maven { url 'https://repo.huaweicloud.com/repository/maven' }
+        // Central fallback
+        mavenCentral()
+    }
+
+    dependencies {
+        testImplementation 'junit:junit:4.13.2'
+        testImplementation 'org.hamcrest:hamcrest-core:2.2' // Recommended with JUnit 4
+    }
+
+    tasks.named('test') {
+        useJUnitPlatform()
+    }
+}
+
+subprojects {
+    version = '1.0.0'
+    group = 'com.finproto'
+}

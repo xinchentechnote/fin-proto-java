@@ -1,7 +1,4 @@
 dependencies {
     // Netty Buffer (for ByteBuf implementation)
-    implementation 'io.netty:netty-buffer:4.1.100.Final'
-    // Test dependencies
-    testImplementation 'junit:junit:4.13.2'
-    testImplementation 'org.hamcrest:hamcrest-core:2.2' // Recommended with JUnit 4
+    api 'io.netty:netty-buffer:4.1.100.Final'
 }

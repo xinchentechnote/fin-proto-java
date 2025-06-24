@@ -37,5 +37,6 @@ test {
     testLogging {
         events "passed", "skipped", "failed"
         exceptionFormat "full"
+        showStandardStreams = true // 新增：显示测试中的打印语句
     }
 }

@@ -1,5 +1,7 @@
 package com.finproto.sample.messages;
 
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Test;
 
 import io.netty.buffer.ByteBuf;
@@ -18,8 +20,9 @@ public class LonginTest {
         Login decodedLogin = new Login();
         decodedLogin.decode(byteBuf);
         // Assert that the decoded values match the original values
-        assert "testUser".equals(decodedLogin.getUsername());
-        assert "testPass".equals(decodedLogin.getPassword());
+        assertEquals("testUser", decodedLogin.getUsername());
+        assertEquals("testPass", decodedLogin.getPassword());
+        assertEquals(login, decodedLogin);
         // Release the ByteBuf to prevent memory leaks
         System.out.println("Origin Login: " + login);
         System.out.println("Decoded Login: " + decodedLogin);

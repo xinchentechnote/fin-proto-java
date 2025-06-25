@@ -1,4 +1,25 @@
 dependencies {
     // Netty Buffer (for ByteBuf implementation)
     api 'io.netty:netty-buffer:4.1.100.Final'
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.hamcrest:hamcrest-core:2.2'
+}
+
+test {
+    // For JUnit 4
+    useJUnit()
+    
+    // For JUnit 5 (use instead of the above if switching)
+    // useJUnitPlatform()
+    
+    maxParallelForks = 1
+    minHeapSize = "512m"
+    maxHeapSize = "2g"
+    
+    // Additional test logging for debugging
+    testLogging {
+        events "passed", "skipped", "failed"
+        exceptionFormat "full"
+        showStandardStreams = true // 新增：显示测试中的打印语句
+    }
 }

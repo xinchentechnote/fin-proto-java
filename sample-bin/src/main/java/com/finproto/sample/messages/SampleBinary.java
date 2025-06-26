@@ -1,15 +1,18 @@
 package com.finproto.sample.messages;
 import java.nio.charset.StandardCharsets;
-
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Supplier;
 import com.finproto.codec.BinaryCodec;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.util.internal.StringUtil;
 
+
 public class SampleBinary implements BinaryCodec {
     private short msgType;
     private short bodyLength;
-    private BinaryCodec msgTypeBody;
+    private BinaryCodec body;
 
     public short getMsgType() {
         return this.msgType;
@@ -29,13 +32,13 @@ public class SampleBinary implements BinaryCodec {
         this.bodyLength = bodyLength;
     }
     
-    public BinaryCodec getMsgTypeBody() {
-        return this.msgTypeBody;
+    public BinaryCodec getBody() {
+        return this.body;
     }
     
     
-    public void setMsgTypeBody(BinaryCodec msgTypeBody) {
-        this.msgTypeBody = msgTypeBody;
+    public void setBody(BinaryCodec body) {
+        this.body = body;
     }
     
 
@@ -43,8 +46,8 @@ public class SampleBinary implements BinaryCodec {
     public void encode(ByteBuf byteBuf) {
         byteBuf.writeShort(this.msgType);
         byteBuf.writeShort(this.bodyLength);
-        if (null != this.msgTypeBody) {
-        this.msgTypeBody.encode(byteBuf);}
+        if (null != this.body) {
+        this.body.encode(byteBuf);}
     }
     
 
@@ -52,12 +55,22 @@ public class SampleBinary implements BinaryCodec {
     public void decode(ByteBuf byteBuf) {
         this.msgType = byteBuf.readShort();
         this.bodyLength = byteBuf.readShort();
-        this.msgTypeBody = createMsgTypeBody(this.msgType);
-        this.msgTypeBody.decode(byteBuf);
+        this.body = createBody(this.msgType);
+        this.body.decode(byteBuf);
     }
     
-    private BinaryCodec createMsgTypeBody(short msgType) {
-        return null;
+    private static final Map<Short, Supplier<BinaryCodec>> bodyMap = new HashMap<>();
+    static {
+        bodyMap.put((short) 4, RiskControlRequest::new);
+        bodyMap.put((short) 5, RiskControlResponse::new);
+    }
+    
+    private BinaryCodec createBody(short msgType) {
+        Supplier<BinaryCodec> supplier = bodyMap.get(msgType);
+        if (null == supplier) {
+            throw new IllegalArgumentException("Unsupported MsgType:" + msgType);
+        }
+        return supplier.get();
     }
 
     @Override

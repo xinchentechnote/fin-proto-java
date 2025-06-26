@@ -1,10 +1,13 @@
 package com.finproto.sample.messages;
 import java.nio.charset.StandardCharsets;
-
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Supplier;
 import com.finproto.codec.BinaryCodec;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.util.internal.StringUtil;
+
 
 public class RiskControlRequest implements BinaryCodec {
     private String uniqueOrderId;
@@ -164,9 +167,6 @@ public class RiskControlRequest implements BinaryCodec {
         this.subOrder.decode(byteBuf);
     }
     
-    private BinaryCodec createMsgTypeBody(short msgType) {
-        return null;
-    }
 
     @Override
     public int hashCode() {
@@ -232,9 +232,6 @@ public class RiskControlRequest implements BinaryCodec {
             this.qty = byteBuf.readInt();
         }
         
-        private BinaryCodec createMsgTypeBody(short msgType) {
-            return null;
-        }
     
         @Override
         public int hashCode() {

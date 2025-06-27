@@ -4,6 +4,7 @@ import com.finproto.codec.BinaryCodec;
 import io.netty.buffer.ByteBuf;
 import io.netty.util.internal.StringUtil;
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 public class Detail implements BinaryCodec {
   private String ruleName;
@@ -49,16 +50,23 @@ public class Detail implements BinaryCodec {
 
   @Override
   public int hashCode() {
-    return 0;
+    return Objects.hash(ruleName, code);
   }
 
   @Override
   public boolean equals(Object obj) {
-    return true;
+    if (this == obj) {
+      return true;
+    }
+    if (null == obj || getClass() != obj.getClass()) {
+      return false;
+    }
+    Detail detail = (Detail) obj;
+    return Objects.equals(ruleName, detail.ruleName) && Objects.equals(code, detail.code);
   }
 
   @Override
   public String toString() {
-    return "";
+    return "Detail [" + "ruleName=" + this.ruleName + ", code=" + this.code + "]";
   }
 }

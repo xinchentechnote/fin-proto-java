@@ -1,5 +1,6 @@
 compile:
+	gradle spotlessApply
 	gradle build
 test:compile
-	gradle test
 	gradle spotlessApply
+	gradle test

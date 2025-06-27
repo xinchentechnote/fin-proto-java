@@ -4,6 +4,7 @@ import com.finproto.codec.BinaryCodec;
 import io.netty.buffer.ByteBuf;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Supplier;
 
 public class SampleBinary implements BinaryCodec {
@@ -69,16 +70,32 @@ public class SampleBinary implements BinaryCodec {
 
   @Override
   public int hashCode() {
-    return 0;
+    return Objects.hash(msgType, bodyLength, body);
   }
 
   @Override
   public boolean equals(Object obj) {
-    return true;
+    if (this == obj) {
+      return true;
+    }
+    if (null == obj || getClass() != obj.getClass()) {
+      return false;
+    }
+    SampleBinary sampleBinary = (SampleBinary) obj;
+    return Objects.equals(msgType, sampleBinary.msgType)
+        && Objects.equals(bodyLength, sampleBinary.bodyLength)
+        && Objects.equals(body, sampleBinary.body);
   }
 
   @Override
   public String toString() {
-    return "";
+    return "SampleBinary ["
+        + "msgType="
+        + this.msgType
+        + ", bodyLength="
+        + this.bodyLength
+        + ", body="
+        + this.body
+        + "]";
   }
 }

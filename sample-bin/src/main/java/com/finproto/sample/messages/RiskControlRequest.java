@@ -4,6 +4,7 @@ import com.finproto.codec.BinaryCodec;
 import io.netty.buffer.ByteBuf;
 import io.netty.util.internal.StringUtil;
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 public class RiskControlRequest implements BinaryCodec {
   private String uniqueOrderId;
@@ -154,17 +155,64 @@ public class RiskControlRequest implements BinaryCodec {
 
   @Override
   public int hashCode() {
-    return 0;
+    return Objects.hash(
+        uniqueOrderId,
+        clOrdId,
+        marketId,
+        securityId,
+        side,
+        orderType,
+        price,
+        qty,
+        extraInfo,
+        subOrder);
   }
 
   @Override
   public boolean equals(Object obj) {
-    return true;
+    if (this == obj) {
+      return true;
+    }
+    if (null == obj || getClass() != obj.getClass()) {
+      return false;
+    }
+    RiskControlRequest riskControlRequest = (RiskControlRequest) obj;
+    return Objects.equals(uniqueOrderId, riskControlRequest.uniqueOrderId)
+        && Objects.equals(clOrdId, riskControlRequest.clOrdId)
+        && Objects.equals(marketId, riskControlRequest.marketId)
+        && Objects.equals(securityId, riskControlRequest.securityId)
+        && Objects.equals(side, riskControlRequest.side)
+        && Objects.equals(orderType, riskControlRequest.orderType)
+        && Objects.equals(price, riskControlRequest.price)
+        && Objects.equals(qty, riskControlRequest.qty)
+        && Objects.equals(extraInfo, riskControlRequest.extraInfo)
+        && Objects.equals(subOrder, riskControlRequest.subOrder);
   }
 
   @Override
   public String toString() {
-    return "";
+    return "RiskControlRequest ["
+        + "uniqueOrderId="
+        + this.uniqueOrderId
+        + ", clOrdId="
+        + this.clOrdId
+        + ", marketId="
+        + this.marketId
+        + ", securityId="
+        + this.securityId
+        + ", side="
+        + this.side
+        + ", orderType="
+        + this.orderType
+        + ", price="
+        + this.price
+        + ", qty="
+        + this.qty
+        + ", extraInfo="
+        + this.extraInfo
+        + ", subOrder="
+        + this.subOrder
+        + "]";
   }
 
   public static class SubOrder implements BinaryCodec {
@@ -212,17 +260,33 @@ public class RiskControlRequest implements BinaryCodec {
 
     @Override
     public int hashCode() {
-      return 0;
+      return Objects.hash(clOrdId, price, qty);
     }
 
     @Override
     public boolean equals(Object obj) {
-      return true;
+      if (this == obj) {
+        return true;
+      }
+      if (null == obj || getClass() != obj.getClass()) {
+        return false;
+      }
+      SubOrder subOrder = (SubOrder) obj;
+      return Objects.equals(clOrdId, subOrder.clOrdId)
+          && Objects.equals(price, subOrder.price)
+          && Objects.equals(qty, subOrder.qty);
     }
 
     @Override
     public String toString() {
-      return "";
+      return "SubOrder ["
+          + "clOrdId="
+          + this.clOrdId
+          + ", price="
+          + this.price
+          + ", qty="
+          + this.qty
+          + "]";
     }
   }
 }

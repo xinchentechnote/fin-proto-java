@@ -4,6 +4,7 @@ import com.finproto.codec.BinaryCodec;
 import io.netty.buffer.ByteBuf;
 import io.netty.util.internal.StringUtil;
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 public class RiskControlResponse implements BinaryCodec {
   private String uniqueOrderId;
@@ -70,16 +71,32 @@ public class RiskControlResponse implements BinaryCodec {
 
   @Override
   public int hashCode() {
-    return 0;
+    return Objects.hash(uniqueOrderId, status, msg);
   }
 
   @Override
   public boolean equals(Object obj) {
-    return true;
+    if (this == obj) {
+      return true;
+    }
+    if (null == obj || getClass() != obj.getClass()) {
+      return false;
+    }
+    RiskControlResponse riskControlResponse = (RiskControlResponse) obj;
+    return Objects.equals(uniqueOrderId, riskControlResponse.uniqueOrderId)
+        && Objects.equals(status, riskControlResponse.status)
+        && Objects.equals(msg, riskControlResponse.msg);
   }
 
   @Override
   public String toString() {
-    return "";
+    return "RiskControlResponse ["
+        + "uniqueOrderId="
+        + this.uniqueOrderId
+        + ", status="
+        + this.status
+        + ", msg="
+        + this.msg
+        + "]";
   }
 }

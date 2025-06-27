@@ -2,6 +2,7 @@ package com.finproto.sample.messages;
 
 import com.finproto.codec.BinaryCodec;
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -39,9 +40,19 @@ public class SampleBinary implements BinaryCodec {
   @Override
   public void encode(ByteBuf byteBuf) {
     byteBuf.writeShort(this.msgType);
+    ByteBuf bodyBuf = null;
+    if (this.body != null) {
+      bodyBuf = Unpooled.buffer();
+      this.body.encode(bodyBuf);
+      this.bodyLength = (short) bodyBuf.readableBytes();
+    } else {
+      this.bodyLength = 0;
+    }
     byteBuf.writeShort(this.bodyLength);
-    if (null != this.body) {
-      this.body.encode(byteBuf);
+
+    if (bodyBuf != null) {
+      byteBuf.writeBytes(bodyBuf);
+      bodyBuf.release();
     }
   }
 

@@ -7,7 +7,7 @@ options {
 
 root packet SampleBinary {
     uint16 MsgType `消息类型`,
-    u16 BodyLength `消息体长度`,
+    u16 BodyLength = lengthof(Body) `消息体长度`,
     match MsgType as Body {
 		4 : RiskControlRequest,
 		5 : RiskControlResponse,

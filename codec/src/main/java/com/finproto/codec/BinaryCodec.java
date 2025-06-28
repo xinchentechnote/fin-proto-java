@@ -25,6 +25,6 @@ public interface BinaryCodec {
     }
 
     default String readFixedString(ByteBuf byteBuf, int len) {
-        return byteBuf.readCharSequence(len, StandardCharsets.UTF_8).toString();
+        return byteBuf.readCharSequence(len, StandardCharsets.UTF_8).toString().trim();
     }
 }

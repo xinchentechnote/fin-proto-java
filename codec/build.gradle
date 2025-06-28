@@ -1,3 +1,15 @@
+plugins {
+    id 'java-library'
+    id "com.diffplug.spotless" version "6.25.0"
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+
 dependencies {
     // Netty Buffer (for ByteBuf implementation)
     api 'io.netty:netty-buffer:4.1.100.Final'
@@ -21,5 +33,15 @@ test {
         events "passed", "skipped", "failed"
         exceptionFormat "full"
         showStandardStreams = true // 新增：显示测试中的打印语句
+    }
+}
+
+
+spotless {
+    java {
+        target "src/**/*.java"
+        googleJavaFormat()
+        removeUnusedImports()
+        //licenseHeader '/* Licensed under Apache-2.0 */'
     }
 }

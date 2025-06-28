@@ -71,7 +71,7 @@ public class SampleBinary implements BinaryCodec {
     bodyMap.put((short) 5, RiskControlResponse::new);
   }
 
-  private BinaryCodec createBody(short msgType) {
+  private BinaryCodec createBody(Short msgType) {
     Supplier<BinaryCodec> supplier = bodyMap.get(msgType);
     if (null == supplier) {
       throw new IllegalArgumentException("Unsupported MsgType:" + msgType);
@@ -92,10 +92,10 @@ public class SampleBinary implements BinaryCodec {
     if (null == obj || getClass() != obj.getClass()) {
       return false;
     }
-    SampleBinary sampleBinary = (SampleBinary) obj;
-    return Objects.equals(msgType, sampleBinary.msgType)
-        && Objects.equals(bodyLength, sampleBinary.bodyLength)
-        && Objects.equals(body, sampleBinary.body);
+    SampleBinary orther_ = (SampleBinary) obj;
+    return Objects.equals(msgType, orther_.msgType)
+        && Objects.equals(bodyLength, orther_.bodyLength)
+        && Objects.equals(body, orther_.body);
   }
 
   @Override

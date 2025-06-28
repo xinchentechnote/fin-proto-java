@@ -1,0 +1,233 @@
+package com.finproto.sse.bin.messages;
+
+import com.finproto.codec.BinaryCodec;
+import io.netty.buffer.ByteBuf;
+import java.util.Objects;
+
+public class CancelReject implements BinaryCodec {
+  private String pbu;
+  private int setId;
+  private long reportIndex;
+  private int bizId;
+  private String bizPbu;
+  private String clOrdId;
+  private String securityId;
+  private String origClOrdId;
+  private String branchId;
+  private int cxlRejReason;
+  private int tradeDate;
+  private long transactTime;
+  private String userInfo;
+
+  public String getPbu() {
+    return this.pbu;
+  }
+
+  public void setPbu(String pbu) {
+    this.pbu = pbu;
+  }
+
+  public int getSetId() {
+    return this.setId;
+  }
+
+  public void setSetId(int setId) {
+    this.setId = setId;
+  }
+
+  public long getReportIndex() {
+    return this.reportIndex;
+  }
+
+  public void setReportIndex(long reportIndex) {
+    this.reportIndex = reportIndex;
+  }
+
+  public int getBizId() {
+    return this.bizId;
+  }
+
+  public void setBizId(int bizId) {
+    this.bizId = bizId;
+  }
+
+  public String getBizPbu() {
+    return this.bizPbu;
+  }
+
+  public void setBizPbu(String bizPbu) {
+    this.bizPbu = bizPbu;
+  }
+
+  public String getClOrdId() {
+    return this.clOrdId;
+  }
+
+  public void setClOrdId(String clOrdId) {
+    this.clOrdId = clOrdId;
+  }
+
+  public String getSecurityId() {
+    return this.securityId;
+  }
+
+  public void setSecurityId(String securityId) {
+    this.securityId = securityId;
+  }
+
+  public String getOrigClOrdId() {
+    return this.origClOrdId;
+  }
+
+  public void setOrigClOrdId(String origClOrdId) {
+    this.origClOrdId = origClOrdId;
+  }
+
+  public String getBranchId() {
+    return this.branchId;
+  }
+
+  public void setBranchId(String branchId) {
+    this.branchId = branchId;
+  }
+
+  public int getCxlRejReason() {
+    return this.cxlRejReason;
+  }
+
+  public void setCxlRejReason(int cxlRejReason) {
+    this.cxlRejReason = cxlRejReason;
+  }
+
+  public int getTradeDate() {
+    return this.tradeDate;
+  }
+
+  public void setTradeDate(int tradeDate) {
+    this.tradeDate = tradeDate;
+  }
+
+  public long getTransactTime() {
+    return this.transactTime;
+  }
+
+  public void setTransactTime(long transactTime) {
+    this.transactTime = transactTime;
+  }
+
+  public String getUserInfo() {
+    return this.userInfo;
+  }
+
+  public void setUserInfo(String userInfo) {
+    this.userInfo = userInfo;
+  }
+
+  @Override
+  public void encode(ByteBuf byteBuf) {
+    writeFixedString(byteBuf, this.pbu, 8);
+    byteBuf.writeInt(this.setId);
+    byteBuf.writeLong(this.reportIndex);
+    byteBuf.writeInt(this.bizId);
+    writeFixedString(byteBuf, this.bizPbu, 8);
+    writeFixedString(byteBuf, this.clOrdId, 10);
+    writeFixedString(byteBuf, this.securityId, 12);
+    writeFixedString(byteBuf, this.origClOrdId, 10);
+    writeFixedString(byteBuf, this.branchId, 8);
+    byteBuf.writeInt(this.cxlRejReason);
+    byteBuf.writeInt(this.tradeDate);
+    byteBuf.writeLong(this.transactTime);
+    writeFixedString(byteBuf, this.userInfo, 32);
+  }
+
+  @Override
+  public void decode(ByteBuf byteBuf) {
+    this.pbu = readFixedString(byteBuf, 8);
+    this.setId = byteBuf.readInt();
+    this.reportIndex = byteBuf.readLong();
+    this.bizId = byteBuf.readInt();
+    this.bizPbu = readFixedString(byteBuf, 8);
+    this.clOrdId = readFixedString(byteBuf, 10);
+    this.securityId = readFixedString(byteBuf, 12);
+    this.origClOrdId = readFixedString(byteBuf, 10);
+    this.branchId = readFixedString(byteBuf, 8);
+    this.cxlRejReason = byteBuf.readInt();
+    this.tradeDate = byteBuf.readInt();
+    this.transactTime = byteBuf.readLong();
+    this.userInfo = readFixedString(byteBuf, 32);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(
+        pbu,
+        setId,
+        reportIndex,
+        bizId,
+        bizPbu,
+        clOrdId,
+        securityId,
+        origClOrdId,
+        branchId,
+        cxlRejReason,
+        tradeDate,
+        transactTime,
+        userInfo);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (null == obj || getClass() != obj.getClass()) {
+      return false;
+    }
+    CancelReject orther_ = (CancelReject) obj;
+    return Objects.equals(pbu, orther_.pbu)
+        && Objects.equals(setId, orther_.setId)
+        && Objects.equals(reportIndex, orther_.reportIndex)
+        && Objects.equals(bizId, orther_.bizId)
+        && Objects.equals(bizPbu, orther_.bizPbu)
+        && Objects.equals(clOrdId, orther_.clOrdId)
+        && Objects.equals(securityId, orther_.securityId)
+        && Objects.equals(origClOrdId, orther_.origClOrdId)
+        && Objects.equals(branchId, orther_.branchId)
+        && Objects.equals(cxlRejReason, orther_.cxlRejReason)
+        && Objects.equals(tradeDate, orther_.tradeDate)
+        && Objects.equals(transactTime, orther_.transactTime)
+        && Objects.equals(userInfo, orther_.userInfo);
+  }
+
+  @Override
+  public String toString() {
+    return "CancelReject ["
+        + "pbu="
+        + this.pbu
+        + ", setId="
+        + this.setId
+        + ", reportIndex="
+        + this.reportIndex
+        + ", bizId="
+        + this.bizId
+        + ", bizPbu="
+        + this.bizPbu
+        + ", clOrdId="
+        + this.clOrdId
+        + ", securityId="
+        + this.securityId
+        + ", origClOrdId="
+        + this.origClOrdId
+        + ", branchId="
+        + this.branchId
+        + ", cxlRejReason="
+        + this.cxlRejReason
+        + ", tradeDate="
+        + this.tradeDate
+        + ", transactTime="
+        + this.transactTime
+        + ", userInfo="
+        + this.userInfo
+        + "]";
+  }
+}

@@ -1,0 +1,80 @@
+package com.finproto.sse.bin.messages;
+
+import com.finproto.codec.BinaryCodec;
+import io.netty.buffer.ByteBuf;
+import java.util.Objects;
+
+public class ExecRptEndOfStream implements BinaryCodec {
+  private String pbu;
+  private int setId;
+  private long endReportIndex;
+
+  public String getPbu() {
+    return this.pbu;
+  }
+
+  public void setPbu(String pbu) {
+    this.pbu = pbu;
+  }
+
+  public int getSetId() {
+    return this.setId;
+  }
+
+  public void setSetId(int setId) {
+    this.setId = setId;
+  }
+
+  public long getEndReportIndex() {
+    return this.endReportIndex;
+  }
+
+  public void setEndReportIndex(long endReportIndex) {
+    this.endReportIndex = endReportIndex;
+  }
+
+  @Override
+  public void encode(ByteBuf byteBuf) {
+    writeFixedString(byteBuf, this.pbu, 8);
+    byteBuf.writeInt(this.setId);
+    byteBuf.writeLong(this.endReportIndex);
+  }
+
+  @Override
+  public void decode(ByteBuf byteBuf) {
+    this.pbu = readFixedString(byteBuf, 8);
+    this.setId = byteBuf.readInt();
+    this.endReportIndex = byteBuf.readLong();
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(pbu, setId, endReportIndex);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (null == obj || getClass() != obj.getClass()) {
+      return false;
+    }
+    ExecRptEndOfStream orther_ = (ExecRptEndOfStream) obj;
+    return Objects.equals(pbu, orther_.pbu)
+        && Objects.equals(setId, orther_.setId)
+        && Objects.equals(endReportIndex, orther_.endReportIndex);
+  }
+
+  @Override
+  public String toString() {
+    return "ExecRptEndOfStream ["
+        + "pbu="
+        + this.pbu
+        + ", setId="
+        + this.setId
+        + ", endReportIndex="
+        + this.endReportIndex
+        + "]";
+  }
+}

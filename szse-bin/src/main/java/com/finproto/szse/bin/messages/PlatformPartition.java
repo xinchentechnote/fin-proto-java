@@ -1,0 +1,49 @@
+package com.finproto.szse.bin.messages;
+
+import com.finproto.codec.BinaryCodec;
+import io.netty.buffer.ByteBuf;
+import java.util.Objects;
+
+public class PlatformPartition implements BinaryCodec {
+  private int partitionNo;
+
+  public int getPartitionNo() {
+    return this.partitionNo;
+  }
+
+  public void setPartitionNo(int partitionNo) {
+    this.partitionNo = partitionNo;
+  }
+
+  @Override
+  public void encode(ByteBuf byteBuf) {
+    byteBuf.writeInt(this.partitionNo);
+  }
+
+  @Override
+  public void decode(ByteBuf byteBuf) {
+    this.partitionNo = byteBuf.readInt();
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(partitionNo);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (null == obj || getClass() != obj.getClass()) {
+      return false;
+    }
+    PlatformPartition orther_ = (PlatformPartition) obj;
+    return Objects.equals(partitionNo, orther_.partitionNo);
+  }
+
+  @Override
+  public String toString() {
+    return "PlatformPartition [" + "partitionNo=" + this.partitionNo + "]";
+  }
+}

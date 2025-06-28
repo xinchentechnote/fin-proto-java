@@ -1,0 +1,122 @@
+package com.finproto.sse.bin.messages;
+
+import com.finproto.codec.BinaryCodec;
+import io.netty.buffer.ByteBuf;
+import java.util.Objects;
+
+public class Logon implements BinaryCodec {
+  private String senderCompId;
+  private String targetCompId;
+  private short heartBtInt;
+  private String prtclVersion;
+  private int tradeDate;
+  private int qsize;
+
+  public String getSenderCompId() {
+    return this.senderCompId;
+  }
+
+  public void setSenderCompId(String senderCompId) {
+    this.senderCompId = senderCompId;
+  }
+
+  public String getTargetCompId() {
+    return this.targetCompId;
+  }
+
+  public void setTargetCompId(String targetCompId) {
+    this.targetCompId = targetCompId;
+  }
+
+  public short getHeartBtInt() {
+    return this.heartBtInt;
+  }
+
+  public void setHeartBtInt(short heartBtInt) {
+    this.heartBtInt = heartBtInt;
+  }
+
+  public String getPrtclVersion() {
+    return this.prtclVersion;
+  }
+
+  public void setPrtclVersion(String prtclVersion) {
+    this.prtclVersion = prtclVersion;
+  }
+
+  public int getTradeDate() {
+    return this.tradeDate;
+  }
+
+  public void setTradeDate(int tradeDate) {
+    this.tradeDate = tradeDate;
+  }
+
+  public int getQsize() {
+    return this.qsize;
+  }
+
+  public void setQsize(int qsize) {
+    this.qsize = qsize;
+  }
+
+  @Override
+  public void encode(ByteBuf byteBuf) {
+    writeFixedString(byteBuf, this.senderCompId, 32);
+    writeFixedString(byteBuf, this.targetCompId, 32);
+    byteBuf.writeShort(this.heartBtInt);
+    writeFixedString(byteBuf, this.prtclVersion, 8);
+    byteBuf.writeInt(this.tradeDate);
+    byteBuf.writeInt(this.qsize);
+  }
+
+  @Override
+  public void decode(ByteBuf byteBuf) {
+    this.senderCompId = readFixedString(byteBuf, 32);
+    this.targetCompId = readFixedString(byteBuf, 32);
+    this.heartBtInt = byteBuf.readShort();
+    this.prtclVersion = readFixedString(byteBuf, 8);
+    this.tradeDate = byteBuf.readInt();
+    this.qsize = byteBuf.readInt();
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(senderCompId, targetCompId, heartBtInt, prtclVersion, tradeDate, qsize);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (null == obj || getClass() != obj.getClass()) {
+      return false;
+    }
+    Logon orther_ = (Logon) obj;
+    return Objects.equals(senderCompId, orther_.senderCompId)
+        && Objects.equals(targetCompId, orther_.targetCompId)
+        && Objects.equals(heartBtInt, orther_.heartBtInt)
+        && Objects.equals(prtclVersion, orther_.prtclVersion)
+        && Objects.equals(tradeDate, orther_.tradeDate)
+        && Objects.equals(qsize, orther_.qsize);
+  }
+
+  @Override
+  public String toString() {
+    return "Logon ["
+        + "senderCompId="
+        + this.senderCompId
+        + ", targetCompId="
+        + this.targetCompId
+        + ", heartBtInt="
+        + this.heartBtInt
+        + ", prtclVersion="
+        + this.prtclVersion
+        + ", tradeDate="
+        + this.tradeDate
+        + ", qsize="
+        + this.qsize
+        + "]";
+  }
+}

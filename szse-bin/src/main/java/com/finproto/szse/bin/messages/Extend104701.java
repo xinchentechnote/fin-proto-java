@@ -1,0 +1,49 @@
+package com.finproto.szse.bin.messages;
+
+import com.finproto.codec.BinaryCodec;
+import io.netty.buffer.ByteBuf;
+import java.util.Objects;
+
+public class Extend104701 implements BinaryCodec {
+  private String secondaryOrderId;
+
+  public String getSecondaryOrderId() {
+    return this.secondaryOrderId;
+  }
+
+  public void setSecondaryOrderId(String secondaryOrderId) {
+    this.secondaryOrderId = secondaryOrderId;
+  }
+
+  @Override
+  public void encode(ByteBuf byteBuf) {
+    writeFixedString(byteBuf, this.secondaryOrderId, 16);
+  }
+
+  @Override
+  public void decode(ByteBuf byteBuf) {
+    this.secondaryOrderId = readFixedString(byteBuf, 16);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(secondaryOrderId);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (null == obj || getClass() != obj.getClass()) {
+      return false;
+    }
+    Extend104701 orther_ = (Extend104701) obj;
+    return Objects.equals(secondaryOrderId, orther_.secondaryOrderId);
+  }
+
+  @Override
+  public String toString() {
+    return "Extend104701 [" + "secondaryOrderId=" + this.secondaryOrderId + "]";
+  }
+}

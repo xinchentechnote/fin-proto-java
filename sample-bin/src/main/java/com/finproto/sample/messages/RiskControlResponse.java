@@ -82,10 +82,10 @@ public class RiskControlResponse implements BinaryCodec {
     if (null == obj || getClass() != obj.getClass()) {
       return false;
     }
-    RiskControlResponse riskControlResponse = (RiskControlResponse) obj;
-    return Objects.equals(uniqueOrderId, riskControlResponse.uniqueOrderId)
-        && Objects.equals(status, riskControlResponse.status)
-        && Objects.equals(msg, riskControlResponse.msg);
+    RiskControlResponse orther_ = (RiskControlResponse) obj;
+    return Objects.equals(uniqueOrderId, orther_.uniqueOrderId)
+        && Objects.equals(status, orther_.status)
+        && Objects.equals(msg, orther_.msg);
   }
 
   @Override

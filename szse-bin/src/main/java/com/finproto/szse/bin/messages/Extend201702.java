@@ -1,0 +1,49 @@
+package com.finproto.szse.bin.messages;
+
+import com.finproto.codec.BinaryCodec;
+import io.netty.buffer.ByteBuf;
+import java.util.Objects;
+
+public class Extend201702 implements BinaryCodec {
+  private long cashOrderQty;
+
+  public long getCashOrderQty() {
+    return this.cashOrderQty;
+  }
+
+  public void setCashOrderQty(long cashOrderQty) {
+    this.cashOrderQty = cashOrderQty;
+  }
+
+  @Override
+  public void encode(ByteBuf byteBuf) {
+    byteBuf.writeLong(this.cashOrderQty);
+  }
+
+  @Override
+  public void decode(ByteBuf byteBuf) {
+    this.cashOrderQty = byteBuf.readLong();
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(cashOrderQty);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (null == obj || getClass() != obj.getClass()) {
+      return false;
+    }
+    Extend201702 orther_ = (Extend201702) obj;
+    return Objects.equals(cashOrderQty, orther_.cashOrderQty);
+  }
+
+  @Override
+  public String toString() {
+    return "Extend201702 [" + "cashOrderQty=" + this.cashOrderQty + "]";
+  }
+}

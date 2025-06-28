@@ -176,17 +176,17 @@ public class RiskControlRequest implements BinaryCodec {
     if (null == obj || getClass() != obj.getClass()) {
       return false;
     }
-    RiskControlRequest riskControlRequest = (RiskControlRequest) obj;
-    return Objects.equals(uniqueOrderId, riskControlRequest.uniqueOrderId)
-        && Objects.equals(clOrdId, riskControlRequest.clOrdId)
-        && Objects.equals(marketId, riskControlRequest.marketId)
-        && Objects.equals(securityId, riskControlRequest.securityId)
-        && Objects.equals(side, riskControlRequest.side)
-        && Objects.equals(orderType, riskControlRequest.orderType)
-        && Objects.equals(price, riskControlRequest.price)
-        && Objects.equals(qty, riskControlRequest.qty)
-        && Objects.equals(extraInfo, riskControlRequest.extraInfo)
-        && Objects.equals(subOrder, riskControlRequest.subOrder);
+    RiskControlRequest orther_ = (RiskControlRequest) obj;
+    return Objects.equals(uniqueOrderId, orther_.uniqueOrderId)
+        && Objects.equals(clOrdId, orther_.clOrdId)
+        && Objects.equals(marketId, orther_.marketId)
+        && Objects.equals(securityId, orther_.securityId)
+        && Objects.equals(side, orther_.side)
+        && Objects.equals(orderType, orther_.orderType)
+        && Objects.equals(price, orther_.price)
+        && Objects.equals(qty, orther_.qty)
+        && Objects.equals(extraInfo, orther_.extraInfo)
+        && Objects.equals(subOrder, orther_.subOrder);
   }
 
   @Override
@@ -271,10 +271,10 @@ public class RiskControlRequest implements BinaryCodec {
       if (null == obj || getClass() != obj.getClass()) {
         return false;
       }
-      SubOrder subOrder = (SubOrder) obj;
-      return Objects.equals(clOrdId, subOrder.clOrdId)
-          && Objects.equals(price, subOrder.price)
-          && Objects.equals(qty, subOrder.qty);
+      SubOrder orther_ = (SubOrder) obj;
+      return Objects.equals(clOrdId, orther_.clOrdId)
+          && Objects.equals(price, orther_.price)
+          && Objects.equals(qty, orther_.qty);
     }
 
     @Override

@@ -1,0 +1,108 @@
+package com.finproto.szse.bin.messages;
+
+import com.finproto.codec.BinaryCodec;
+import io.netty.buffer.ByteBuf;
+import java.util.Objects;
+
+public class Logon implements BinaryCodec {
+  private String senderCompId;
+  private String targetCompId;
+  private int heartBtInt;
+  private String password;
+  private String defaultApplVerId;
+
+  public String getSenderCompId() {
+    return this.senderCompId;
+  }
+
+  public void setSenderCompId(String senderCompId) {
+    this.senderCompId = senderCompId;
+  }
+
+  public String getTargetCompId() {
+    return this.targetCompId;
+  }
+
+  public void setTargetCompId(String targetCompId) {
+    this.targetCompId = targetCompId;
+  }
+
+  public int getHeartBtInt() {
+    return this.heartBtInt;
+  }
+
+  public void setHeartBtInt(int heartBtInt) {
+    this.heartBtInt = heartBtInt;
+  }
+
+  public String getPassword() {
+    return this.password;
+  }
+
+  public void setPassword(String password) {
+    this.password = password;
+  }
+
+  public String getDefaultApplVerId() {
+    return this.defaultApplVerId;
+  }
+
+  public void setDefaultApplVerId(String defaultApplVerId) {
+    this.defaultApplVerId = defaultApplVerId;
+  }
+
+  @Override
+  public void encode(ByteBuf byteBuf) {
+    writeFixedString(byteBuf, this.senderCompId, 20);
+    writeFixedString(byteBuf, this.targetCompId, 20);
+    byteBuf.writeInt(this.heartBtInt);
+    writeFixedString(byteBuf, this.password, 16);
+    writeFixedString(byteBuf, this.defaultApplVerId, 32);
+  }
+
+  @Override
+  public void decode(ByteBuf byteBuf) {
+    this.senderCompId = readFixedString(byteBuf, 20);
+    this.targetCompId = readFixedString(byteBuf, 20);
+    this.heartBtInt = byteBuf.readInt();
+    this.password = readFixedString(byteBuf, 16);
+    this.defaultApplVerId = readFixedString(byteBuf, 32);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(senderCompId, targetCompId, heartBtInt, password, defaultApplVerId);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (null == obj || getClass() != obj.getClass()) {
+      return false;
+    }
+    Logon orther_ = (Logon) obj;
+    return Objects.equals(senderCompId, orther_.senderCompId)
+        && Objects.equals(targetCompId, orther_.targetCompId)
+        && Objects.equals(heartBtInt, orther_.heartBtInt)
+        && Objects.equals(password, orther_.password)
+        && Objects.equals(defaultApplVerId, orther_.defaultApplVerId);
+  }
+
+  @Override
+  public String toString() {
+    return "Logon ["
+        + "senderCompId="
+        + this.senderCompId
+        + ", targetCompId="
+        + this.targetCompId
+        + ", heartBtInt="
+        + this.heartBtInt
+        + ", password="
+        + this.password
+        + ", defaultApplVerId="
+        + this.defaultApplVerId
+        + "]";
+  }
+}

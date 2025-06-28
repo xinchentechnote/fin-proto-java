@@ -1,0 +1,293 @@
+package com.finproto.szse.bin.messages;
+
+import com.finproto.codec.BinaryCodec;
+import io.netty.buffer.ByteBuf;
+import java.util.Objects;
+
+public class Extend204129 implements BinaryCodec {
+  private String memberId;
+  private String investorType;
+  private String investorId;
+  private String investorName;
+  private String traderCode;
+  private String secondaryOrderId;
+  private short bidTransType;
+  private short bidExecInstType;
+  private long lowLimitPrice;
+  private long highLimitPrice;
+  private long minQty;
+  private int tradeDate;
+  private short settlType;
+  private byte settlPeriod;
+  private byte preTradeAnonymity;
+  private byte cashMargin;
+  private String memo;
+
+  public String getMemberId() {
+    return this.memberId;
+  }
+
+  public void setMemberId(String memberId) {
+    this.memberId = memberId;
+  }
+
+  public String getInvestorType() {
+    return this.investorType;
+  }
+
+  public void setInvestorType(String investorType) {
+    this.investorType = investorType;
+  }
+
+  public String getInvestorId() {
+    return this.investorId;
+  }
+
+  public void setInvestorId(String investorId) {
+    this.investorId = investorId;
+  }
+
+  public String getInvestorName() {
+    return this.investorName;
+  }
+
+  public void setInvestorName(String investorName) {
+    this.investorName = investorName;
+  }
+
+  public String getTraderCode() {
+    return this.traderCode;
+  }
+
+  public void setTraderCode(String traderCode) {
+    this.traderCode = traderCode;
+  }
+
+  public String getSecondaryOrderId() {
+    return this.secondaryOrderId;
+  }
+
+  public void setSecondaryOrderId(String secondaryOrderId) {
+    this.secondaryOrderId = secondaryOrderId;
+  }
+
+  public short getBidTransType() {
+    return this.bidTransType;
+  }
+
+  public void setBidTransType(short bidTransType) {
+    this.bidTransType = bidTransType;
+  }
+
+  public short getBidExecInstType() {
+    return this.bidExecInstType;
+  }
+
+  public void setBidExecInstType(short bidExecInstType) {
+    this.bidExecInstType = bidExecInstType;
+  }
+
+  public long getLowLimitPrice() {
+    return this.lowLimitPrice;
+  }
+
+  public void setLowLimitPrice(long lowLimitPrice) {
+    this.lowLimitPrice = lowLimitPrice;
+  }
+
+  public long getHighLimitPrice() {
+    return this.highLimitPrice;
+  }
+
+  public void setHighLimitPrice(long highLimitPrice) {
+    this.highLimitPrice = highLimitPrice;
+  }
+
+  public long getMinQty() {
+    return this.minQty;
+  }
+
+  public void setMinQty(long minQty) {
+    this.minQty = minQty;
+  }
+
+  public int getTradeDate() {
+    return this.tradeDate;
+  }
+
+  public void setTradeDate(int tradeDate) {
+    this.tradeDate = tradeDate;
+  }
+
+  public short getSettlType() {
+    return this.settlType;
+  }
+
+  public void setSettlType(short settlType) {
+    this.settlType = settlType;
+  }
+
+  public byte getSettlPeriod() {
+    return this.settlPeriod;
+  }
+
+  public void setSettlPeriod(byte settlPeriod) {
+    this.settlPeriod = settlPeriod;
+  }
+
+  public byte getPreTradeAnonymity() {
+    return this.preTradeAnonymity;
+  }
+
+  public void setPreTradeAnonymity(byte preTradeAnonymity) {
+    this.preTradeAnonymity = preTradeAnonymity;
+  }
+
+  public byte getCashMargin() {
+    return this.cashMargin;
+  }
+
+  public void setCashMargin(byte cashMargin) {
+    this.cashMargin = cashMargin;
+  }
+
+  public String getMemo() {
+    return this.memo;
+  }
+
+  public void setMemo(String memo) {
+    this.memo = memo;
+  }
+
+  @Override
+  public void encode(ByteBuf byteBuf) {
+    writeFixedString(byteBuf, this.memberId, 6);
+    writeFixedString(byteBuf, this.investorType, 2);
+    writeFixedString(byteBuf, this.investorId, 10);
+    writeFixedString(byteBuf, this.investorName, 120);
+    writeFixedString(byteBuf, this.traderCode, 8);
+    writeFixedString(byteBuf, this.secondaryOrderId, 16);
+    byteBuf.writeShort(this.bidTransType);
+    byteBuf.writeShort(this.bidExecInstType);
+    byteBuf.writeLong(this.lowLimitPrice);
+    byteBuf.writeLong(this.highLimitPrice);
+    byteBuf.writeLong(this.minQty);
+    byteBuf.writeInt(this.tradeDate);
+    byteBuf.writeShort(this.settlType);
+    byteBuf.writeByte(this.settlPeriod);
+    byteBuf.writeByte(this.preTradeAnonymity);
+    byteBuf.writeByte(this.cashMargin);
+    writeFixedString(byteBuf, this.memo, 160);
+  }
+
+  @Override
+  public void decode(ByteBuf byteBuf) {
+    this.memberId = readFixedString(byteBuf, 6);
+    this.investorType = readFixedString(byteBuf, 2);
+    this.investorId = readFixedString(byteBuf, 10);
+    this.investorName = readFixedString(byteBuf, 120);
+    this.traderCode = readFixedString(byteBuf, 8);
+    this.secondaryOrderId = readFixedString(byteBuf, 16);
+    this.bidTransType = byteBuf.readShort();
+    this.bidExecInstType = byteBuf.readShort();
+    this.lowLimitPrice = byteBuf.readLong();
+    this.highLimitPrice = byteBuf.readLong();
+    this.minQty = byteBuf.readLong();
+    this.tradeDate = byteBuf.readInt();
+    this.settlType = byteBuf.readShort();
+    this.settlPeriod = byteBuf.readByte();
+    this.preTradeAnonymity = byteBuf.readByte();
+    this.cashMargin = byteBuf.readByte();
+    this.memo = readFixedString(byteBuf, 160);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(
+        memberId,
+        investorType,
+        investorId,
+        investorName,
+        traderCode,
+        secondaryOrderId,
+        bidTransType,
+        bidExecInstType,
+        lowLimitPrice,
+        highLimitPrice,
+        minQty,
+        tradeDate,
+        settlType,
+        settlPeriod,
+        preTradeAnonymity,
+        cashMargin,
+        memo);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (null == obj || getClass() != obj.getClass()) {
+      return false;
+    }
+    Extend204129 orther_ = (Extend204129) obj;
+    return Objects.equals(memberId, orther_.memberId)
+        && Objects.equals(investorType, orther_.investorType)
+        && Objects.equals(investorId, orther_.investorId)
+        && Objects.equals(investorName, orther_.investorName)
+        && Objects.equals(traderCode, orther_.traderCode)
+        && Objects.equals(secondaryOrderId, orther_.secondaryOrderId)
+        && Objects.equals(bidTransType, orther_.bidTransType)
+        && Objects.equals(bidExecInstType, orther_.bidExecInstType)
+        && Objects.equals(lowLimitPrice, orther_.lowLimitPrice)
+        && Objects.equals(highLimitPrice, orther_.highLimitPrice)
+        && Objects.equals(minQty, orther_.minQty)
+        && Objects.equals(tradeDate, orther_.tradeDate)
+        && Objects.equals(settlType, orther_.settlType)
+        && Objects.equals(settlPeriod, orther_.settlPeriod)
+        && Objects.equals(preTradeAnonymity, orther_.preTradeAnonymity)
+        && Objects.equals(cashMargin, orther_.cashMargin)
+        && Objects.equals(memo, orther_.memo);
+  }
+
+  @Override
+  public String toString() {
+    return "Extend204129 ["
+        + "memberId="
+        + this.memberId
+        + ", investorType="
+        + this.investorType
+        + ", investorId="
+        + this.investorId
+        + ", investorName="
+        + this.investorName
+        + ", traderCode="
+        + this.traderCode
+        + ", secondaryOrderId="
+        + this.secondaryOrderId
+        + ", bidTransType="
+        + this.bidTransType
+        + ", bidExecInstType="
+        + this.bidExecInstType
+        + ", lowLimitPrice="
+        + this.lowLimitPrice
+        + ", highLimitPrice="
+        + this.highLimitPrice
+        + ", minQty="
+        + this.minQty
+        + ", tradeDate="
+        + this.tradeDate
+        + ", settlType="
+        + this.settlType
+        + ", settlPeriod="
+        + this.settlPeriod
+        + ", preTradeAnonymity="
+        + this.preTradeAnonymity
+        + ", cashMargin="
+        + this.cashMargin
+        + ", memo="
+        + this.memo
+        + "]";
+  }
+}

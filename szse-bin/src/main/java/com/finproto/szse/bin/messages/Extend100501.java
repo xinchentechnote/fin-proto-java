@@ -1,0 +1,66 @@
+package com.finproto.szse.bin.messages;
+
+import com.finproto.codec.BinaryCodec;
+import io.netty.buffer.ByteBuf;
+import java.util.Objects;
+
+public class Extend100501 implements BinaryCodec {
+  private String confirmId;
+  private byte cashMargin;
+
+  public String getConfirmId() {
+    return this.confirmId;
+  }
+
+  public void setConfirmId(String confirmId) {
+    this.confirmId = confirmId;
+  }
+
+  public byte getCashMargin() {
+    return this.cashMargin;
+  }
+
+  public void setCashMargin(byte cashMargin) {
+    this.cashMargin = cashMargin;
+  }
+
+  @Override
+  public void encode(ByteBuf byteBuf) {
+    writeFixedString(byteBuf, this.confirmId, 8);
+    byteBuf.writeByte(this.cashMargin);
+  }
+
+  @Override
+  public void decode(ByteBuf byteBuf) {
+    this.confirmId = readFixedString(byteBuf, 8);
+    this.cashMargin = byteBuf.readByte();
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(confirmId, cashMargin);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (null == obj || getClass() != obj.getClass()) {
+      return false;
+    }
+    Extend100501 orther_ = (Extend100501) obj;
+    return Objects.equals(confirmId, orther_.confirmId)
+        && Objects.equals(cashMargin, orther_.cashMargin);
+  }
+
+  @Override
+  public String toString() {
+    return "Extend100501 ["
+        + "confirmId="
+        + this.confirmId
+        + ", cashMargin="
+        + this.cashMargin
+        + "]";
+  }
+}

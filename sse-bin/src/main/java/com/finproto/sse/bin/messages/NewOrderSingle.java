@@ -1,0 +1,278 @@
+package com.finproto.sse.bin.messages;
+
+import com.finproto.codec.BinaryCodec;
+import io.netty.buffer.ByteBuf;
+import java.util.Objects;
+
+public class NewOrderSingle implements BinaryCodec {
+  private int bizId;
+  private String bizPbu;
+  private String clOrdId;
+  private String securityId;
+  private String account;
+  private byte ownerType;
+  private byte side;
+  private long price;
+  private long orderQty;
+  private byte ordType;
+  private byte timeInForce;
+  private long transactTime;
+  private String creditTag;
+  private String clearingFirm;
+  private String branchId;
+  private String userInfo;
+
+  public int getBizId() {
+    return this.bizId;
+  }
+
+  public void setBizId(int bizId) {
+    this.bizId = bizId;
+  }
+
+  public String getBizPbu() {
+    return this.bizPbu;
+  }
+
+  public void setBizPbu(String bizPbu) {
+    this.bizPbu = bizPbu;
+  }
+
+  public String getClOrdId() {
+    return this.clOrdId;
+  }
+
+  public void setClOrdId(String clOrdId) {
+    this.clOrdId = clOrdId;
+  }
+
+  public String getSecurityId() {
+    return this.securityId;
+  }
+
+  public void setSecurityId(String securityId) {
+    this.securityId = securityId;
+  }
+
+  public String getAccount() {
+    return this.account;
+  }
+
+  public void setAccount(String account) {
+    this.account = account;
+  }
+
+  public byte getOwnerType() {
+    return this.ownerType;
+  }
+
+  public void setOwnerType(byte ownerType) {
+    this.ownerType = ownerType;
+  }
+
+  public byte getSide() {
+    return this.side;
+  }
+
+  public void setSide(byte side) {
+    this.side = side;
+  }
+
+  public long getPrice() {
+    return this.price;
+  }
+
+  public void setPrice(long price) {
+    this.price = price;
+  }
+
+  public long getOrderQty() {
+    return this.orderQty;
+  }
+
+  public void setOrderQty(long orderQty) {
+    this.orderQty = orderQty;
+  }
+
+  public byte getOrdType() {
+    return this.ordType;
+  }
+
+  public void setOrdType(byte ordType) {
+    this.ordType = ordType;
+  }
+
+  public byte getTimeInForce() {
+    return this.timeInForce;
+  }
+
+  public void setTimeInForce(byte timeInForce) {
+    this.timeInForce = timeInForce;
+  }
+
+  public long getTransactTime() {
+    return this.transactTime;
+  }
+
+  public void setTransactTime(long transactTime) {
+    this.transactTime = transactTime;
+  }
+
+  public String getCreditTag() {
+    return this.creditTag;
+  }
+
+  public void setCreditTag(String creditTag) {
+    this.creditTag = creditTag;
+  }
+
+  public String getClearingFirm() {
+    return this.clearingFirm;
+  }
+
+  public void setClearingFirm(String clearingFirm) {
+    this.clearingFirm = clearingFirm;
+  }
+
+  public String getBranchId() {
+    return this.branchId;
+  }
+
+  public void setBranchId(String branchId) {
+    this.branchId = branchId;
+  }
+
+  public String getUserInfo() {
+    return this.userInfo;
+  }
+
+  public void setUserInfo(String userInfo) {
+    this.userInfo = userInfo;
+  }
+
+  @Override
+  public void encode(ByteBuf byteBuf) {
+    byteBuf.writeInt(this.bizId);
+    writeFixedString(byteBuf, this.bizPbu, 8);
+    writeFixedString(byteBuf, this.clOrdId, 10);
+    writeFixedString(byteBuf, this.securityId, 12);
+    writeFixedString(byteBuf, this.account, 13);
+    byteBuf.writeByte(this.ownerType);
+    byteBuf.writeByte(this.side);
+    byteBuf.writeLong(this.price);
+    byteBuf.writeLong(this.orderQty);
+    byteBuf.writeByte(this.ordType);
+    byteBuf.writeByte(this.timeInForce);
+    byteBuf.writeLong(this.transactTime);
+    writeFixedString(byteBuf, this.creditTag, 2);
+    writeFixedString(byteBuf, this.clearingFirm, 8);
+    writeFixedString(byteBuf, this.branchId, 8);
+    writeFixedString(byteBuf, this.userInfo, 32);
+  }
+
+  @Override
+  public void decode(ByteBuf byteBuf) {
+    this.bizId = byteBuf.readInt();
+    this.bizPbu = readFixedString(byteBuf, 8);
+    this.clOrdId = readFixedString(byteBuf, 10);
+    this.securityId = readFixedString(byteBuf, 12);
+    this.account = readFixedString(byteBuf, 13);
+    this.ownerType = byteBuf.readByte();
+    this.side = byteBuf.readByte();
+    this.price = byteBuf.readLong();
+    this.orderQty = byteBuf.readLong();
+    this.ordType = byteBuf.readByte();
+    this.timeInForce = byteBuf.readByte();
+    this.transactTime = byteBuf.readLong();
+    this.creditTag = readFixedString(byteBuf, 2);
+    this.clearingFirm = readFixedString(byteBuf, 8);
+    this.branchId = readFixedString(byteBuf, 8);
+    this.userInfo = readFixedString(byteBuf, 32);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(
+        bizId,
+        bizPbu,
+        clOrdId,
+        securityId,
+        account,
+        ownerType,
+        side,
+        price,
+        orderQty,
+        ordType,
+        timeInForce,
+        transactTime,
+        creditTag,
+        clearingFirm,
+        branchId,
+        userInfo);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (null == obj || getClass() != obj.getClass()) {
+      return false;
+    }
+    NewOrderSingle orther_ = (NewOrderSingle) obj;
+    return Objects.equals(bizId, orther_.bizId)
+        && Objects.equals(bizPbu, orther_.bizPbu)
+        && Objects.equals(clOrdId, orther_.clOrdId)
+        && Objects.equals(securityId, orther_.securityId)
+        && Objects.equals(account, orther_.account)
+        && Objects.equals(ownerType, orther_.ownerType)
+        && Objects.equals(side, orther_.side)
+        && Objects.equals(price, orther_.price)
+        && Objects.equals(orderQty, orther_.orderQty)
+        && Objects.equals(ordType, orther_.ordType)
+        && Objects.equals(timeInForce, orther_.timeInForce)
+        && Objects.equals(transactTime, orther_.transactTime)
+        && Objects.equals(creditTag, orther_.creditTag)
+        && Objects.equals(clearingFirm, orther_.clearingFirm)
+        && Objects.equals(branchId, orther_.branchId)
+        && Objects.equals(userInfo, orther_.userInfo);
+  }
+
+  @Override
+  public String toString() {
+    return "NewOrderSingle ["
+        + "bizId="
+        + this.bizId
+        + ", bizPbu="
+        + this.bizPbu
+        + ", clOrdId="
+        + this.clOrdId
+        + ", securityId="
+        + this.securityId
+        + ", account="
+        + this.account
+        + ", ownerType="
+        + this.ownerType
+        + ", side="
+        + this.side
+        + ", price="
+        + this.price
+        + ", orderQty="
+        + this.orderQty
+        + ", ordType="
+        + this.ordType
+        + ", timeInForce="
+        + this.timeInForce
+        + ", transactTime="
+        + this.transactTime
+        + ", creditTag="
+        + this.creditTag
+        + ", clearingFirm="
+        + this.clearingFirm
+        + ", branchId="
+        + this.branchId
+        + ", userInfo="
+        + this.userInfo
+        + "]";
+  }
+}

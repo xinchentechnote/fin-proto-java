@@ -1,0 +1,158 @@
+package com.finproto.szse.bin.messages;
+
+import com.finproto.codec.BinaryCodec;
+import io.netty.buffer.ByteBuf;
+import java.util.Objects;
+
+public class Extend204115 implements BinaryCodec {
+  private byte cashMargin;
+  private short settlType;
+  private byte settlPeriod;
+  private String counterpartyMemberId;
+  private String counterpartyInvestorType;
+  private String counterpartyInvestorId;
+  private String counterpartyInvestorName;
+  private String counterpartyTraderCode;
+
+  public byte getCashMargin() {
+    return this.cashMargin;
+  }
+
+  public void setCashMargin(byte cashMargin) {
+    this.cashMargin = cashMargin;
+  }
+
+  public short getSettlType() {
+    return this.settlType;
+  }
+
+  public void setSettlType(short settlType) {
+    this.settlType = settlType;
+  }
+
+  public byte getSettlPeriod() {
+    return this.settlPeriod;
+  }
+
+  public void setSettlPeriod(byte settlPeriod) {
+    this.settlPeriod = settlPeriod;
+  }
+
+  public String getCounterpartyMemberId() {
+    return this.counterpartyMemberId;
+  }
+
+  public void setCounterpartyMemberId(String counterpartyMemberId) {
+    this.counterpartyMemberId = counterpartyMemberId;
+  }
+
+  public String getCounterpartyInvestorType() {
+    return this.counterpartyInvestorType;
+  }
+
+  public void setCounterpartyInvestorType(String counterpartyInvestorType) {
+    this.counterpartyInvestorType = counterpartyInvestorType;
+  }
+
+  public String getCounterpartyInvestorId() {
+    return this.counterpartyInvestorId;
+  }
+
+  public void setCounterpartyInvestorId(String counterpartyInvestorId) {
+    this.counterpartyInvestorId = counterpartyInvestorId;
+  }
+
+  public String getCounterpartyInvestorName() {
+    return this.counterpartyInvestorName;
+  }
+
+  public void setCounterpartyInvestorName(String counterpartyInvestorName) {
+    this.counterpartyInvestorName = counterpartyInvestorName;
+  }
+
+  public String getCounterpartyTraderCode() {
+    return this.counterpartyTraderCode;
+  }
+
+  public void setCounterpartyTraderCode(String counterpartyTraderCode) {
+    this.counterpartyTraderCode = counterpartyTraderCode;
+  }
+
+  @Override
+  public void encode(ByteBuf byteBuf) {
+    byteBuf.writeByte(this.cashMargin);
+    byteBuf.writeShort(this.settlType);
+    byteBuf.writeByte(this.settlPeriod);
+    writeFixedString(byteBuf, this.counterpartyMemberId, 6);
+    writeFixedString(byteBuf, this.counterpartyInvestorType, 2);
+    writeFixedString(byteBuf, this.counterpartyInvestorId, 10);
+    writeFixedString(byteBuf, this.counterpartyInvestorName, 120);
+    writeFixedString(byteBuf, this.counterpartyTraderCode, 8);
+  }
+
+  @Override
+  public void decode(ByteBuf byteBuf) {
+    this.cashMargin = byteBuf.readByte();
+    this.settlType = byteBuf.readShort();
+    this.settlPeriod = byteBuf.readByte();
+    this.counterpartyMemberId = readFixedString(byteBuf, 6);
+    this.counterpartyInvestorType = readFixedString(byteBuf, 2);
+    this.counterpartyInvestorId = readFixedString(byteBuf, 10);
+    this.counterpartyInvestorName = readFixedString(byteBuf, 120);
+    this.counterpartyTraderCode = readFixedString(byteBuf, 8);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(
+        cashMargin,
+        settlType,
+        settlPeriod,
+        counterpartyMemberId,
+        counterpartyInvestorType,
+        counterpartyInvestorId,
+        counterpartyInvestorName,
+        counterpartyTraderCode);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (null == obj || getClass() != obj.getClass()) {
+      return false;
+    }
+    Extend204115 orther_ = (Extend204115) obj;
+    return Objects.equals(cashMargin, orther_.cashMargin)
+        && Objects.equals(settlType, orther_.settlType)
+        && Objects.equals(settlPeriod, orther_.settlPeriod)
+        && Objects.equals(counterpartyMemberId, orther_.counterpartyMemberId)
+        && Objects.equals(counterpartyInvestorType, orther_.counterpartyInvestorType)
+        && Objects.equals(counterpartyInvestorId, orther_.counterpartyInvestorId)
+        && Objects.equals(counterpartyInvestorName, orther_.counterpartyInvestorName)
+        && Objects.equals(counterpartyTraderCode, orther_.counterpartyTraderCode);
+  }
+
+  @Override
+  public String toString() {
+    return "Extend204115 ["
+        + "cashMargin="
+        + this.cashMargin
+        + ", settlType="
+        + this.settlType
+        + ", settlPeriod="
+        + this.settlPeriod
+        + ", counterpartyMemberId="
+        + this.counterpartyMemberId
+        + ", counterpartyInvestorType="
+        + this.counterpartyInvestorType
+        + ", counterpartyInvestorId="
+        + this.counterpartyInvestorId
+        + ", counterpartyInvestorName="
+        + this.counterpartyInvestorName
+        + ", counterpartyTraderCode="
+        + this.counterpartyTraderCode
+        + "]";
+  }
+}

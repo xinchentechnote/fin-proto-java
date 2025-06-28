@@ -1,0 +1,66 @@
+package com.finproto.szse.bin.messages;
+
+import com.finproto.codec.BinaryCodec;
+import io.netty.buffer.ByteBuf;
+import java.util.Objects;
+
+public class PlatformStateInfo implements BinaryCodec {
+  private short platformId;
+  private short platformState;
+
+  public short getPlatformId() {
+    return this.platformId;
+  }
+
+  public void setPlatformId(short platformId) {
+    this.platformId = platformId;
+  }
+
+  public short getPlatformState() {
+    return this.platformState;
+  }
+
+  public void setPlatformState(short platformState) {
+    this.platformState = platformState;
+  }
+
+  @Override
+  public void encode(ByteBuf byteBuf) {
+    byteBuf.writeShort(this.platformId);
+    byteBuf.writeShort(this.platformState);
+  }
+
+  @Override
+  public void decode(ByteBuf byteBuf) {
+    this.platformId = byteBuf.readShort();
+    this.platformState = byteBuf.readShort();
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(platformId, platformState);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (null == obj || getClass() != obj.getClass()) {
+      return false;
+    }
+    PlatformStateInfo orther_ = (PlatformStateInfo) obj;
+    return Objects.equals(platformId, orther_.platformId)
+        && Objects.equals(platformState, orther_.platformState);
+  }
+
+  @Override
+  public String toString() {
+    return "PlatformStateInfo ["
+        + "platformId="
+        + this.platformId
+        + ", platformState="
+        + this.platformState
+        + "]";
+  }
+}

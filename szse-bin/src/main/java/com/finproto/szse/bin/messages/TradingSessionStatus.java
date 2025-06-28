@@ -1,0 +1,143 @@
+package com.finproto.szse.bin.messages;
+
+import com.finproto.codec.BinaryCodec;
+import io.netty.buffer.ByteBuf;
+import java.util.Objects;
+
+public class TradingSessionStatus implements BinaryCodec {
+  private String marketId;
+  private String marketSegmentId;
+  private String tradingSessionId;
+  private String tradingSessionSubId;
+  private short tradSesStatus;
+  private long tradSesStartTime;
+  private long tradSesEndTime;
+
+  public String getMarketId() {
+    return this.marketId;
+  }
+
+  public void setMarketId(String marketId) {
+    this.marketId = marketId;
+  }
+
+  public String getMarketSegmentId() {
+    return this.marketSegmentId;
+  }
+
+  public void setMarketSegmentId(String marketSegmentId) {
+    this.marketSegmentId = marketSegmentId;
+  }
+
+  public String getTradingSessionId() {
+    return this.tradingSessionId;
+  }
+
+  public void setTradingSessionId(String tradingSessionId) {
+    this.tradingSessionId = tradingSessionId;
+  }
+
+  public String getTradingSessionSubId() {
+    return this.tradingSessionSubId;
+  }
+
+  public void setTradingSessionSubId(String tradingSessionSubId) {
+    this.tradingSessionSubId = tradingSessionSubId;
+  }
+
+  public short getTradSesStatus() {
+    return this.tradSesStatus;
+  }
+
+  public void setTradSesStatus(short tradSesStatus) {
+    this.tradSesStatus = tradSesStatus;
+  }
+
+  public long getTradSesStartTime() {
+    return this.tradSesStartTime;
+  }
+
+  public void setTradSesStartTime(long tradSesStartTime) {
+    this.tradSesStartTime = tradSesStartTime;
+  }
+
+  public long getTradSesEndTime() {
+    return this.tradSesEndTime;
+  }
+
+  public void setTradSesEndTime(long tradSesEndTime) {
+    this.tradSesEndTime = tradSesEndTime;
+  }
+
+  @Override
+  public void encode(ByteBuf byteBuf) {
+    writeFixedString(byteBuf, this.marketId, 8);
+    writeFixedString(byteBuf, this.marketSegmentId, 8);
+    writeFixedString(byteBuf, this.tradingSessionId, 4);
+    writeFixedString(byteBuf, this.tradingSessionSubId, 4);
+    byteBuf.writeShort(this.tradSesStatus);
+    byteBuf.writeLong(this.tradSesStartTime);
+    byteBuf.writeLong(this.tradSesEndTime);
+  }
+
+  @Override
+  public void decode(ByteBuf byteBuf) {
+    this.marketId = readFixedString(byteBuf, 8);
+    this.marketSegmentId = readFixedString(byteBuf, 8);
+    this.tradingSessionId = readFixedString(byteBuf, 4);
+    this.tradingSessionSubId = readFixedString(byteBuf, 4);
+    this.tradSesStatus = byteBuf.readShort();
+    this.tradSesStartTime = byteBuf.readLong();
+    this.tradSesEndTime = byteBuf.readLong();
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(
+        marketId,
+        marketSegmentId,
+        tradingSessionId,
+        tradingSessionSubId,
+        tradSesStatus,
+        tradSesStartTime,
+        tradSesEndTime);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (null == obj || getClass() != obj.getClass()) {
+      return false;
+    }
+    TradingSessionStatus orther_ = (TradingSessionStatus) obj;
+    return Objects.equals(marketId, orther_.marketId)
+        && Objects.equals(marketSegmentId, orther_.marketSegmentId)
+        && Objects.equals(tradingSessionId, orther_.tradingSessionId)
+        && Objects.equals(tradingSessionSubId, orther_.tradingSessionSubId)
+        && Objects.equals(tradSesStatus, orther_.tradSesStatus)
+        && Objects.equals(tradSesStartTime, orther_.tradSesStartTime)
+        && Objects.equals(tradSesEndTime, orther_.tradSesEndTime);
+  }
+
+  @Override
+  public String toString() {
+    return "TradingSessionStatus ["
+        + "marketId="
+        + this.marketId
+        + ", marketSegmentId="
+        + this.marketSegmentId
+        + ", tradingSessionId="
+        + this.tradingSessionId
+        + ", tradingSessionSubId="
+        + this.tradingSessionSubId
+        + ", tradSesStatus="
+        + this.tradSesStatus
+        + ", tradSesStartTime="
+        + this.tradSesStartTime
+        + ", tradSesEndTime="
+        + this.tradSesEndTime
+        + "]";
+  }
+}

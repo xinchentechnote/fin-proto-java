@@ -1,3 +1,52 @@
+plugins {
+    id 'java-library'
+    id "com.diffplug.spotless" version "6.25.0"
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
 dependencies {
-    implementation project(':codec')
+    api project(':codec')
+    
+    // Test dependencies
+    // Option 1: Use JUnit 4 (your current setup)
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.hamcrest:hamcrest-core:2.2'
+    
+    // Option 2: OR migrate to JUnit 5 (recommended)
+    // testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
+    // testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
+    // testImplementation 'org.hamcrest:hamcrest:2.2'
+}
+
+test {
+    // For JUnit 4
+    useJUnit()
+    
+    // For JUnit 5 (use instead of the above if switching)
+    // useJUnitPlatform()
+    
+    maxParallelForks = 1
+    minHeapSize = "512m"
+    maxHeapSize = "2g"
+    
+    // Additional test logging for debugging
+    testLogging {
+        events "passed", "skipped", "failed"
+        exceptionFormat "full"
+        showStandardStreams = true // 新增：显示测试中的打印语句
+    }
+}
+
+spotless {
+    java {
+        target "src/**/*.java"
+        googleJavaFormat()
+        removeUnusedImports()
+        //licenseHeader '/* Licensed under Apache-2.0 */'
+    }
 }

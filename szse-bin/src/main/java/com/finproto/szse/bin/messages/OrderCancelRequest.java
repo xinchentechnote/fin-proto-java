@@ -1,0 +1,233 @@
+package com.finproto.szse.bin.messages;
+
+import com.finproto.codec.BinaryCodec;
+import io.netty.buffer.ByteBuf;
+import java.util.Objects;
+
+public class OrderCancelRequest implements BinaryCodec {
+  private String applId;
+  private String submittingPbuid;
+  private String securityId;
+  private String securityIdsource;
+  private short ownerType;
+  private String clearingFirm;
+  private long transactTime;
+  private String userInfo;
+  private String clOrdId;
+  private String origClOrdId;
+  private byte side;
+  private String orderId;
+  private long orderQty;
+
+  public String getApplId() {
+    return this.applId;
+  }
+
+  public void setApplId(String applId) {
+    this.applId = applId;
+  }
+
+  public String getSubmittingPbuid() {
+    return this.submittingPbuid;
+  }
+
+  public void setSubmittingPbuid(String submittingPbuid) {
+    this.submittingPbuid = submittingPbuid;
+  }
+
+  public String getSecurityId() {
+    return this.securityId;
+  }
+
+  public void setSecurityId(String securityId) {
+    this.securityId = securityId;
+  }
+
+  public String getSecurityIdsource() {
+    return this.securityIdsource;
+  }
+
+  public void setSecurityIdsource(String securityIdsource) {
+    this.securityIdsource = securityIdsource;
+  }
+
+  public short getOwnerType() {
+    return this.ownerType;
+  }
+
+  public void setOwnerType(short ownerType) {
+    this.ownerType = ownerType;
+  }
+
+  public String getClearingFirm() {
+    return this.clearingFirm;
+  }
+
+  public void setClearingFirm(String clearingFirm) {
+    this.clearingFirm = clearingFirm;
+  }
+
+  public long getTransactTime() {
+    return this.transactTime;
+  }
+
+  public void setTransactTime(long transactTime) {
+    this.transactTime = transactTime;
+  }
+
+  public String getUserInfo() {
+    return this.userInfo;
+  }
+
+  public void setUserInfo(String userInfo) {
+    this.userInfo = userInfo;
+  }
+
+  public String getClOrdId() {
+    return this.clOrdId;
+  }
+
+  public void setClOrdId(String clOrdId) {
+    this.clOrdId = clOrdId;
+  }
+
+  public String getOrigClOrdId() {
+    return this.origClOrdId;
+  }
+
+  public void setOrigClOrdId(String origClOrdId) {
+    this.origClOrdId = origClOrdId;
+  }
+
+  public byte getSide() {
+    return this.side;
+  }
+
+  public void setSide(byte side) {
+    this.side = side;
+  }
+
+  public String getOrderId() {
+    return this.orderId;
+  }
+
+  public void setOrderId(String orderId) {
+    this.orderId = orderId;
+  }
+
+  public long getOrderQty() {
+    return this.orderQty;
+  }
+
+  public void setOrderQty(long orderQty) {
+    this.orderQty = orderQty;
+  }
+
+  @Override
+  public void encode(ByteBuf byteBuf) {
+    writeFixedString(byteBuf, this.applId, 3);
+    writeFixedString(byteBuf, this.submittingPbuid, 6);
+    writeFixedString(byteBuf, this.securityId, 8);
+    writeFixedString(byteBuf, this.securityIdsource, 4);
+    byteBuf.writeShort(this.ownerType);
+    writeFixedString(byteBuf, this.clearingFirm, 2);
+    byteBuf.writeLong(this.transactTime);
+    writeFixedString(byteBuf, this.userInfo, 8);
+    writeFixedString(byteBuf, this.clOrdId, 10);
+    writeFixedString(byteBuf, this.origClOrdId, 10);
+    byteBuf.writeByte(this.side);
+    writeFixedString(byteBuf, this.orderId, 16);
+    byteBuf.writeLong(this.orderQty);
+  }
+
+  @Override
+  public void decode(ByteBuf byteBuf) {
+    this.applId = readFixedString(byteBuf, 3);
+    this.submittingPbuid = readFixedString(byteBuf, 6);
+    this.securityId = readFixedString(byteBuf, 8);
+    this.securityIdsource = readFixedString(byteBuf, 4);
+    this.ownerType = byteBuf.readShort();
+    this.clearingFirm = readFixedString(byteBuf, 2);
+    this.transactTime = byteBuf.readLong();
+    this.userInfo = readFixedString(byteBuf, 8);
+    this.clOrdId = readFixedString(byteBuf, 10);
+    this.origClOrdId = readFixedString(byteBuf, 10);
+    this.side = byteBuf.readByte();
+    this.orderId = readFixedString(byteBuf, 16);
+    this.orderQty = byteBuf.readLong();
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(
+        applId,
+        submittingPbuid,
+        securityId,
+        securityIdsource,
+        ownerType,
+        clearingFirm,
+        transactTime,
+        userInfo,
+        clOrdId,
+        origClOrdId,
+        side,
+        orderId,
+        orderQty);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (null == obj || getClass() != obj.getClass()) {
+      return false;
+    }
+    OrderCancelRequest orther_ = (OrderCancelRequest) obj;
+    return Objects.equals(applId, orther_.applId)
+        && Objects.equals(submittingPbuid, orther_.submittingPbuid)
+        && Objects.equals(securityId, orther_.securityId)
+        && Objects.equals(securityIdsource, orther_.securityIdsource)
+        && Objects.equals(ownerType, orther_.ownerType)
+        && Objects.equals(clearingFirm, orther_.clearingFirm)
+        && Objects.equals(transactTime, orther_.transactTime)
+        && Objects.equals(userInfo, orther_.userInfo)
+        && Objects.equals(clOrdId, orther_.clOrdId)
+        && Objects.equals(origClOrdId, orther_.origClOrdId)
+        && Objects.equals(side, orther_.side)
+        && Objects.equals(orderId, orther_.orderId)
+        && Objects.equals(orderQty, orther_.orderQty);
+  }
+
+  @Override
+  public String toString() {
+    return "OrderCancelRequest ["
+        + "applId="
+        + this.applId
+        + ", submittingPbuid="
+        + this.submittingPbuid
+        + ", securityId="
+        + this.securityId
+        + ", securityIdsource="
+        + this.securityIdsource
+        + ", ownerType="
+        + this.ownerType
+        + ", clearingFirm="
+        + this.clearingFirm
+        + ", transactTime="
+        + this.transactTime
+        + ", userInfo="
+        + this.userInfo
+        + ", clOrdId="
+        + this.clOrdId
+        + ", origClOrdId="
+        + this.origClOrdId
+        + ", side="
+        + this.side
+        + ", orderId="
+        + this.orderId
+        + ", orderQty="
+        + this.orderQty
+        + "]";
+  }
+}

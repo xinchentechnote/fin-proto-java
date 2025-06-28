@@ -1,0 +1,12 @@
+cd codec
+make
+cd -
+cd sample-bin
+make
+cd -
+cd sse-bin
+make
+cd -
+cd szse-bin
+make
+cd -

@@ -61,8 +61,8 @@ public class Detail implements BinaryCodec {
     if (null == obj || getClass() != obj.getClass()) {
       return false;
     }
-    Detail detail = (Detail) obj;
-    return Objects.equals(ruleName, detail.ruleName) && Objects.equals(code, detail.code);
+    Detail orther_ = (Detail) obj;
+    return Objects.equals(ruleName, orther_.ruleName) && Objects.equals(code, orther_.code);
   }
 
   @Override

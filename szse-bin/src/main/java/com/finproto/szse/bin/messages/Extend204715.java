@@ -1,0 +1,94 @@
+package com.finproto.szse.bin.messages;
+
+import com.finproto.codec.BinaryCodec;
+import io.netty.buffer.ByteBuf;
+import java.util.Objects;
+
+public class Extend204715 implements BinaryCodec {
+  private short expirationDays;
+  private byte expirationType;
+  private int maturityDate;
+  private String shareProperty;
+
+  public short getExpirationDays() {
+    return this.expirationDays;
+  }
+
+  public void setExpirationDays(short expirationDays) {
+    this.expirationDays = expirationDays;
+  }
+
+  public byte getExpirationType() {
+    return this.expirationType;
+  }
+
+  public void setExpirationType(byte expirationType) {
+    this.expirationType = expirationType;
+  }
+
+  public int getMaturityDate() {
+    return this.maturityDate;
+  }
+
+  public void setMaturityDate(int maturityDate) {
+    this.maturityDate = maturityDate;
+  }
+
+  public String getShareProperty() {
+    return this.shareProperty;
+  }
+
+  public void setShareProperty(String shareProperty) {
+    this.shareProperty = shareProperty;
+  }
+
+  @Override
+  public void encode(ByteBuf byteBuf) {
+    byteBuf.writeShort(this.expirationDays);
+    byteBuf.writeByte(this.expirationType);
+    byteBuf.writeInt(this.maturityDate);
+    writeFixedString(byteBuf, this.shareProperty, 2);
+  }
+
+  @Override
+  public void decode(ByteBuf byteBuf) {
+    this.expirationDays = byteBuf.readShort();
+    this.expirationType = byteBuf.readByte();
+    this.maturityDate = byteBuf.readInt();
+    this.shareProperty = readFixedString(byteBuf, 2);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(expirationDays, expirationType, maturityDate, shareProperty);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (null == obj || getClass() != obj.getClass()) {
+      return false;
+    }
+    Extend204715 orther_ = (Extend204715) obj;
+    return Objects.equals(expirationDays, orther_.expirationDays)
+        && Objects.equals(expirationType, orther_.expirationType)
+        && Objects.equals(maturityDate, orther_.maturityDate)
+        && Objects.equals(shareProperty, orther_.shareProperty);
+  }
+
+  @Override
+  public String toString() {
+    return "Extend204715 ["
+        + "expirationDays="
+        + this.expirationDays
+        + ", expirationType="
+        + this.expirationType
+        + ", maturityDate="
+        + this.maturityDate
+        + ", shareProperty="
+        + this.shareProperty
+        + "]";
+  }
+}

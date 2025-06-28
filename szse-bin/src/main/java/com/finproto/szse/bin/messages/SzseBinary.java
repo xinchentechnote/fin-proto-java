@@ -1,0 +1,212 @@
+package com.finproto.szse.bin.messages;
+
+import com.finproto.codec.BinaryCodec;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.function.Supplier;
+
+public class SzseBinary implements BinaryCodec {
+  private int msgType;
+  private int bodyLength;
+  private BinaryCodec body;
+  private int checksum;
+
+  public int getMsgType() {
+    return this.msgType;
+  }
+
+  public void setMsgType(int msgType) {
+    this.msgType = msgType;
+  }
+
+  public int getBodyLength() {
+    return this.bodyLength;
+  }
+
+  public void setBodyLength(int bodyLength) {
+    this.bodyLength = bodyLength;
+  }
+
+  public BinaryCodec getBody() {
+    return this.body;
+  }
+
+  public void setBody(BinaryCodec body) {
+    this.body = body;
+  }
+
+  public int getChecksum() {
+    return this.checksum;
+  }
+
+  public void setChecksum(int checksum) {
+    this.checksum = checksum;
+  }
+
+  @Override
+  public void encode(ByteBuf byteBuf) {
+    byteBuf.writeInt(this.msgType);
+    ByteBuf bodyBuf = null;
+    if (this.body != null) {
+      bodyBuf = Unpooled.buffer();
+      this.body.encode(bodyBuf);
+      this.bodyLength = (int) bodyBuf.readableBytes();
+    } else {
+      this.bodyLength = 0;
+    }
+    byteBuf.writeInt(this.bodyLength);
+
+    if (bodyBuf != null) {
+      byteBuf.writeBytes(bodyBuf);
+      bodyBuf.release();
+    }
+
+    byteBuf.writeInt(this.checksum);
+  }
+
+  @Override
+  public void decode(ByteBuf byteBuf) {
+    this.msgType = byteBuf.readInt();
+    this.bodyLength = byteBuf.readInt();
+    this.body = createBody(this.msgType);
+    this.body.decode(byteBuf);
+    this.checksum = byteBuf.readInt();
+  }
+
+  private static final Map<Integer, Supplier<BinaryCodec>> bodyMap = new HashMap<>();
+
+  static {
+    bodyMap.put((int) 1, Logon::new);
+    bodyMap.put((int) 2, Logout::new);
+    bodyMap.put((int) 3, Heartbeat::new);
+    bodyMap.put((int) 4, BusinessReject::new);
+    bodyMap.put((int) 5, ReportSynchronization::new);
+    bodyMap.put((int) 6, PlatformStateInfo::new);
+    bodyMap.put((int) 7, ReportFinished::new);
+    bodyMap.put((int) 9, PlatformPartition::new);
+    bodyMap.put((int) 10, TradingSessionStatus::new);
+    bodyMap.put((int) 100101, NewOrder::new);
+    bodyMap.put((int) 100201, NewOrder::new);
+    bodyMap.put((int) 100301, NewOrder::new);
+    bodyMap.put((int) 100401, NewOrder::new);
+    bodyMap.put((int) 100501, NewOrder::new);
+    bodyMap.put((int) 100601, NewOrder::new);
+    bodyMap.put((int) 100701, NewOrder::new);
+    bodyMap.put((int) 101201, NewOrder::new);
+    bodyMap.put((int) 101301, NewOrder::new);
+    bodyMap.put((int) 101401, NewOrder::new);
+    bodyMap.put((int) 101501, NewOrder::new);
+    bodyMap.put((int) 101601, NewOrder::new);
+    bodyMap.put((int) 101701, NewOrder::new);
+    bodyMap.put((int) 101801, NewOrder::new);
+    bodyMap.put((int) 101901, NewOrder::new);
+    bodyMap.put((int) 102301, NewOrder::new);
+    bodyMap.put((int) 102701, NewOrder::new);
+    bodyMap.put((int) 102701, NewOrder::new);
+    bodyMap.put((int) 102801, NewOrder::new);
+    bodyMap.put((int) 102801, NewOrder::new);
+    bodyMap.put((int) 102901, NewOrder::new);
+    bodyMap.put((int) 102901, NewOrder::new);
+    bodyMap.put((int) 103101, NewOrder::new);
+    bodyMap.put((int) 103101, NewOrder::new);
+    bodyMap.put((int) 106301, NewOrder::new);
+    bodyMap.put((int) 103301, NewOrder::new);
+    bodyMap.put((int) 103501, NewOrder::new);
+    bodyMap.put((int) 103701, NewOrder::new);
+    bodyMap.put((int) 104101, NewOrder::new);
+    bodyMap.put((int) 104128, NewOrder::new);
+    bodyMap.put((int) 104701, NewOrder::new);
+    bodyMap.put((int) 200102, ExecutionConfirm::new);
+    bodyMap.put((int) 200202, ExecutionConfirm::new);
+    bodyMap.put((int) 200302, ExecutionConfirm::new);
+    bodyMap.put((int) 200402, ExecutionConfirm::new);
+    bodyMap.put((int) 200502, ExecutionConfirm::new);
+    bodyMap.put((int) 200602, ExecutionConfirm::new);
+    bodyMap.put((int) 200702, ExecutionConfirm::new);
+    bodyMap.put((int) 201202, ExecutionConfirm::new);
+    bodyMap.put((int) 201302, ExecutionConfirm::new);
+    bodyMap.put((int) 201402, ExecutionConfirm::new);
+    bodyMap.put((int) 201502, ExecutionConfirm::new);
+    bodyMap.put((int) 201602, ExecutionConfirm::new);
+    bodyMap.put((int) 201702, ExecutionConfirm::new);
+    bodyMap.put((int) 201802, ExecutionConfirm::new);
+    bodyMap.put((int) 201902, ExecutionConfirm::new);
+    bodyMap.put((int) 202202, ExecutionConfirm::new);
+    bodyMap.put((int) 202302, ExecutionConfirm::new);
+    bodyMap.put((int) 202702, ExecutionConfirm::new);
+    bodyMap.put((int) 202702, ExecutionConfirm::new);
+    bodyMap.put((int) 202802, ExecutionConfirm::new);
+    bodyMap.put((int) 202802, ExecutionConfirm::new);
+    bodyMap.put((int) 202902, ExecutionConfirm::new);
+    bodyMap.put((int) 202902, ExecutionConfirm::new);
+    bodyMap.put((int) 203102, ExecutionConfirm::new);
+    bodyMap.put((int) 203102, ExecutionConfirm::new);
+    bodyMap.put((int) 206302, ExecutionConfirm::new);
+    bodyMap.put((int) 203302, ExecutionConfirm::new);
+    bodyMap.put((int) 203302, ExecutionConfirm::new);
+    bodyMap.put((int) 203502, ExecutionConfirm::new);
+    bodyMap.put((int) 203502, ExecutionConfirm::new);
+    bodyMap.put((int) 203702, ExecutionConfirm::new);
+    bodyMap.put((int) 204102, ExecutionConfirm::new);
+    bodyMap.put((int) 204129, ExecutionConfirm::new);
+    bodyMap.put((int) 204702, ExecutionConfirm::new);
+    bodyMap.put((int) 200115, ExecutionReport::new);
+    bodyMap.put((int) 200215, ExecutionReport::new);
+    bodyMap.put((int) 200315, ExecutionReport::new);
+    bodyMap.put((int) 200415, ExecutionReport::new);
+    bodyMap.put((int) 200515, ExecutionReport::new);
+    bodyMap.put((int) 200615, ExecutionReport::new);
+    bodyMap.put((int) 200715, ExecutionReport::new);
+    bodyMap.put((int) 206315, ExecutionReport::new);
+    bodyMap.put((int) 203715, ExecutionReport::new);
+    bodyMap.put((int) 204115, ExecutionReport::new);
+    bodyMap.put((int) 204130, ExecutionReport::new);
+    bodyMap.put((int) 190007, OrderCancelRequest::new);
+    bodyMap.put((int) 290008, CancelReject::new);
+  }
+
+  private BinaryCodec createBody(Integer msgType) {
+    Supplier<BinaryCodec> supplier = bodyMap.get(msgType);
+    if (null == supplier) {
+      throw new IllegalArgumentException("Unsupported MsgType:" + msgType);
+    }
+    return supplier.get();
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(msgType, bodyLength, body, checksum);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (null == obj || getClass() != obj.getClass()) {
+      return false;
+    }
+    SzseBinary orther_ = (SzseBinary) obj;
+    return Objects.equals(msgType, orther_.msgType)
+        && Objects.equals(bodyLength, orther_.bodyLength)
+        && Objects.equals(body, orther_.body)
+        && Objects.equals(checksum, orther_.checksum);
+  }
+
+  @Override
+  public String toString() {
+    return "SzseBinary ["
+        + "msgType="
+        + this.msgType
+        + ", bodyLength="
+        + this.bodyLength
+        + ", body="
+        + this.body
+        + ", checksum="
+        + this.checksum
+        + "]";
+  }
+}

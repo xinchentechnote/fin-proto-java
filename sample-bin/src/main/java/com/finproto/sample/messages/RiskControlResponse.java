@@ -41,29 +41,29 @@ public class RiskControlResponse implements BinaryCodec {
       byteBuf.writeShort(0);
     } else {
       byte[] bytes = this.uniqueOrderId.getBytes(StandardCharsets.UTF_8);
-      byteBuf.writeShort(bytes.length);
+      byteBuf.writeShortLE(bytes.length);
       byteBuf.writeBytes(bytes);
     }
 
-    byteBuf.writeInt(this.status);
+    byteBuf.writeIntLE(this.status);
     if (StringUtil.isNullOrEmpty(this.msg)) {
       byteBuf.writeShort(0);
     } else {
       byte[] bytes = this.msg.getBytes(StandardCharsets.UTF_8);
-      byteBuf.writeShort(bytes.length);
+      byteBuf.writeShortLE(bytes.length);
       byteBuf.writeBytes(bytes);
     }
   }
 
   @Override
   public void decode(ByteBuf byteBuf) {
-    short uniqueOrderIdLen = byteBuf.readShort();
+    short uniqueOrderIdLen = byteBuf.readShortLE();
     if (uniqueOrderIdLen > 0) {
       this.uniqueOrderId =
           byteBuf.readCharSequence(uniqueOrderIdLen, StandardCharsets.UTF_8).toString();
     }
-    this.status = byteBuf.readInt();
-    short msgLen = byteBuf.readShort();
+    this.status = byteBuf.readIntLE();
+    short msgLen = byteBuf.readShortLE();
     if (msgLen > 0) {
       this.msg = byteBuf.readCharSequence(msgLen, StandardCharsets.UTF_8).toString();
     }

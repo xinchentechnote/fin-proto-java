@@ -39,7 +39,7 @@ public class SampleBinary implements BinaryCodec {
 
   @Override
   public void encode(ByteBuf byteBuf) {
-    byteBuf.writeShort(this.msgType);
+    byteBuf.writeShortLE(this.msgType);
     ByteBuf bodyBuf = null;
     if (this.body != null) {
       bodyBuf = Unpooled.buffer();
@@ -48,7 +48,7 @@ public class SampleBinary implements BinaryCodec {
     } else {
       this.bodyLength = 0;
     }
-    byteBuf.writeShort(this.bodyLength);
+    byteBuf.writeShortLE(this.bodyLength);
 
     if (bodyBuf != null) {
       byteBuf.writeBytes(bodyBuf);
@@ -58,8 +58,8 @@ public class SampleBinary implements BinaryCodec {
 
   @Override
   public void decode(ByteBuf byteBuf) {
-    this.msgType = byteBuf.readShort();
-    this.bodyLength = byteBuf.readShort();
+    this.msgType = byteBuf.readShortLE();
+    this.bodyLength = byteBuf.readShortLE();
     this.body = createBody(this.msgType);
     this.body.decode(byteBuf);
   }

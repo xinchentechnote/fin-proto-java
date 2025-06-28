@@ -104,7 +104,7 @@ public class RiskControlRequest implements BinaryCodec {
       byteBuf.writeShort(0);
     } else {
       byte[] bytes = this.uniqueOrderId.getBytes(StandardCharsets.UTF_8);
-      byteBuf.writeShort(bytes.length);
+      byteBuf.writeShortLE(bytes.length);
       byteBuf.writeBytes(bytes);
     }
 
@@ -113,13 +113,13 @@ public class RiskControlRequest implements BinaryCodec {
     writeFixedString(byteBuf, this.securityId, 12);
     byteBuf.writeByte(this.side);
     byteBuf.writeByte(this.orderType);
-    byteBuf.writeLong(this.price);
-    byteBuf.writeInt(this.qty);
+    byteBuf.writeLongLE(this.price);
+    byteBuf.writeIntLE(this.qty);
     if (StringUtil.isNullOrEmpty(this.extraInfo)) {
       byteBuf.writeShort(0);
     } else {
       byte[] bytes = this.extraInfo.getBytes(StandardCharsets.UTF_8);
-      byteBuf.writeShort(bytes.length);
+      byteBuf.writeShortLE(bytes.length);
       byteBuf.writeBytes(bytes);
     }
 
@@ -131,7 +131,7 @@ public class RiskControlRequest implements BinaryCodec {
 
   @Override
   public void decode(ByteBuf byteBuf) {
-    short uniqueOrderIdLen = byteBuf.readShort();
+    short uniqueOrderIdLen = byteBuf.readShortLE();
     if (uniqueOrderIdLen > 0) {
       this.uniqueOrderId =
           byteBuf.readCharSequence(uniqueOrderIdLen, StandardCharsets.UTF_8).toString();
@@ -141,9 +141,9 @@ public class RiskControlRequest implements BinaryCodec {
     this.securityId = readFixedString(byteBuf, 12);
     this.side = byteBuf.readByte();
     this.orderType = byteBuf.readByte();
-    this.price = byteBuf.readLong();
-    this.qty = byteBuf.readInt();
-    short extraInfoLen = byteBuf.readShort();
+    this.price = byteBuf.readLongLE();
+    this.qty = byteBuf.readIntLE();
+    short extraInfoLen = byteBuf.readShortLE();
     if (extraInfoLen > 0) {
       this.extraInfo = byteBuf.readCharSequence(extraInfoLen, StandardCharsets.UTF_8).toString();
     }
@@ -247,15 +247,15 @@ public class RiskControlRequest implements BinaryCodec {
     @Override
     public void encode(ByteBuf byteBuf) {
       writeFixedString(byteBuf, this.clOrdId, 16);
-      byteBuf.writeLong(this.price);
-      byteBuf.writeInt(this.qty);
+      byteBuf.writeLongLE(this.price);
+      byteBuf.writeIntLE(this.qty);
     }
 
     @Override
     public void decode(ByteBuf byteBuf) {
       this.clOrdId = readFixedString(byteBuf, 16);
-      this.price = byteBuf.readLong();
-      this.qty = byteBuf.readInt();
+      this.price = byteBuf.readLongLE();
+      this.qty = byteBuf.readIntLE();
     }
 
     @Override

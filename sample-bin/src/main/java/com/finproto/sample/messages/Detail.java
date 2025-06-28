@@ -32,20 +32,20 @@ public class Detail implements BinaryCodec {
       byteBuf.writeShort(0);
     } else {
       byte[] bytes = this.ruleName.getBytes(StandardCharsets.UTF_8);
-      byteBuf.writeShort(bytes.length);
+      byteBuf.writeShortLE(bytes.length);
       byteBuf.writeBytes(bytes);
     }
 
-    byteBuf.writeShort(this.code);
+    byteBuf.writeShortLE(this.code);
   }
 
   @Override
   public void decode(ByteBuf byteBuf) {
-    short ruleNameLen = byteBuf.readShort();
+    short ruleNameLen = byteBuf.readShortLE();
     if (ruleNameLen > 0) {
       this.ruleName = byteBuf.readCharSequence(ruleNameLen, StandardCharsets.UTF_8).toString();
     }
-    this.code = byteBuf.readShort();
+    this.code = byteBuf.readShortLE();
   }
 
   @Override

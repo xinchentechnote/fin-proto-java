@@ -8,7 +8,7 @@ BIN_DIR := ~/workspace/fin-protoc/bin/
 
 .PHONY: all compile format fix clean
 
-all: compile fmt test
+all: compile test
 
 build: compile
 

@@ -1,129 +1,130 @@
 package com.finproto.sample.messages;
-
-import com.finproto.codec.BinaryCodec;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Supplier;
+import com.finproto.codec.BinaryCodec;
+
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+import io.netty.util.internal.StringUtil;
+
 
 public class RootPacket implements BinaryCodec {
-  private short msgType;
-  private int payloadLen;
-  private BinaryCodec payload;
-  private int checksum;
+    private short msgType;
+    private int payloadLen;
+    private BinaryCodec payload;
+    private int checksum;
 
-  public short getMsgType() {
-    return this.msgType;
-  }
-
-  public void setMsgType(short msgType) {
-    this.msgType = msgType;
-  }
-
-  public int getPayloadLen() {
-    return this.payloadLen;
-  }
-
-  public void setPayloadLen(int payloadLen) {
-    this.payloadLen = payloadLen;
-  }
-
-  public BinaryCodec getPayload() {
-    return this.payload;
-  }
-
-  public void setPayload(BinaryCodec payload) {
-    this.payload = payload;
-  }
-
-  public int getChecksum() {
-    return this.checksum;
-  }
-
-  public void setChecksum(int checksum) {
-    this.checksum = checksum;
-  }
-
-  @Override
-  public void encode(ByteBuf byteBuf) {
-    byteBuf.writeShortLE(this.msgType);
-    ByteBuf payloadBuf = null;
-    if (this.payload != null) {
-      payloadBuf = Unpooled.buffer();
-      this.payload.encode(payloadBuf);
-      this.payloadLen = (int) payloadBuf.readableBytes();
-    } else {
-      this.payloadLen = 0;
+    public short getMsgType() {
+        return this.msgType;
     }
-    byteBuf.writeIntLE(this.payloadLen);
+    
+    
+    public void setMsgType(short msgType) {
+        this.msgType = msgType;
+    }
+    
+    public int getPayloadLen() {
+        return this.payloadLen;
+    }
+    
+    
+    public void setPayloadLen(int payloadLen) {
+        this.payloadLen = payloadLen;
+    }
+    
+    public BinaryCodec getPayload() {
+        return this.payload;
+    }
+    
+    
+    public void setPayload(BinaryCodec payload) {
+        this.payload = payload;
+    }
+    
+    public int getChecksum() {
+        return this.checksum;
+    }
+    
+    
+    public void setChecksum(int checksum) {
+        this.checksum = checksum;
+    }
+    
 
-    if (payloadBuf != null) {
-      byteBuf.writeBytes(payloadBuf);
-      payloadBuf.release();
+    @Override
+    public void encode(ByteBuf byteBuf) {
+        byteBuf.writeShortLE(this.msgType);
+        ByteBuf payloadBuf = null;
+        if (this.payload != null) {
+        payloadBuf = Unpooled.buffer();
+        this.payload.encode(payloadBuf);
+        this.payloadLen = (int) payloadBuf.readableBytes();
+        } else {
+        this.payloadLen = 0;
+        }
+        byteBuf.writeIntLE(this.payloadLen);
+        
+        if (payloadBuf != null) {
+        byteBuf.writeBytes(payloadBuf);
+        payloadBuf.release();
+        }
+        
+        byteBuf.writeIntLE(this.checksum);
+    }
+    
+
+    @Override
+    public void decode(ByteBuf byteBuf) {
+        this.msgType = byteBuf.readShortLE();
+        this.payloadLen = byteBuf.readIntLE();
+        this.payload = createPayload(this.msgType);
+        this.payload.decode(byteBuf);
+        this.checksum = byteBuf.readIntLE();
+    }
+    
+    private static final Map<Short, Supplier<BinaryCodec>> payloadMap = new HashMap<>();
+    static {
+        payloadMap.put((short) 1, BasicPacket::new);
+        payloadMap.put((short) 2, StringPacket::new);
+        payloadMap.put((short) 3, NestedPacket::new);
+        payloadMap.put((short) 4, EmptyPacket::new);
+    }
+    
+    private BinaryCodec createPayload(Short msgType) {
+        Supplier<BinaryCodec> supplier = payloadMap.get(msgType);
+        if (null == supplier) {
+            throw new IllegalArgumentException("Unsupported MsgType:" + msgType);
+        }
+        return supplier.get();
     }
 
-    byteBuf.writeIntLE(this.checksum);
-  }
-
-  @Override
-  public void decode(ByteBuf byteBuf) {
-    this.msgType = byteBuf.readShortLE();
-    this.payloadLen = byteBuf.readIntLE();
-    this.payload = createPayload(this.msgType);
-    this.payload.decode(byteBuf);
-    this.checksum = byteBuf.readIntLE();
-  }
-
-  private static final Map<Short, Supplier<BinaryCodec>> payloadMap = new HashMap<>();
-
-  static {
-    payloadMap.put((short) 1, BasicPacket::new);
-    payloadMap.put((short) 2, StringPacket::new);
-    payloadMap.put((short) 3, NestedPacket::new);
-    payloadMap.put((short) 4, EmptyPacket::new);
-  }
-
-  private BinaryCodec createPayload(Short msgType) {
-    Supplier<BinaryCodec> supplier = payloadMap.get(msgType);
-    if (null == supplier) {
-      throw new IllegalArgumentException("Unsupported MsgType:" + msgType);
+    @Override
+    public int hashCode() {
+        return Objects.hash(msgType, payloadLen, payload, checksum);
     }
-    return supplier.get();
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(msgType, payloadLen, payload, checksum);
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (this == obj) {
-      return true;
+    
+    @Override
+    public boolean equals(Object obj) {
+        if(this == obj) {
+            return true;
+        }
+        if(null == obj || getClass() != obj.getClass()) {
+            return false;
+        }
+        RootPacket orther_ = (RootPacket) obj;
+        return Objects.equals(msgType, orther_.msgType) && Objects.equals(payloadLen, orther_.payloadLen) && Objects.equals(payload, orther_.payload) && Objects.equals(checksum, orther_.checksum);
     }
-    if (null == obj || getClass() != obj.getClass()) {
-      return false;
-    }
-    RootPacket orther_ = (RootPacket) obj;
-    return Objects.equals(msgType, orther_.msgType)
-        && Objects.equals(payloadLen, orther_.payloadLen)
-        && Objects.equals(payload, orther_.payload)
-        && Objects.equals(checksum, orther_.checksum);
-  }
+    
 
-  @Override
-  public String toString() {
-    return "RootPacket ["
-        + "msgType="
-        + this.msgType
-        + ", payloadLen="
-        + this.payloadLen
-        + ", payload="
-        + this.payload
-        + ", checksum="
-        + this.checksum
-        + "]";
-  }
+    @Override
+    public String toString() {
+        return "RootPacket [" + "msgType=" + this.msgType + ", payloadLen=" + this.payloadLen + ", payload=" + this.payload + ", checksum=" + this.checksum + "]";
+    }
+    
+
 }

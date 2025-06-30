@@ -2,12 +2,14 @@ package com.finproto.sse.bin.messages;
 
 import com.finproto.codec.BinaryCodec;
 import io.netty.buffer.ByteBuf;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class ExecRptInfo implements BinaryCodec {
   private short platformId;
-  private String pbu;
-  private int setId;
+  private List<String> pbu;
+  private List<Integer> setId;
 
   public short getPlatformId() {
     return this.platformId;
@@ -17,34 +19,60 @@ public class ExecRptInfo implements BinaryCodec {
     this.platformId = platformId;
   }
 
-  public String getPbu() {
+  public List<String> getPbu() {
     return this.pbu;
   }
 
-  public void setPbu(String pbu) {
+  public void setPbu(List<String> pbu) {
     this.pbu = pbu;
   }
 
-  public int getSetId() {
+  public List<Integer> getSetId() {
     return this.setId;
   }
 
-  public void setSetId(int setId) {
+  public void setSetId(List<Integer> setId) {
     this.setId = setId;
   }
 
   @Override
   public void encode(ByteBuf byteBuf) {
     byteBuf.writeShort(this.platformId);
-    writeFixedString(byteBuf, this.pbu, 8);
-    byteBuf.writeInt(this.setId);
+    if (null == this.pbu || this.pbu.size() == 0) {
+      byteBuf.writeShort(0);
+    } else {
+      byteBuf.writeShort((short) this.pbu.size());
+      for (int i = 0; i < this.pbu.size(); i++) {
+        writeFixedString(byteBuf, this.pbu.get(i), 8);
+      }
+    }
+    if (null == this.setId || this.setId.size() == 0) {
+      byteBuf.writeShort(0);
+    } else {
+      byteBuf.writeShort((short) this.setId.size());
+      for (int i = 0; i < this.setId.size(); i++) {
+        byteBuf.writeInt(this.setId.get(i));
+      }
+    }
   }
 
   @Override
   public void decode(ByteBuf byteBuf) {
     this.platformId = byteBuf.readShort();
-    this.pbu = readFixedString(byteBuf, 8);
-    this.setId = byteBuf.readInt();
+    short pbuSize = byteBuf.readShort();
+    if (pbuSize > 0) {
+      this.pbu = new ArrayList<>();
+      for (int i = 0; i < pbuSize; i++) {
+        this.pbu.add(readFixedString(byteBuf, 8));
+      }
+    }
+    short setIdSize = byteBuf.readShort();
+    if (setIdSize > 0) {
+      this.setId = new ArrayList<>();
+      for (int i = 0; i < setIdSize; i++) {
+        this.setId.add(byteBuf.readInt());
+      }
+    }
   }
 
   @Override

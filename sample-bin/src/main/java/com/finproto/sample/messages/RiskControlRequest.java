@@ -4,6 +4,8 @@ import com.finproto.codec.BinaryCodec;
 import io.netty.buffer.ByteBuf;
 import io.netty.util.internal.StringUtil;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class RiskControlRequest implements BinaryCodec {
@@ -15,7 +17,7 @@ public class RiskControlRequest implements BinaryCodec {
   private byte orderType;
   private long price;
   private int qty;
-  private String extraInfo;
+  private List<String> extraInfo;
   private SubOrder subOrder;
 
   public String getUniqueOrderId() {
@@ -82,11 +84,11 @@ public class RiskControlRequest implements BinaryCodec {
     this.qty = qty;
   }
 
-  public String getExtraInfo() {
+  public List<String> getExtraInfo() {
     return this.extraInfo;
   }
 
-  public void setExtraInfo(String extraInfo) {
+  public void setExtraInfo(List<String> extraInfo) {
     this.extraInfo = extraInfo;
   }
 
@@ -115,16 +117,19 @@ public class RiskControlRequest implements BinaryCodec {
     byteBuf.writeByte(this.orderType);
     byteBuf.writeLongLE(this.price);
     byteBuf.writeIntLE(this.qty);
-    if (StringUtil.isNullOrEmpty(this.extraInfo)) {
+    if (null == this.extraInfo || this.extraInfo.size() == 0) {
       byteBuf.writeShort(0);
     } else {
-      byte[] bytes = this.extraInfo.getBytes(StandardCharsets.UTF_8);
-      byteBuf.writeShortLE(bytes.length);
-      byteBuf.writeBytes(bytes);
-    }
-
-    if (null == this.subOrder) {
-      this.subOrder = new SubOrder();
+      byteBuf.writeShortLE((short) this.extraInfo.size());
+      for (int i = 0; i < this.extraInfo.size(); i++) {
+        if (StringUtil.isNullOrEmpty(this.extraInfo.get(i))) {
+          byteBuf.writeShort(0);
+        } else {
+          byte[] bytes = this.extraInfo.get(i).getBytes(StandardCharsets.UTF_8);
+          byteBuf.writeShortLE(bytes.length);
+          byteBuf.writeBytes(bytes);
+        }
+      }
     }
     this.subOrder.encode(byteBuf);
   }
@@ -143,9 +148,16 @@ public class RiskControlRequest implements BinaryCodec {
     this.orderType = byteBuf.readByte();
     this.price = byteBuf.readLongLE();
     this.qty = byteBuf.readIntLE();
-    short extraInfoLen = byteBuf.readShortLE();
-    if (extraInfoLen > 0) {
-      this.extraInfo = byteBuf.readCharSequence(extraInfoLen, StandardCharsets.UTF_8).toString();
+    short extraInfoSize = byteBuf.readShortLE();
+    if (extraInfoSize > 0) {
+      this.extraInfo = new ArrayList<>();
+      for (int i = 0; i < extraInfoSize; i++) {
+        short extraInfoLen = byteBuf.readShortLE();
+        if (extraInfoLen > 0) {
+          this.extraInfo.add(
+              byteBuf.readCharSequence(extraInfoLen, StandardCharsets.UTF_8).toString());
+        }
+      }
     }
     if (null == this.subOrder) {
       this.subOrder = new SubOrder();

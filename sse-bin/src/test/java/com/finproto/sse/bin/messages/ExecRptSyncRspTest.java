@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import java.util.Arrays;
 import org.junit.Test;
 
 public class ExecRptSyncRspTest {
@@ -17,7 +18,7 @@ public class ExecRptSyncRspTest {
     subExecRptSyncRsp.setEndReportIndex(8L);
     subExecRptSyncRsp.setRejReason(4);
     subExecRptSyncRsp.setText("1111111111111111111111111111111111111111111111111111111111111111");
-    original.setSubExecRptSyncRsp(subExecRptSyncRsp);
+    original.setSubExecRptSyncRsp(Arrays.asList(subExecRptSyncRsp));
 
     ByteBuf buffer = Unpooled.buffer();
     original.encode(buffer);

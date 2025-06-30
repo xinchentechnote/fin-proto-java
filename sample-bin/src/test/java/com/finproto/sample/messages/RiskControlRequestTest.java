@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import java.util.Arrays;
 import org.junit.Test;
 
 public class RiskControlRequestTest {
@@ -18,7 +19,7 @@ public class RiskControlRequestTest {
     original.setOrderType((byte) 1);
     original.setPrice(8L);
     original.setQty(4);
-    original.setExtraInfo("example");
+    original.setExtraInfo(Arrays.asList("example"));
     RiskControlRequest.SubOrder subOrder = new RiskControlRequest.SubOrder();
     subOrder.setClOrdId("1111111111111111");
     subOrder.setPrice(8L);

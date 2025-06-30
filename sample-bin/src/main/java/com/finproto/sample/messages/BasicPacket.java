@@ -1,0 +1,513 @@
+package com.finproto.sample.messages;
+
+import com.finproto.codec.BinaryCodec;
+import io.netty.buffer.ByteBuf;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
+public class BasicPacket implements BinaryCodec {
+  private byte fieldI8;
+  private short fieldI16;
+  private int fieldI32;
+  private long fieldI64;
+  private byte fieldChar;
+  private byte fieldU8;
+  private short fieldU16;
+  private int fieldU32;
+  private long fieldU64;
+  private float fieldF32;
+  private double fieldF64;
+  private List<Byte> fieldI8List;
+  private List<Short> fieldI16List;
+  private List<Integer> fieldI32List;
+  private List<Long> fieldI64List;
+  private List<Byte> fieldCharList;
+  private List<Byte> fieldU8List;
+  private List<Short> fieldU16List;
+  private List<Integer> fieldU32List;
+  private List<Long> fieldU64List;
+  private List<Float> fieldF32List;
+  private List<Double> fieldF64List;
+
+  public byte getFieldI8() {
+    return this.fieldI8;
+  }
+
+  public void setFieldI8(byte fieldI8) {
+    this.fieldI8 = fieldI8;
+  }
+
+  public short getFieldI16() {
+    return this.fieldI16;
+  }
+
+  public void setFieldI16(short fieldI16) {
+    this.fieldI16 = fieldI16;
+  }
+
+  public int getFieldI32() {
+    return this.fieldI32;
+  }
+
+  public void setFieldI32(int fieldI32) {
+    this.fieldI32 = fieldI32;
+  }
+
+  public long getFieldI64() {
+    return this.fieldI64;
+  }
+
+  public void setFieldI64(long fieldI64) {
+    this.fieldI64 = fieldI64;
+  }
+
+  public byte getFieldChar() {
+    return this.fieldChar;
+  }
+
+  public void setFieldChar(byte fieldChar) {
+    this.fieldChar = fieldChar;
+  }
+
+  public byte getFieldU8() {
+    return this.fieldU8;
+  }
+
+  public void setFieldU8(byte fieldU8) {
+    this.fieldU8 = fieldU8;
+  }
+
+  public short getFieldU16() {
+    return this.fieldU16;
+  }
+
+  public void setFieldU16(short fieldU16) {
+    this.fieldU16 = fieldU16;
+  }
+
+  public int getFieldU32() {
+    return this.fieldU32;
+  }
+
+  public void setFieldU32(int fieldU32) {
+    this.fieldU32 = fieldU32;
+  }
+
+  public long getFieldU64() {
+    return this.fieldU64;
+  }
+
+  public void setFieldU64(long fieldU64) {
+    this.fieldU64 = fieldU64;
+  }
+
+  public float getFieldF32() {
+    return this.fieldF32;
+  }
+
+  public void setFieldF32(float fieldF32) {
+    this.fieldF32 = fieldF32;
+  }
+
+  public double getFieldF64() {
+    return this.fieldF64;
+  }
+
+  public void setFieldF64(double fieldF64) {
+    this.fieldF64 = fieldF64;
+  }
+
+  public List<Byte> getFieldI8List() {
+    return this.fieldI8List;
+  }
+
+  public void setFieldI8List(List<Byte> fieldI8List) {
+    this.fieldI8List = fieldI8List;
+  }
+
+  public List<Short> getFieldI16List() {
+    return this.fieldI16List;
+  }
+
+  public void setFieldI16List(List<Short> fieldI16List) {
+    this.fieldI16List = fieldI16List;
+  }
+
+  public List<Integer> getFieldI32List() {
+    return this.fieldI32List;
+  }
+
+  public void setFieldI32List(List<Integer> fieldI32List) {
+    this.fieldI32List = fieldI32List;
+  }
+
+  public List<Long> getFieldI64List() {
+    return this.fieldI64List;
+  }
+
+  public void setFieldI64List(List<Long> fieldI64List) {
+    this.fieldI64List = fieldI64List;
+  }
+
+  public List<Byte> getFieldCharList() {
+    return this.fieldCharList;
+  }
+
+  public void setFieldCharList(List<Byte> fieldCharList) {
+    this.fieldCharList = fieldCharList;
+  }
+
+  public List<Byte> getFieldU8List() {
+    return this.fieldU8List;
+  }
+
+  public void setFieldU8List(List<Byte> fieldU8List) {
+    this.fieldU8List = fieldU8List;
+  }
+
+  public List<Short> getFieldU16List() {
+    return this.fieldU16List;
+  }
+
+  public void setFieldU16List(List<Short> fieldU16List) {
+    this.fieldU16List = fieldU16List;
+  }
+
+  public List<Integer> getFieldU32List() {
+    return this.fieldU32List;
+  }
+
+  public void setFieldU32List(List<Integer> fieldU32List) {
+    this.fieldU32List = fieldU32List;
+  }
+
+  public List<Long> getFieldU64List() {
+    return this.fieldU64List;
+  }
+
+  public void setFieldU64List(List<Long> fieldU64List) {
+    this.fieldU64List = fieldU64List;
+  }
+
+  public List<Float> getFieldF32List() {
+    return this.fieldF32List;
+  }
+
+  public void setFieldF32List(List<Float> fieldF32List) {
+    this.fieldF32List = fieldF32List;
+  }
+
+  public List<Double> getFieldF64List() {
+    return this.fieldF64List;
+  }
+
+  public void setFieldF64List(List<Double> fieldF64List) {
+    this.fieldF64List = fieldF64List;
+  }
+
+  @Override
+  public void encode(ByteBuf byteBuf) {
+    byteBuf.writeByte(this.fieldI8);
+    byteBuf.writeShortLE(this.fieldI16);
+    byteBuf.writeIntLE(this.fieldI32);
+    byteBuf.writeLongLE(this.fieldI64);
+    byteBuf.writeByte(this.fieldChar);
+    byteBuf.writeByte(this.fieldU8);
+    byteBuf.writeShortLE(this.fieldU16);
+    byteBuf.writeIntLE(this.fieldU32);
+    byteBuf.writeLongLE(this.fieldU64);
+    byteBuf.writeFloatLE(this.fieldF32);
+    byteBuf.writeDoubleLE(this.fieldF64);
+    if (null == this.fieldI8List || this.fieldI8List.size() == 0) {
+      byteBuf.writeShort(0);
+    } else {
+      byteBuf.writeShortLE((short) this.fieldI8List.size());
+      for (int i = 0; i < this.fieldI8List.size(); i++) {
+        byteBuf.writeByte(this.fieldI8List.get(i));
+      }
+    }
+    if (null == this.fieldI16List || this.fieldI16List.size() == 0) {
+      byteBuf.writeShort(0);
+    } else {
+      byteBuf.writeShortLE((short) this.fieldI16List.size());
+      for (int i = 0; i < this.fieldI16List.size(); i++) {
+        byteBuf.writeShortLE(this.fieldI16List.get(i));
+      }
+    }
+    if (null == this.fieldI32List || this.fieldI32List.size() == 0) {
+      byteBuf.writeShort(0);
+    } else {
+      byteBuf.writeShortLE((short) this.fieldI32List.size());
+      for (int i = 0; i < this.fieldI32List.size(); i++) {
+        byteBuf.writeIntLE(this.fieldI32List.get(i));
+      }
+    }
+    if (null == this.fieldI64List || this.fieldI64List.size() == 0) {
+      byteBuf.writeShort(0);
+    } else {
+      byteBuf.writeShortLE((short) this.fieldI64List.size());
+      for (int i = 0; i < this.fieldI64List.size(); i++) {
+        byteBuf.writeLongLE(this.fieldI64List.get(i));
+      }
+    }
+    if (null == this.fieldCharList || this.fieldCharList.size() == 0) {
+      byteBuf.writeShort(0);
+    } else {
+      byteBuf.writeShortLE((short) this.fieldCharList.size());
+      for (int i = 0; i < this.fieldCharList.size(); i++) {
+        byteBuf.writeByte(this.fieldCharList.get(i));
+      }
+    }
+    if (null == this.fieldU8List || this.fieldU8List.size() == 0) {
+      byteBuf.writeShort(0);
+    } else {
+      byteBuf.writeShortLE((short) this.fieldU8List.size());
+      for (int i = 0; i < this.fieldU8List.size(); i++) {
+        byteBuf.writeByte(this.fieldU8List.get(i));
+      }
+    }
+    if (null == this.fieldU16List || this.fieldU16List.size() == 0) {
+      byteBuf.writeShort(0);
+    } else {
+      byteBuf.writeShortLE((short) this.fieldU16List.size());
+      for (int i = 0; i < this.fieldU16List.size(); i++) {
+        byteBuf.writeShortLE(this.fieldU16List.get(i));
+      }
+    }
+    if (null == this.fieldU32List || this.fieldU32List.size() == 0) {
+      byteBuf.writeShort(0);
+    } else {
+      byteBuf.writeShortLE((short) this.fieldU32List.size());
+      for (int i = 0; i < this.fieldU32List.size(); i++) {
+        byteBuf.writeIntLE(this.fieldU32List.get(i));
+      }
+    }
+    if (null == this.fieldU64List || this.fieldU64List.size() == 0) {
+      byteBuf.writeShort(0);
+    } else {
+      byteBuf.writeShortLE((short) this.fieldU64List.size());
+      for (int i = 0; i < this.fieldU64List.size(); i++) {
+        byteBuf.writeLongLE(this.fieldU64List.get(i));
+      }
+    }
+    if (null == this.fieldF32List || this.fieldF32List.size() == 0) {
+      byteBuf.writeShort(0);
+    } else {
+      byteBuf.writeShortLE((short) this.fieldF32List.size());
+      for (int i = 0; i < this.fieldF32List.size(); i++) {
+        byteBuf.writeFloatLE(this.fieldF32List.get(i));
+      }
+    }
+    if (null == this.fieldF64List || this.fieldF64List.size() == 0) {
+      byteBuf.writeShort(0);
+    } else {
+      byteBuf.writeShortLE((short) this.fieldF64List.size());
+      for (int i = 0; i < this.fieldF64List.size(); i++) {
+        byteBuf.writeDoubleLE(this.fieldF64List.get(i));
+      }
+    }
+  }
+
+  @Override
+  public void decode(ByteBuf byteBuf) {
+    this.fieldI8 = byteBuf.readByte();
+    this.fieldI16 = byteBuf.readShortLE();
+    this.fieldI32 = byteBuf.readIntLE();
+    this.fieldI64 = byteBuf.readLongLE();
+    this.fieldChar = byteBuf.readByte();
+    this.fieldU8 = byteBuf.readByte();
+    this.fieldU16 = byteBuf.readShortLE();
+    this.fieldU32 = byteBuf.readIntLE();
+    this.fieldU64 = byteBuf.readLongLE();
+    this.fieldF32 = byteBuf.readFloatLE();
+    this.fieldF64 = byteBuf.readDoubleLE();
+    short fieldI8ListSize = byteBuf.readShortLE();
+    if (fieldI8ListSize > 0) {
+      this.fieldI8List = new ArrayList<>();
+      for (int i = 0; i < fieldI8ListSize; i++) {
+        this.fieldI8List.add(byteBuf.readByte());
+      }
+    }
+    short fieldI16ListSize = byteBuf.readShortLE();
+    if (fieldI16ListSize > 0) {
+      this.fieldI16List = new ArrayList<>();
+      for (int i = 0; i < fieldI16ListSize; i++) {
+        this.fieldI16List.add(byteBuf.readShortLE());
+      }
+    }
+    short fieldI32ListSize = byteBuf.readShortLE();
+    if (fieldI32ListSize > 0) {
+      this.fieldI32List = new ArrayList<>();
+      for (int i = 0; i < fieldI32ListSize; i++) {
+        this.fieldI32List.add(byteBuf.readIntLE());
+      }
+    }
+    short fieldI64ListSize = byteBuf.readShortLE();
+    if (fieldI64ListSize > 0) {
+      this.fieldI64List = new ArrayList<>();
+      for (int i = 0; i < fieldI64ListSize; i++) {
+        this.fieldI64List.add(byteBuf.readLongLE());
+      }
+    }
+    short fieldCharListSize = byteBuf.readShortLE();
+    if (fieldCharListSize > 0) {
+      this.fieldCharList = new ArrayList<>();
+      for (int i = 0; i < fieldCharListSize; i++) {
+        this.fieldCharList.add(byteBuf.readByte());
+      }
+    }
+    short fieldU8ListSize = byteBuf.readShortLE();
+    if (fieldU8ListSize > 0) {
+      this.fieldU8List = new ArrayList<>();
+      for (int i = 0; i < fieldU8ListSize; i++) {
+        this.fieldU8List.add(byteBuf.readByte());
+      }
+    }
+    short fieldU16ListSize = byteBuf.readShortLE();
+    if (fieldU16ListSize > 0) {
+      this.fieldU16List = new ArrayList<>();
+      for (int i = 0; i < fieldU16ListSize; i++) {
+        this.fieldU16List.add(byteBuf.readShortLE());
+      }
+    }
+    short fieldU32ListSize = byteBuf.readShortLE();
+    if (fieldU32ListSize > 0) {
+      this.fieldU32List = new ArrayList<>();
+      for (int i = 0; i < fieldU32ListSize; i++) {
+        this.fieldU32List.add(byteBuf.readIntLE());
+      }
+    }
+    short fieldU64ListSize = byteBuf.readShortLE();
+    if (fieldU64ListSize > 0) {
+      this.fieldU64List = new ArrayList<>();
+      for (int i = 0; i < fieldU64ListSize; i++) {
+        this.fieldU64List.add(byteBuf.readLongLE());
+      }
+    }
+    short fieldF32ListSize = byteBuf.readShortLE();
+    if (fieldF32ListSize > 0) {
+      this.fieldF32List = new ArrayList<>();
+      for (int i = 0; i < fieldF32ListSize; i++) {
+        this.fieldF32List.add(byteBuf.readFloatLE());
+      }
+    }
+    short fieldF64ListSize = byteBuf.readShortLE();
+    if (fieldF64ListSize > 0) {
+      this.fieldF64List = new ArrayList<>();
+      for (int i = 0; i < fieldF64ListSize; i++) {
+        this.fieldF64List.add(byteBuf.readDoubleLE());
+      }
+    }
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(
+        fieldI8,
+        fieldI16,
+        fieldI32,
+        fieldI64,
+        fieldChar,
+        fieldU8,
+        fieldU16,
+        fieldU32,
+        fieldU64,
+        fieldF32,
+        fieldF64,
+        fieldI8List,
+        fieldI16List,
+        fieldI32List,
+        fieldI64List,
+        fieldCharList,
+        fieldU8List,
+        fieldU16List,
+        fieldU32List,
+        fieldU64List,
+        fieldF32List,
+        fieldF64List);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (null == obj || getClass() != obj.getClass()) {
+      return false;
+    }
+    BasicPacket orther_ = (BasicPacket) obj;
+    return Objects.equals(fieldI8, orther_.fieldI8)
+        && Objects.equals(fieldI16, orther_.fieldI16)
+        && Objects.equals(fieldI32, orther_.fieldI32)
+        && Objects.equals(fieldI64, orther_.fieldI64)
+        && Objects.equals(fieldChar, orther_.fieldChar)
+        && Objects.equals(fieldU8, orther_.fieldU8)
+        && Objects.equals(fieldU16, orther_.fieldU16)
+        && Objects.equals(fieldU32, orther_.fieldU32)
+        && Objects.equals(fieldU64, orther_.fieldU64)
+        && Objects.equals(fieldF32, orther_.fieldF32)
+        && Objects.equals(fieldF64, orther_.fieldF64)
+        && Objects.equals(fieldI8List, orther_.fieldI8List)
+        && Objects.equals(fieldI16List, orther_.fieldI16List)
+        && Objects.equals(fieldI32List, orther_.fieldI32List)
+        && Objects.equals(fieldI64List, orther_.fieldI64List)
+        && Objects.equals(fieldCharList, orther_.fieldCharList)
+        && Objects.equals(fieldU8List, orther_.fieldU8List)
+        && Objects.equals(fieldU16List, orther_.fieldU16List)
+        && Objects.equals(fieldU32List, orther_.fieldU32List)
+        && Objects.equals(fieldU64List, orther_.fieldU64List)
+        && Objects.equals(fieldF32List, orther_.fieldF32List)
+        && Objects.equals(fieldF64List, orther_.fieldF64List);
+  }
+
+  @Override
+  public String toString() {
+    return "BasicPacket ["
+        + "fieldI8="
+        + this.fieldI8
+        + ", fieldI16="
+        + this.fieldI16
+        + ", fieldI32="
+        + this.fieldI32
+        + ", fieldI64="
+        + this.fieldI64
+        + ", fieldChar="
+        + this.fieldChar
+        + ", fieldU8="
+        + this.fieldU8
+        + ", fieldU16="
+        + this.fieldU16
+        + ", fieldU32="
+        + this.fieldU32
+        + ", fieldU64="
+        + this.fieldU64
+        + ", fieldF32="
+        + this.fieldF32
+        + ", fieldF64="
+        + this.fieldF64
+        + ", fieldI8List="
+        + this.fieldI8List
+        + ", fieldI16List="
+        + this.fieldI16List
+        + ", fieldI32List="
+        + this.fieldI32List
+        + ", fieldI64List="
+        + this.fieldI64List
+        + ", fieldCharList="
+        + this.fieldCharList
+        + ", fieldU8List="
+        + this.fieldU8List
+        + ", fieldU16List="
+        + this.fieldU16List
+        + ", fieldU32List="
+        + this.fieldU32List
+        + ", fieldU64List="
+        + this.fieldU64List
+        + ", fieldF32List="
+        + this.fieldF32List
+        + ", fieldF64List="
+        + this.fieldF64List
+        + "]";
+  }
+}

@@ -863,7 +863,6 @@ packet BusinessReject {
 }
 
 packet ReportSynchronization {
-    NoPartitions `平台分区数量`
     repeat PartitionReport
 }
 
@@ -885,7 +884,6 @@ packet ReportFinished {
 
 packet PlatformInfo {
     PlatformID `平台号（1=现货集中竞价交易平台 2=综合金融服务平台 3=非交易处理平台 4=衍生品集中竞价交易平台 5=国际市场互联平台 6=固定收益交易平台）`
-    NoPartitions `平台分区数量`
     repeat PlatformPartition
 }
 

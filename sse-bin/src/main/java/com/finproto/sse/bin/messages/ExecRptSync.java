@@ -2,33 +2,44 @@ package com.finproto.sse.bin.messages;
 
 import com.finproto.codec.BinaryCodec;
 import io.netty.buffer.ByteBuf;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class ExecRptSync implements BinaryCodec {
-  private SubExecRptSync subExecRptSync;
+  private List<SubExecRptSync> subExecRptSync;
 
-  public SubExecRptSync getSubExecRptSync() {
+  public List<SubExecRptSync> getSubExecRptSync() {
     return this.subExecRptSync;
   }
 
-  public void setSubExecRptSync(SubExecRptSync subExecRptSync) {
+  public void setSubExecRptSync(List<SubExecRptSync> subExecRptSync) {
     this.subExecRptSync = subExecRptSync;
   }
 
   @Override
   public void encode(ByteBuf byteBuf) {
-    if (null == this.subExecRptSync) {
-      this.subExecRptSync = new SubExecRptSync();
+    if (null == this.subExecRptSync || this.subExecRptSync.size() == 0) {
+      byteBuf.writeShort(0);
+    } else {
+      byteBuf.writeShort((short) this.subExecRptSync.size());
+      for (int i = 0; i < this.subExecRptSync.size(); i++) {
+        this.subExecRptSync.get(i).encode(byteBuf);
+      }
     }
-    this.subExecRptSync.encode(byteBuf);
   }
 
   @Override
   public void decode(ByteBuf byteBuf) {
-    if (null == this.subExecRptSync) {
-      this.subExecRptSync = new SubExecRptSync();
+    short subExecRptSyncSize = byteBuf.readShort();
+    if (subExecRptSyncSize > 0) {
+      this.subExecRptSync = new ArrayList<>();
+      for (int i = 0; i < subExecRptSyncSize; i++) {
+        SubExecRptSync subExecRptSync_ = new SubExecRptSync();
+        subExecRptSync_.decode(byteBuf);
+        this.subExecRptSync.add(subExecRptSync_);
+      }
     }
-    this.subExecRptSync.decode(byteBuf);
   }
 
   @Override

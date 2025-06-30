@@ -2,12 +2,13 @@ package com.finproto.szse.bin.messages;
 
 import com.finproto.codec.BinaryCodec;
 import io.netty.buffer.ByteBuf;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class PlatformInfo implements BinaryCodec {
   private short platformId;
-  private int noPartitions;
-  private PlatformPartition platformPartition;
+  private List<PlatformPartition> platformPartition;
 
   public short getPlatformId() {
     return this.platformId;
@@ -17,45 +18,44 @@ public class PlatformInfo implements BinaryCodec {
     this.platformId = platformId;
   }
 
-  public int getNoPartitions() {
-    return this.noPartitions;
-  }
-
-  public void setNoPartitions(int noPartitions) {
-    this.noPartitions = noPartitions;
-  }
-
-  public PlatformPartition getPlatformPartition() {
+  public List<PlatformPartition> getPlatformPartition() {
     return this.platformPartition;
   }
 
-  public void setPlatformPartition(PlatformPartition platformPartition) {
+  public void setPlatformPartition(List<PlatformPartition> platformPartition) {
     this.platformPartition = platformPartition;
   }
 
   @Override
   public void encode(ByteBuf byteBuf) {
     byteBuf.writeShort(this.platformId);
-    byteBuf.writeInt(this.noPartitions);
-    if (null == this.platformPartition) {
-      this.platformPartition = new PlatformPartition();
+    if (null == this.platformPartition || this.platformPartition.size() == 0) {
+      byteBuf.writeInt(0);
+    } else {
+      byteBuf.writeInt((int) this.platformPartition.size());
+      for (int i = 0; i < this.platformPartition.size(); i++) {
+        this.platformPartition.get(i).encode(byteBuf);
+      }
     }
-    this.platformPartition.encode(byteBuf);
   }
 
   @Override
   public void decode(ByteBuf byteBuf) {
     this.platformId = byteBuf.readShort();
-    this.noPartitions = byteBuf.readInt();
-    if (null == this.platformPartition) {
-      this.platformPartition = new PlatformPartition();
+    int platformPartitionSize = byteBuf.readInt();
+    if (platformPartitionSize > 0) {
+      this.platformPartition = new ArrayList<>();
+      for (int i = 0; i < platformPartitionSize; i++) {
+        PlatformPartition platformPartition_ = new PlatformPartition();
+        platformPartition_.decode(byteBuf);
+        this.platformPartition.add(platformPartition_);
+      }
     }
-    this.platformPartition.decode(byteBuf);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(platformId, noPartitions, platformPartition);
+    return Objects.hash(platformId, platformPartition);
   }
 
   @Override
@@ -68,7 +68,6 @@ public class PlatformInfo implements BinaryCodec {
     }
     PlatformInfo orther_ = (PlatformInfo) obj;
     return Objects.equals(platformId, orther_.platformId)
-        && Objects.equals(noPartitions, orther_.noPartitions)
         && Objects.equals(platformPartition, orther_.platformPartition);
   }
 
@@ -77,8 +76,6 @@ public class PlatformInfo implements BinaryCodec {
     return "PlatformInfo ["
         + "platformId="
         + this.platformId
-        + ", noPartitions="
-        + this.noPartitions
         + ", platformPartition="
         + this.platformPartition
         + "]";

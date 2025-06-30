@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import java.util.Arrays;
 import org.junit.Test;
 
 public class SampleBinaryTest {
@@ -20,7 +21,7 @@ public class SampleBinaryTest {
     riskControlRequest.setOrderType((byte) 1);
     riskControlRequest.setPrice(8L);
     riskControlRequest.setQty(4);
-    riskControlRequest.setExtraInfo("example");
+    riskControlRequest.setExtraInfo(Arrays.asList("example"));
     RiskControlRequest.SubOrder subOrder = new RiskControlRequest.SubOrder();
     subOrder.setClOrdId("1111111111111111");
     subOrder.setPrice(8L);

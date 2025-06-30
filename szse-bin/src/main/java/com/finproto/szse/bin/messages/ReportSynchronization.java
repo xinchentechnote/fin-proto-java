@@ -2,49 +2,49 @@ package com.finproto.szse.bin.messages;
 
 import com.finproto.codec.BinaryCodec;
 import io.netty.buffer.ByteBuf;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class ReportSynchronization implements BinaryCodec {
-  private int noPartitions;
-  private PartitionReport partitionReport;
+  private List<PartitionReport> partitionReport;
 
-  public int getNoPartitions() {
-    return this.noPartitions;
-  }
-
-  public void setNoPartitions(int noPartitions) {
-    this.noPartitions = noPartitions;
-  }
-
-  public PartitionReport getPartitionReport() {
+  public List<PartitionReport> getPartitionReport() {
     return this.partitionReport;
   }
 
-  public void setPartitionReport(PartitionReport partitionReport) {
+  public void setPartitionReport(List<PartitionReport> partitionReport) {
     this.partitionReport = partitionReport;
   }
 
   @Override
   public void encode(ByteBuf byteBuf) {
-    byteBuf.writeInt(this.noPartitions);
-    if (null == this.partitionReport) {
-      this.partitionReport = new PartitionReport();
+    if (null == this.partitionReport || this.partitionReport.size() == 0) {
+      byteBuf.writeInt(0);
+    } else {
+      byteBuf.writeInt((int) this.partitionReport.size());
+      for (int i = 0; i < this.partitionReport.size(); i++) {
+        this.partitionReport.get(i).encode(byteBuf);
+      }
     }
-    this.partitionReport.encode(byteBuf);
   }
 
   @Override
   public void decode(ByteBuf byteBuf) {
-    this.noPartitions = byteBuf.readInt();
-    if (null == this.partitionReport) {
-      this.partitionReport = new PartitionReport();
+    int partitionReportSize = byteBuf.readInt();
+    if (partitionReportSize > 0) {
+      this.partitionReport = new ArrayList<>();
+      for (int i = 0; i < partitionReportSize; i++) {
+        PartitionReport partitionReport_ = new PartitionReport();
+        partitionReport_.decode(byteBuf);
+        this.partitionReport.add(partitionReport_);
+      }
     }
-    this.partitionReport.decode(byteBuf);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(noPartitions, partitionReport);
+    return Objects.hash(partitionReport);
   }
 
   @Override
@@ -56,17 +56,11 @@ public class ReportSynchronization implements BinaryCodec {
       return false;
     }
     ReportSynchronization orther_ = (ReportSynchronization) obj;
-    return Objects.equals(noPartitions, orther_.noPartitions)
-        && Objects.equals(partitionReport, orther_.partitionReport);
+    return Objects.equals(partitionReport, orther_.partitionReport);
   }
 
   @Override
   public String toString() {
-    return "ReportSynchronization ["
-        + "noPartitions="
-        + this.noPartitions
-        + ", partitionReport="
-        + this.partitionReport
-        + "]";
+    return "ReportSynchronization [" + "partitionReport=" + this.partitionReport + "]";
   }
 }

@@ -2,33 +2,44 @@ package com.finproto.sse.bin.messages;
 
 import com.finproto.codec.BinaryCodec;
 import io.netty.buffer.ByteBuf;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class ExecRptSyncRsp implements BinaryCodec {
-  private SubExecRptSyncRsp subExecRptSyncRsp;
+  private List<SubExecRptSyncRsp> subExecRptSyncRsp;
 
-  public SubExecRptSyncRsp getSubExecRptSyncRsp() {
+  public List<SubExecRptSyncRsp> getSubExecRptSyncRsp() {
     return this.subExecRptSyncRsp;
   }
 
-  public void setSubExecRptSyncRsp(SubExecRptSyncRsp subExecRptSyncRsp) {
+  public void setSubExecRptSyncRsp(List<SubExecRptSyncRsp> subExecRptSyncRsp) {
     this.subExecRptSyncRsp = subExecRptSyncRsp;
   }
 
   @Override
   public void encode(ByteBuf byteBuf) {
-    if (null == this.subExecRptSyncRsp) {
-      this.subExecRptSyncRsp = new SubExecRptSyncRsp();
+    if (null == this.subExecRptSyncRsp || this.subExecRptSyncRsp.size() == 0) {
+      byteBuf.writeShort(0);
+    } else {
+      byteBuf.writeShort((short) this.subExecRptSyncRsp.size());
+      for (int i = 0; i < this.subExecRptSyncRsp.size(); i++) {
+        this.subExecRptSyncRsp.get(i).encode(byteBuf);
+      }
     }
-    this.subExecRptSyncRsp.encode(byteBuf);
   }
 
   @Override
   public void decode(ByteBuf byteBuf) {
-    if (null == this.subExecRptSyncRsp) {
-      this.subExecRptSyncRsp = new SubExecRptSyncRsp();
+    short subExecRptSyncRspSize = byteBuf.readShort();
+    if (subExecRptSyncRspSize > 0) {
+      this.subExecRptSyncRsp = new ArrayList<>();
+      for (int i = 0; i < subExecRptSyncRspSize; i++) {
+        SubExecRptSyncRsp subExecRptSyncRsp_ = new SubExecRptSyncRsp();
+        subExecRptSyncRsp_.decode(byteBuf);
+        this.subExecRptSyncRsp.add(subExecRptSyncRsp_);
+      }
     }
-    this.subExecRptSyncRsp.decode(byteBuf);
   }
 
   @Override

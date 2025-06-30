@@ -90,7 +90,7 @@ public class Extend206302 implements BinaryCodec {
     byteBuf.writeByte(this.lotType);
     byteBuf.writeInt(this.imcrejectTextLen);
     if (StringUtil.isNullOrEmpty(this.imcrejectText)) {
-      byteBuf.writeShort(0);
+      byteBuf.writeInt(0);
     } else {
       byte[] bytes = this.imcrejectText.getBytes(StandardCharsets.UTF_8);
       byteBuf.writeInt(bytes.length);

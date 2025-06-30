@@ -1,90 +1,81 @@
 package com.finproto.sample.messages;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.function.Supplier;
+
 import com.finproto.codec.BinaryCodec;
-
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
-import io.netty.util.internal.StringUtil;
-
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 public class SubPacket implements BinaryCodec {
-    private int fieldU32;
-    private List<Short> fieldI16List;
+  private int fieldU32;
+  private List<Short> fieldI16List;
 
-    public int getFieldU32() {
-        return this.fieldU32;
-    }
-    
-    
-    public void setFieldU32(int fieldU32) {
-        this.fieldU32 = fieldU32;
-    }
-    
-    public List<Short> getFieldI16List() {
-        return this.fieldI16List;
-    }
-    
-    
-    public void setFieldI16List(List<Short> fieldI16List) {
-        this.fieldI16List = fieldI16List;
-    }
-    
+  public int getFieldU32() {
+    return this.fieldU32;
+  }
 
-    @Override
-    public void encode(ByteBuf byteBuf) {
-        byteBuf.writeIntLE(this.fieldU32);
-        if (null == this.fieldI16List || this.fieldI16List.size() == 0) {
-            byteBuf.writeShort(0);
-        } else {
-            byteBuf.writeShortLE((short) this.fieldI16List.size());
-            for (int i = 0; i < this.fieldI16List.size(); i++) {
-                byteBuf.writeShortLE(this.fieldI16List.get(i));
-            }
-        }
-    }
-    
+  public void setFieldU32(int fieldU32) {
+    this.fieldU32 = fieldU32;
+  }
 
-    @Override
-    public void decode(ByteBuf byteBuf) {
-        this.fieldU32 = byteBuf.readIntLE();
+  public List<Short> getFieldI16List() {
+    return this.fieldI16List;
+  }
+
+  public void setFieldI16List(List<Short> fieldI16List) {
+    this.fieldI16List = fieldI16List;
+  }
+
+  @Override
+  public void encode(ByteBuf byteBuf) {
+    byteBuf.writeIntLE(this.fieldU32);
+    if (null == this.fieldI16List || this.fieldI16List.size() == 0) {
+      byteBuf.writeShort(0);
+    } else {
+      byteBuf.writeShortLE((short) this.fieldI16List.size());
+      for (int i = 0; i < this.fieldI16List.size(); i++) {
+        byteBuf.writeShortLE(this.fieldI16List.get(i));
+      }
+    }
+  }
+
+  @Override
+  public void decode(ByteBuf byteBuf) {
+    this.fieldU32 = byteBuf.readIntLE();
     short fieldI16ListSize = byteBuf.readShortLE();
-        if(fieldI16ListSize > 0) {
-        this.fieldI16List = new ArrayList<>();
-        for(int i=0;i<fieldI16ListSize;i++) {
+    if (fieldI16ListSize > 0) {
+      this.fieldI16List = new ArrayList<>();
+      for (int i = 0; i < fieldI16ListSize; i++) {
         this.fieldI16List.add(byteBuf.readShortLE());
-        }
-        }
+      }
     }
-    
+  }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(fieldU32, fieldI16List);
-    }
-    
-    @Override
-    public boolean equals(Object obj) {
-        if(this == obj) {
-            return true;
-        }
-        if(null == obj || getClass() != obj.getClass()) {
-            return false;
-        }
-        SubPacket orther_ = (SubPacket) obj;
-        return Objects.equals(fieldU32, orther_.fieldU32) && Objects.equals(fieldI16List, orther_.fieldI16List);
-    }
-    
+  @Override
+  public int hashCode() {
+    return Objects.hash(fieldU32, fieldI16List);
+  }
 
-    @Override
-    public String toString() {
-        return "SubPacket [" + "fieldU32=" + this.fieldU32 + ", fieldI16List=" + this.fieldI16List + "]";
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
     }
-    
+    if (null == obj || getClass() != obj.getClass()) {
+      return false;
+    }
+    SubPacket orther_ = (SubPacket) obj;
+    return Objects.equals(fieldU32, orther_.fieldU32)
+        && Objects.equals(fieldI16List, orther_.fieldI16List);
+  }
 
+  @Override
+  public String toString() {
+    return "SubPacket ["
+        + "fieldU32="
+        + this.fieldU32
+        + ", fieldI16List="
+        + this.fieldI16List
+        + "]";
+  }
 }

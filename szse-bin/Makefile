@@ -1,7 +1,7 @@
 # Makefile for fin-protoc project
 
 # Variables
-PROTO_DSL := proto/szse_bin_v1.29.pdsl
+PROTO_DSL := ../submodules/fin-proto/szse/binary/szse_bin_v1.29.pdsl
 PROTO_DIR := proto/
 OUTPUT_DIR := src/
 BIN_DIR := ~/workspace/fin-protoc/bin/
@@ -22,7 +22,6 @@ compile:
 fmt: fix
 	@echo "Formatting code..."
 	gradle spotlessApply
-	$(BIN_DIR)/fin-protoc format -f $(PROTO_DSL)
 
 
 test:

@@ -11,10 +11,10 @@ public class ReportSynchronizationTest {
   @Test
   public void testEncodeDecode() {
     ReportSynchronization original = new ReportSynchronization();
-    PartitionReport partitionReport = new PartitionReport();
-    partitionReport.setPartitionNo(4);
-    partitionReport.setReportIndex(8L);
-    original.setPartitionReport(Arrays.asList(partitionReport));
+    PartitionReport partitionReport0 = new PartitionReport();
+    partitionReport0.setPartitionNo(4);
+    partitionReport0.setReportIndex(8L);
+    original.setPartitionReport(Arrays.asList(partitionReport0));
 
     ByteBuf buffer = Unpooled.buffer();
     original.encode(buffer);

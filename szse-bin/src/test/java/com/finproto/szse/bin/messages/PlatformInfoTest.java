@@ -12,9 +12,9 @@ public class PlatformInfoTest {
   public void testEncodeDecode() {
     PlatformInfo original = new PlatformInfo();
     original.setPlatformId((short) 2);
-    PlatformPartition platformPartition = new PlatformPartition();
-    platformPartition.setPartitionNo(4);
-    original.setPlatformPartition(Arrays.asList(platformPartition));
+    PlatformPartition platformPartition0 = new PlatformPartition();
+    platformPartition0.setPartitionNo(4);
+    original.setPlatformPartition(Arrays.asList(platformPartition0));
 
     ByteBuf buffer = Unpooled.buffer();
     original.encode(buffer);

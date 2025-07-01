@@ -8,7 +8,7 @@ BIN_DIR := ~/workspace/fin-protoc/bin/
 
 .PHONY: all compile format fix clean
 
-all: compile test
+all: compile fmt test
 
 build: compile
 
@@ -22,7 +22,6 @@ compile:
 fmt: fix
 	@echo "Formatting code..."
 	gradle spotlessApply
-	$(BIN_DIR)/fin-protoc format -f $(PROTO_DSL)
 
 
 test:

@@ -1,0 +1,129 @@
+package com.finproto.risk.bin.messages;
+
+import com.finproto.codec.BinaryCodec;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.function.Supplier;
+
+public class RcBinary implements BinaryCodec {
+  private int msgType;
+  private int version;
+  private int msgBodyLen;
+  private BinaryCodec body;
+
+  public int getMsgType() {
+    return this.msgType;
+  }
+
+  public void setMsgType(int msgType) {
+    this.msgType = msgType;
+  }
+
+  public int getVersion() {
+    return this.version;
+  }
+
+  public void setVersion(int version) {
+    this.version = version;
+  }
+
+  public int getMsgBodyLen() {
+    return this.msgBodyLen;
+  }
+
+  public void setMsgBodyLen(int msgBodyLen) {
+    this.msgBodyLen = msgBodyLen;
+  }
+
+  public BinaryCodec getBody() {
+    return this.body;
+  }
+
+  public void setBody(BinaryCodec body) {
+    this.body = body;
+  }
+
+  @Override
+  public void encode(ByteBuf byteBuf) {
+    byteBuf.writeInt(this.msgType);
+    byteBuf.writeInt(this.version);
+    ByteBuf bodyBuf = null;
+    if (this.body != null) {
+      bodyBuf = Unpooled.buffer();
+      this.body.encode(bodyBuf);
+      this.msgBodyLen = (int) bodyBuf.readableBytes();
+    } else {
+      this.msgBodyLen = 0;
+    }
+    byteBuf.writeInt(this.msgBodyLen);
+
+    if (bodyBuf != null) {
+      byteBuf.writeBytes(bodyBuf);
+      bodyBuf.release();
+    }
+  }
+
+  @Override
+  public void decode(ByteBuf byteBuf) {
+    this.msgType = byteBuf.readInt();
+    this.version = byteBuf.readInt();
+    this.msgBodyLen = byteBuf.readInt();
+    this.body = createBody(this.msgType);
+    this.body.decode(byteBuf);
+  }
+
+  private static final Map<Integer, Supplier<BinaryCodec>> bodyMap = new HashMap<>();
+
+  static {
+    bodyMap.put((int) 100101, NewOrder::new);
+    bodyMap.put((int) 200102, OrderConfirm::new);
+    bodyMap.put((int) 200115, ExecutionReport::new);
+    bodyMap.put((int) 190007, OrderCancel::new);
+    bodyMap.put((int) 290008, CancelReject::new);
+  }
+
+  private BinaryCodec createBody(Integer msgType) {
+    Supplier<BinaryCodec> supplier = bodyMap.get(msgType);
+    if (null == supplier) {
+      throw new IllegalArgumentException("Unsupported MsgType:" + msgType);
+    }
+    return supplier.get();
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(msgType, version, msgBodyLen, body);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (null == obj || getClass() != obj.getClass()) {
+      return false;
+    }
+    RcBinary orther_ = (RcBinary) obj;
+    return Objects.equals(msgType, orther_.msgType)
+        && Objects.equals(version, orther_.version)
+        && Objects.equals(msgBodyLen, orther_.msgBodyLen)
+        && Objects.equals(body, orther_.body);
+  }
+
+  @Override
+  public String toString() {
+    return "RcBinary ["
+        + "msgType="
+        + this.msgType
+        + ", version="
+        + this.version
+        + ", msgBodyLen="
+        + this.msgBodyLen
+        + ", body="
+        + this.body
+        + "]";
+  }
+}

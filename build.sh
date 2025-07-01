@@ -1,6 +1,9 @@
 cd codec
 make
 cd -
+cd risk-bin
+make
+cd -
 cd sample-bin
 make
 cd -

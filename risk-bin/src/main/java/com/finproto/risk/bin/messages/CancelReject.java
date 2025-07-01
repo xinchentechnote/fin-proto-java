@@ -1,0 +1,103 @@
+package com.finproto.risk.bin.messages;
+
+import com.finproto.codec.BinaryCodec;
+import io.netty.buffer.ByteBuf;
+import io.netty.util.internal.StringUtil;
+import java.nio.charset.StandardCharsets;
+import java.util.Objects;
+
+public class CancelReject implements BinaryCodec {
+  private String clOrdId;
+  private String origClOrdId;
+  private int cxlRejReason;
+
+  public String getClOrdId() {
+    return this.clOrdId;
+  }
+
+  public void setClOrdId(String clOrdId) {
+    this.clOrdId = clOrdId;
+  }
+
+  public String getOrigClOrdId() {
+    return this.origClOrdId;
+  }
+
+  public void setOrigClOrdId(String origClOrdId) {
+    this.origClOrdId = origClOrdId;
+  }
+
+  public int getCxlRejReason() {
+    return this.cxlRejReason;
+  }
+
+  public void setCxlRejReason(int cxlRejReason) {
+    this.cxlRejReason = cxlRejReason;
+  }
+
+  @Override
+  public void encode(ByteBuf byteBuf) {
+    if (StringUtil.isNullOrEmpty(this.clOrdId)) {
+      byteBuf.writeInt(0);
+    } else {
+      byte[] bytes = this.clOrdId.getBytes(StandardCharsets.UTF_8);
+      byteBuf.writeInt(bytes.length);
+      byteBuf.writeBytes(bytes);
+    }
+
+    if (StringUtil.isNullOrEmpty(this.origClOrdId)) {
+      byteBuf.writeInt(0);
+    } else {
+      byte[] bytes = this.origClOrdId.getBytes(StandardCharsets.UTF_8);
+      byteBuf.writeInt(bytes.length);
+      byteBuf.writeBytes(bytes);
+    }
+
+    byteBuf.writeInt(this.cxlRejReason);
+  }
+
+  @Override
+  public void decode(ByteBuf byteBuf) {
+    int clOrdIdLen = byteBuf.readInt();
+    if (clOrdIdLen > 0) {
+      this.clOrdId = byteBuf.readCharSequence(clOrdIdLen, StandardCharsets.UTF_8).toString();
+    }
+    int origClOrdIdLen = byteBuf.readInt();
+    if (origClOrdIdLen > 0) {
+      this.origClOrdId =
+          byteBuf.readCharSequence(origClOrdIdLen, StandardCharsets.UTF_8).toString();
+    }
+    this.cxlRejReason = byteBuf.readInt();
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(clOrdId, origClOrdId, cxlRejReason);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (null == obj || getClass() != obj.getClass()) {
+      return false;
+    }
+    CancelReject orther_ = (CancelReject) obj;
+    return Objects.equals(clOrdId, orther_.clOrdId)
+        && Objects.equals(origClOrdId, orther_.origClOrdId)
+        && Objects.equals(cxlRejReason, orther_.cxlRejReason);
+  }
+
+  @Override
+  public String toString() {
+    return "CancelReject ["
+        + "clOrdId="
+        + this.clOrdId
+        + ", origClOrdId="
+        + this.origClOrdId
+        + ", cxlRejReason="
+        + this.cxlRejReason
+        + "]";
+  }
+}

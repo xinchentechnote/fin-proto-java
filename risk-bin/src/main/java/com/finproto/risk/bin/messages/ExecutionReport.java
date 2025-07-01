@@ -1,0 +1,130 @@
+package com.finproto.risk.bin.messages;
+
+import com.finproto.codec.BinaryCodec;
+import io.netty.buffer.ByteBuf;
+import io.netty.util.internal.StringUtil;
+import java.nio.charset.StandardCharsets;
+import java.util.Objects;
+
+public class ExecutionReport implements BinaryCodec {
+  private String clOrdId;
+  private String ordCnfmId;
+  private long lastPx;
+  private long lastQty;
+  private byte ordStatus;
+
+  public String getClOrdId() {
+    return this.clOrdId;
+  }
+
+  public void setClOrdId(String clOrdId) {
+    this.clOrdId = clOrdId;
+  }
+
+  public String getOrdCnfmId() {
+    return this.ordCnfmId;
+  }
+
+  public void setOrdCnfmId(String ordCnfmId) {
+    this.ordCnfmId = ordCnfmId;
+  }
+
+  public long getLastPx() {
+    return this.lastPx;
+  }
+
+  public void setLastPx(long lastPx) {
+    this.lastPx = lastPx;
+  }
+
+  public long getLastQty() {
+    return this.lastQty;
+  }
+
+  public void setLastQty(long lastQty) {
+    this.lastQty = lastQty;
+  }
+
+  public byte getOrdStatus() {
+    return this.ordStatus;
+  }
+
+  public void setOrdStatus(byte ordStatus) {
+    this.ordStatus = ordStatus;
+  }
+
+  @Override
+  public void encode(ByteBuf byteBuf) {
+    if (StringUtil.isNullOrEmpty(this.clOrdId)) {
+      byteBuf.writeInt(0);
+    } else {
+      byte[] bytes = this.clOrdId.getBytes(StandardCharsets.UTF_8);
+      byteBuf.writeInt(bytes.length);
+      byteBuf.writeBytes(bytes);
+    }
+
+    if (StringUtil.isNullOrEmpty(this.ordCnfmId)) {
+      byteBuf.writeInt(0);
+    } else {
+      byte[] bytes = this.ordCnfmId.getBytes(StandardCharsets.UTF_8);
+      byteBuf.writeInt(bytes.length);
+      byteBuf.writeBytes(bytes);
+    }
+
+    byteBuf.writeLong(this.lastPx);
+    byteBuf.writeLong(this.lastQty);
+    byteBuf.writeByte(this.ordStatus);
+  }
+
+  @Override
+  public void decode(ByteBuf byteBuf) {
+    int clOrdIdLen = byteBuf.readInt();
+    if (clOrdIdLen > 0) {
+      this.clOrdId = byteBuf.readCharSequence(clOrdIdLen, StandardCharsets.UTF_8).toString();
+    }
+    int ordCnfmIdLen = byteBuf.readInt();
+    if (ordCnfmIdLen > 0) {
+      this.ordCnfmId = byteBuf.readCharSequence(ordCnfmIdLen, StandardCharsets.UTF_8).toString();
+    }
+    this.lastPx = byteBuf.readLong();
+    this.lastQty = byteBuf.readLong();
+    this.ordStatus = byteBuf.readByte();
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(clOrdId, ordCnfmId, lastPx, lastQty, ordStatus);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (null == obj || getClass() != obj.getClass()) {
+      return false;
+    }
+    ExecutionReport orther_ = (ExecutionReport) obj;
+    return Objects.equals(clOrdId, orther_.clOrdId)
+        && Objects.equals(ordCnfmId, orther_.ordCnfmId)
+        && Objects.equals(lastPx, orther_.lastPx)
+        && Objects.equals(lastQty, orther_.lastQty)
+        && Objects.equals(ordStatus, orther_.ordStatus);
+  }
+
+  @Override
+  public String toString() {
+    return "ExecutionReport ["
+        + "clOrdId="
+        + this.clOrdId
+        + ", ordCnfmId="
+        + this.ordCnfmId
+        + ", lastPx="
+        + this.lastPx
+        + ", lastQty="
+        + this.lastQty
+        + ", ordStatus="
+        + this.ordStatus
+        + "]";
+  }
+}

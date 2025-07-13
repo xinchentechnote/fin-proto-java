@@ -9,8 +9,8 @@ public class Extend200102 implements BinaryCodec {
   private long stopPx;
   private long minQty;
   private short maxPriceLevels;
-  private byte timeInForce;
-  private byte cashMargin;
+  private String timeInForce;
+  private String cashMargin;
 
   public long getStopPx() {
     return this.stopPx;
@@ -36,19 +36,19 @@ public class Extend200102 implements BinaryCodec {
     this.maxPriceLevels = maxPriceLevels;
   }
 
-  public byte getTimeInForce() {
+  public String getTimeInForce() {
     return this.timeInForce;
   }
 
-  public void setTimeInForce(byte timeInForce) {
+  public void setTimeInForce(String timeInForce) {
     this.timeInForce = timeInForce;
   }
 
-  public byte getCashMargin() {
+  public String getCashMargin() {
     return this.cashMargin;
   }
 
-  public void setCashMargin(byte cashMargin) {
+  public void setCashMargin(String cashMargin) {
     this.cashMargin = cashMargin;
   }
 
@@ -57,8 +57,8 @@ public class Extend200102 implements BinaryCodec {
     byteBuf.writeLong(this.stopPx);
     byteBuf.writeLong(this.minQty);
     byteBuf.writeShort(this.maxPriceLevels);
-    byteBuf.writeByte(this.timeInForce);
-    byteBuf.writeByte(this.cashMargin);
+    writeFixedString(byteBuf, this.timeInForce, 1);
+    writeFixedString(byteBuf, this.cashMargin, 1);
   }
 
   @Override
@@ -66,8 +66,8 @@ public class Extend200102 implements BinaryCodec {
     this.stopPx = byteBuf.readLong();
     this.minQty = byteBuf.readLong();
     this.maxPriceLevels = byteBuf.readShort();
-    this.timeInForce = byteBuf.readByte();
-    this.cashMargin = byteBuf.readByte();
+    this.timeInForce = readFixedString(byteBuf, 1);
+    this.cashMargin = readFixedString(byteBuf, 1);
   }
 
   @Override

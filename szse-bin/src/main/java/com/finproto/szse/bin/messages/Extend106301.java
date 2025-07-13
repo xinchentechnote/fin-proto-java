@@ -9,8 +9,8 @@ public class Extend106301 implements BinaryCodec {
   private long stopPx;
   private long minQty;
   private short maxPriceLevels;
-  private byte timeInForce;
-  private byte lotType;
+  private String timeInForce;
+  private String lotType;
 
   public long getStopPx() {
     return this.stopPx;
@@ -36,19 +36,19 @@ public class Extend106301 implements BinaryCodec {
     this.maxPriceLevels = maxPriceLevels;
   }
 
-  public byte getTimeInForce() {
+  public String getTimeInForce() {
     return this.timeInForce;
   }
 
-  public void setTimeInForce(byte timeInForce) {
+  public void setTimeInForce(String timeInForce) {
     this.timeInForce = timeInForce;
   }
 
-  public byte getLotType() {
+  public String getLotType() {
     return this.lotType;
   }
 
-  public void setLotType(byte lotType) {
+  public void setLotType(String lotType) {
     this.lotType = lotType;
   }
 
@@ -57,8 +57,8 @@ public class Extend106301 implements BinaryCodec {
     byteBuf.writeLong(this.stopPx);
     byteBuf.writeLong(this.minQty);
     byteBuf.writeShort(this.maxPriceLevels);
-    byteBuf.writeByte(this.timeInForce);
-    byteBuf.writeByte(this.lotType);
+    writeFixedString(byteBuf, this.timeInForce, 1);
+    writeFixedString(byteBuf, this.lotType, 1);
   }
 
   @Override
@@ -66,8 +66,8 @@ public class Extend106301 implements BinaryCodec {
     this.stopPx = byteBuf.readLong();
     this.minQty = byteBuf.readLong();
     this.maxPriceLevels = byteBuf.readShort();
-    this.timeInForce = byteBuf.readByte();
-    this.lotType = byteBuf.readByte();
+    this.timeInForce = readFixedString(byteBuf, 1);
+    this.lotType = readFixedString(byteBuf, 1);
   }
 
   @Override

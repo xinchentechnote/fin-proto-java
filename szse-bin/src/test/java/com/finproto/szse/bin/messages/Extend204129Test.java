@@ -26,7 +26,7 @@ public class Extend204129Test {
     original.setSettlType((short) 2);
     original.setSettlPeriod((byte) 1);
     original.setPreTradeAnonymity((byte) 1);
-    original.setCashMargin((byte) 1);
+    original.setCashMargin("1");
     original.setMemo(
         "1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111");
 

@@ -16,7 +16,7 @@ public class OrderCancelTest {
     original.setSecurityId("111111111111");
     original.setAccount("1111111111111");
     original.setOwnerType((byte) 1);
-    original.setSide((byte) 1);
+    original.setSide("1");
     original.setOrigClOrdId("1111111111");
     original.setTransactTime(8L);
     original.setBranchId("11111111");

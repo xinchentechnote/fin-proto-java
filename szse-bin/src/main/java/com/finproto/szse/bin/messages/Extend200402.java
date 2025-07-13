@@ -9,8 +9,8 @@ public class Extend200402 implements BinaryCodec {
   private long stopPx;
   private long minQty;
   private short maxPriceLevels;
-  private byte timeInForce;
-  private byte positionEffect;
+  private String timeInForce;
+  private String positionEffect;
   private byte coveredOrUncovered;
   private String contractAccountCode;
   private String secondaryOrderId;
@@ -39,19 +39,19 @@ public class Extend200402 implements BinaryCodec {
     this.maxPriceLevels = maxPriceLevels;
   }
 
-  public byte getTimeInForce() {
+  public String getTimeInForce() {
     return this.timeInForce;
   }
 
-  public void setTimeInForce(byte timeInForce) {
+  public void setTimeInForce(String timeInForce) {
     this.timeInForce = timeInForce;
   }
 
-  public byte getPositionEffect() {
+  public String getPositionEffect() {
     return this.positionEffect;
   }
 
-  public void setPositionEffect(byte positionEffect) {
+  public void setPositionEffect(String positionEffect) {
     this.positionEffect = positionEffect;
   }
 
@@ -84,8 +84,8 @@ public class Extend200402 implements BinaryCodec {
     byteBuf.writeLong(this.stopPx);
     byteBuf.writeLong(this.minQty);
     byteBuf.writeShort(this.maxPriceLevels);
-    byteBuf.writeByte(this.timeInForce);
-    byteBuf.writeByte(this.positionEffect);
+    writeFixedString(byteBuf, this.timeInForce, 1);
+    writeFixedString(byteBuf, this.positionEffect, 1);
     byteBuf.writeByte(this.coveredOrUncovered);
     writeFixedString(byteBuf, this.contractAccountCode, 6);
     writeFixedString(byteBuf, this.secondaryOrderId, 16);
@@ -96,8 +96,8 @@ public class Extend200402 implements BinaryCodec {
     this.stopPx = byteBuf.readLong();
     this.minQty = byteBuf.readLong();
     this.maxPriceLevels = byteBuf.readShort();
-    this.timeInForce = byteBuf.readByte();
-    this.positionEffect = byteBuf.readByte();
+    this.timeInForce = readFixedString(byteBuf, 1);
+    this.positionEffect = readFixedString(byteBuf, 1);
     this.coveredOrUncovered = byteBuf.readByte();
     this.contractAccountCode = readFixedString(byteBuf, 6);
     this.secondaryOrderId = readFixedString(byteBuf, 16);

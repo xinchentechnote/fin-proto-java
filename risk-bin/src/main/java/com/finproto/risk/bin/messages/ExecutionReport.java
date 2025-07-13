@@ -12,7 +12,7 @@ public class ExecutionReport implements BinaryCodec {
   private String ordCnfmId;
   private long lastPx;
   private long lastQty;
-  private byte ordStatus;
+  private String ordStatus;
 
   public String getClOrdId() {
     return this.clOrdId;
@@ -46,11 +46,11 @@ public class ExecutionReport implements BinaryCodec {
     this.lastQty = lastQty;
   }
 
-  public byte getOrdStatus() {
+  public String getOrdStatus() {
     return this.ordStatus;
   }
 
-  public void setOrdStatus(byte ordStatus) {
+  public void setOrdStatus(String ordStatus) {
     this.ordStatus = ordStatus;
   }
 
@@ -74,7 +74,7 @@ public class ExecutionReport implements BinaryCodec {
 
     byteBuf.writeLong(this.lastPx);
     byteBuf.writeLong(this.lastQty);
-    byteBuf.writeByte(this.ordStatus);
+    writeFixedString(byteBuf, this.ordStatus, 1);
   }
 
   @Override
@@ -89,7 +89,7 @@ public class ExecutionReport implements BinaryCodec {
     }
     this.lastPx = byteBuf.readLong();
     this.lastQty = byteBuf.readLong();
-    this.ordStatus = byteBuf.readByte();
+    this.ordStatus = readFixedString(byteBuf, 1);
   }
 
   @Override

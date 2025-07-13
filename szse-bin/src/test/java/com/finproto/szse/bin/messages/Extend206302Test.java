@@ -14,8 +14,8 @@ public class Extend206302Test {
     original.setStopPx(8L);
     original.setMinQty(8L);
     original.setMaxPriceLevels((short) 2);
-    original.setTimeInForce((byte) 1);
-    original.setLotType((byte) 1);
+    original.setTimeInForce("1");
+    original.setLotType("1");
     original.setImcrejectTextLen(4);
     original.setImcrejectText("example");
 

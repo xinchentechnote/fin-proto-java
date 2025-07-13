@@ -12,7 +12,7 @@ public class LogonTest {
     Logon original = new Logon();
     original.setSenderCompId("11111111111111111111");
     original.setTargetCompId("11111111111111111111");
-    original.setHeartBtInt(4);
+    original.setHeartBtint(4);
     original.setPassword("1111111111111111");
     original.setDefaultApplVerId("11111111111111111111111111111111");
 

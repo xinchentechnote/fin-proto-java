@@ -10,7 +10,7 @@ public class Extend204115Test {
   @Test
   public void testEncodeDecode() {
     Extend204115 original = new Extend204115();
-    original.setCashMargin((byte) 1);
+    original.setCashMargin("1");
     original.setSettlType((short) 2);
     original.setSettlPeriod((byte) 1);
     original.setCounterpartyMemberId("111111");

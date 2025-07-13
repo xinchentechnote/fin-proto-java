@@ -12,10 +12,10 @@ public class NewOrderTest {
     NewOrder original = new NewOrder();
     original.setClOrdId("example");
     original.setSecurityId("example");
-    original.setSide((byte) 1);
+    original.setSide("1");
     original.setPrice(8L);
     original.setOrderQty(8L);
-    original.setOrdType((byte) 1);
+    original.setOrdType("1");
     original.setAccount("example");
 
     ByteBuf buffer = Unpooled.buffer();

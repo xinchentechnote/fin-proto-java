@@ -21,8 +21,8 @@ public class NewOrderTest {
     original.setAccountId("111111111111");
     original.setBranchId("1111");
     original.setOrderRestrictions("1111");
-    original.setSide((byte) 1);
-    original.setOrdType((byte) 1);
+    original.setSide("1");
+    original.setOrdType("1");
     original.setOrderQty(8L);
     original.setPrice(8L);
     original.setApplId("010");
@@ -30,8 +30,8 @@ public class NewOrderTest {
     extend100101.setStopPx(8L);
     extend100101.setMinQty(8L);
     extend100101.setMaxPriceLevels((short) 2);
-    extend100101.setTimeInForce((byte) 1);
-    extend100101.setCashMargin((byte) 1);
+    extend100101.setTimeInForce("1");
+    extend100101.setCashMargin("1");
     original.setApplExtend(extend100101);
 
     ByteBuf buffer = Unpooled.buffer();

@@ -11,7 +11,7 @@ public class Extend200502Test {
   public void testEncodeDecode() {
     Extend200502 original = new Extend200502();
     original.setConfirmId("11111111");
-    original.setCashMargin((byte) 1);
+    original.setCashMargin("1");
 
     ByteBuf buffer = Unpooled.buffer();
     original.encode(buffer);

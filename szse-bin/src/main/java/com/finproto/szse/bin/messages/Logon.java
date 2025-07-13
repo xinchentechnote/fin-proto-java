@@ -8,7 +8,7 @@ import java.util.Objects;
 public class Logon implements BinaryCodec {
   private String senderCompId;
   private String targetCompId;
-  private int heartBtInt;
+  private int heartBtint;
   private String password;
   private String defaultApplVerId;
 
@@ -28,12 +28,12 @@ public class Logon implements BinaryCodec {
     this.targetCompId = targetCompId;
   }
 
-  public int getHeartBtInt() {
-    return this.heartBtInt;
+  public int getHeartBtint() {
+    return this.heartBtint;
   }
 
-  public void setHeartBtInt(int heartBtInt) {
-    this.heartBtInt = heartBtInt;
+  public void setHeartBtint(int heartBtint) {
+    this.heartBtint = heartBtint;
   }
 
   public String getPassword() {
@@ -56,7 +56,7 @@ public class Logon implements BinaryCodec {
   public void encode(ByteBuf byteBuf) {
     writeFixedString(byteBuf, this.senderCompId, 20);
     writeFixedString(byteBuf, this.targetCompId, 20);
-    byteBuf.writeInt(this.heartBtInt);
+    byteBuf.writeInt(this.heartBtint);
     writeFixedString(byteBuf, this.password, 16);
     writeFixedString(byteBuf, this.defaultApplVerId, 32);
   }
@@ -65,14 +65,14 @@ public class Logon implements BinaryCodec {
   public void decode(ByteBuf byteBuf) {
     this.senderCompId = readFixedString(byteBuf, 20);
     this.targetCompId = readFixedString(byteBuf, 20);
-    this.heartBtInt = byteBuf.readInt();
+    this.heartBtint = byteBuf.readInt();
     this.password = readFixedString(byteBuf, 16);
     this.defaultApplVerId = readFixedString(byteBuf, 32);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(senderCompId, targetCompId, heartBtInt, password, defaultApplVerId);
+    return Objects.hash(senderCompId, targetCompId, heartBtint, password, defaultApplVerId);
   }
 
   @Override
@@ -86,7 +86,7 @@ public class Logon implements BinaryCodec {
     Logon orther_ = (Logon) obj;
     return Objects.equals(senderCompId, orther_.senderCompId)
         && Objects.equals(targetCompId, orther_.targetCompId)
-        && Objects.equals(heartBtInt, orther_.heartBtInt)
+        && Objects.equals(heartBtint, orther_.heartBtint)
         && Objects.equals(password, orther_.password)
         && Objects.equals(defaultApplVerId, orther_.defaultApplVerId);
   }
@@ -98,8 +98,8 @@ public class Logon implements BinaryCodec {
         + this.senderCompId
         + ", targetCompId="
         + this.targetCompId
-        + ", heartBtInt="
-        + this.heartBtInt
+        + ", heartBtint="
+        + this.heartBtint
         + ", password="
         + this.password
         + ", defaultApplVerId="

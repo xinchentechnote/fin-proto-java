@@ -19,8 +19,8 @@ public class CancelReject implements BinaryCodec {
   private String userInfo;
   private String clOrdId;
   private String origClOrdId;
-  private byte side;
-  private byte ordStatus;
+  private String side;
+  private String ordStatus;
   private short cxlRejReason;
   private String rejectText;
   private String orderId;
@@ -129,19 +129,19 @@ public class CancelReject implements BinaryCodec {
     this.origClOrdId = origClOrdId;
   }
 
-  public byte getSide() {
+  public String getSide() {
     return this.side;
   }
 
-  public void setSide(byte side) {
+  public void setSide(String side) {
     this.side = side;
   }
 
-  public byte getOrdStatus() {
+  public String getOrdStatus() {
     return this.ordStatus;
   }
 
-  public void setOrdStatus(byte ordStatus) {
+  public void setOrdStatus(String ordStatus) {
     this.ordStatus = ordStatus;
   }
 
@@ -184,8 +184,8 @@ public class CancelReject implements BinaryCodec {
     writeFixedString(byteBuf, this.userInfo, 8);
     writeFixedString(byteBuf, this.clOrdId, 10);
     writeFixedString(byteBuf, this.origClOrdId, 10);
-    byteBuf.writeByte(this.side);
-    byteBuf.writeByte(this.ordStatus);
+    writeFixedString(byteBuf, this.side, 1);
+    writeFixedString(byteBuf, this.ordStatus, 1);
     byteBuf.writeShort(this.cxlRejReason);
     writeFixedString(byteBuf, this.rejectText, 16);
     writeFixedString(byteBuf, this.orderId, 16);
@@ -206,8 +206,8 @@ public class CancelReject implements BinaryCodec {
     this.userInfo = readFixedString(byteBuf, 8);
     this.clOrdId = readFixedString(byteBuf, 10);
     this.origClOrdId = readFixedString(byteBuf, 10);
-    this.side = byteBuf.readByte();
-    this.ordStatus = byteBuf.readByte();
+    this.side = readFixedString(byteBuf, 1);
+    this.ordStatus = readFixedString(byteBuf, 1);
     this.cxlRejReason = byteBuf.readShort();
     this.rejectText = readFixedString(byteBuf, 16);
     this.orderId = readFixedString(byteBuf, 16);

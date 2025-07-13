@@ -27,7 +27,7 @@ public class Extend204130Test {
     original.setBidExecInstType((short) 2);
     original.setSettlType((short) 2);
     original.setSettlPeriod((byte) 1);
-    original.setCashMargin((byte) 1);
+    original.setCashMargin("1");
     original.setMemo(
         "1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111");
 

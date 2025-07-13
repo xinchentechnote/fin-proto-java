@@ -9,7 +9,7 @@ public class Extend200302 implements BinaryCodec {
   private long stopPx;
   private long minQty;
   private short maxPriceLevels;
-  private byte timeInForce;
+  private String timeInForce;
 
   public long getStopPx() {
     return this.stopPx;
@@ -35,11 +35,11 @@ public class Extend200302 implements BinaryCodec {
     this.maxPriceLevels = maxPriceLevels;
   }
 
-  public byte getTimeInForce() {
+  public String getTimeInForce() {
     return this.timeInForce;
   }
 
-  public void setTimeInForce(byte timeInForce) {
+  public void setTimeInForce(String timeInForce) {
     this.timeInForce = timeInForce;
   }
 
@@ -48,7 +48,7 @@ public class Extend200302 implements BinaryCodec {
     byteBuf.writeLong(this.stopPx);
     byteBuf.writeLong(this.minQty);
     byteBuf.writeShort(this.maxPriceLevels);
-    byteBuf.writeByte(this.timeInForce);
+    writeFixedString(byteBuf, this.timeInForce, 1);
   }
 
   @Override
@@ -56,7 +56,7 @@ public class Extend200302 implements BinaryCodec {
     this.stopPx = byteBuf.readLong();
     this.minQty = byteBuf.readLong();
     this.maxPriceLevels = byteBuf.readShort();
-    this.timeInForce = byteBuf.readByte();
+    this.timeInForce = readFixedString(byteBuf, 1);
   }
 
   @Override

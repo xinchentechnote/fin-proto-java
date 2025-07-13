@@ -9,7 +9,7 @@ import java.util.Objects;
 
 public class OrderConfirm implements BinaryCodec {
   private String clOrdId;
-  private byte execType;
+  private String execType;
   private int ordRejReason;
   private String ordCnfmId;
 
@@ -21,11 +21,11 @@ public class OrderConfirm implements BinaryCodec {
     this.clOrdId = clOrdId;
   }
 
-  public byte getExecType() {
+  public String getExecType() {
     return this.execType;
   }
 
-  public void setExecType(byte execType) {
+  public void setExecType(String execType) {
     this.execType = execType;
   }
 
@@ -55,7 +55,7 @@ public class OrderConfirm implements BinaryCodec {
       byteBuf.writeBytes(bytes);
     }
 
-    byteBuf.writeByte(this.execType);
+    writeFixedString(byteBuf, this.execType, 1);
     byteBuf.writeInt(this.ordRejReason);
     if (StringUtil.isNullOrEmpty(this.ordCnfmId)) {
       byteBuf.writeInt(0);
@@ -72,7 +72,7 @@ public class OrderConfirm implements BinaryCodec {
     if (clOrdIdLen > 0) {
       this.clOrdId = byteBuf.readCharSequence(clOrdIdLen, StandardCharsets.UTF_8).toString();
     }
-    this.execType = byteBuf.readByte();
+    this.execType = readFixedString(byteBuf, 1);
     this.ordRejReason = byteBuf.readInt();
     int ordCnfmIdLen = byteBuf.readInt();
     if (ordCnfmIdLen > 0) {

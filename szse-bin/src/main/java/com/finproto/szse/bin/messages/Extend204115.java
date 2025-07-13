@@ -6,7 +6,7 @@ import io.netty.buffer.ByteBuf;
 import java.util.Objects;
 
 public class Extend204115 implements BinaryCodec {
-  private byte cashMargin;
+  private String cashMargin;
   private short settlType;
   private byte settlPeriod;
   private String counterpartyMemberId;
@@ -15,11 +15,11 @@ public class Extend204115 implements BinaryCodec {
   private String counterpartyInvestorName;
   private String counterpartyTraderCode;
 
-  public byte getCashMargin() {
+  public String getCashMargin() {
     return this.cashMargin;
   }
 
-  public void setCashMargin(byte cashMargin) {
+  public void setCashMargin(String cashMargin) {
     this.cashMargin = cashMargin;
   }
 
@@ -81,7 +81,7 @@ public class Extend204115 implements BinaryCodec {
 
   @Override
   public void encode(ByteBuf byteBuf) {
-    byteBuf.writeByte(this.cashMargin);
+    writeFixedString(byteBuf, this.cashMargin, 1);
     byteBuf.writeShort(this.settlType);
     byteBuf.writeByte(this.settlPeriod);
     writeFixedString(byteBuf, this.counterpartyMemberId, 6);
@@ -93,7 +93,7 @@ public class Extend204115 implements BinaryCodec {
 
   @Override
   public void decode(ByteBuf byteBuf) {
-    this.cashMargin = byteBuf.readByte();
+    this.cashMargin = readFixedString(byteBuf, 1);
     this.settlType = byteBuf.readShort();
     this.settlPeriod = byteBuf.readByte();
     this.counterpartyMemberId = readFixedString(byteBuf, 6);

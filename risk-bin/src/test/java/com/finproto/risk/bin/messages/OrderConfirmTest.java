@@ -11,7 +11,7 @@ public class OrderConfirmTest {
   public void testEncodeDecode() {
     OrderConfirm original = new OrderConfirm();
     original.setClOrdId("example");
-    original.setExecType((byte) 1);
+    original.setExecType("1");
     original.setOrdRejReason(4);
     original.setOrdCnfmId("example");
 

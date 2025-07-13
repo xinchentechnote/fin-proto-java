@@ -16,7 +16,7 @@ public class OrderCancelRequest implements BinaryCodec {
   private String userInfo;
   private String clOrdId;
   private String origClOrdId;
-  private byte side;
+  private String side;
   private String orderId;
   private long orderQty;
 
@@ -100,11 +100,11 @@ public class OrderCancelRequest implements BinaryCodec {
     this.origClOrdId = origClOrdId;
   }
 
-  public byte getSide() {
+  public String getSide() {
     return this.side;
   }
 
-  public void setSide(byte side) {
+  public void setSide(String side) {
     this.side = side;
   }
 
@@ -136,7 +136,7 @@ public class OrderCancelRequest implements BinaryCodec {
     writeFixedString(byteBuf, this.userInfo, 8);
     writeFixedString(byteBuf, this.clOrdId, 10);
     writeFixedString(byteBuf, this.origClOrdId, 10);
-    byteBuf.writeByte(this.side);
+    writeFixedString(byteBuf, this.side, 1);
     writeFixedString(byteBuf, this.orderId, 16);
     byteBuf.writeLong(this.orderQty);
   }
@@ -153,7 +153,7 @@ public class OrderCancelRequest implements BinaryCodec {
     this.userInfo = readFixedString(byteBuf, 8);
     this.clOrdId = readFixedString(byteBuf, 10);
     this.origClOrdId = readFixedString(byteBuf, 10);
-    this.side = byteBuf.readByte();
+    this.side = readFixedString(byteBuf, 1);
     this.orderId = readFixedString(byteBuf, 16);
     this.orderQty = byteBuf.readLong();
   }

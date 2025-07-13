@@ -20,7 +20,7 @@ public class OrderCancelRequestTest {
     original.setUserInfo("11111111");
     original.setClOrdId("1111111111");
     original.setOrigClOrdId("1111111111");
-    original.setSide((byte) 1);
+    original.setSide("1");
     original.setOrderId("1111111111111111");
     original.setOrderQty(8L);
 

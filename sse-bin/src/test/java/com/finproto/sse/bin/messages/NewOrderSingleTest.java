@@ -16,11 +16,11 @@ public class NewOrderSingleTest {
     original.setSecurityId("111111111111");
     original.setAccount("1111111111111");
     original.setOwnerType((byte) 1);
-    original.setSide((byte) 1);
+    original.setSide("1");
     original.setPrice(8L);
     original.setOrderQty(8L);
-    original.setOrdType((byte) 1);
-    original.setTimeInForce((byte) 1);
+    original.setOrdType("1");
+    original.setTimeInForce("1");
     original.setTransactTime(8L);
     original.setCreditTag("11");
     original.setClearingFirm("11111111");

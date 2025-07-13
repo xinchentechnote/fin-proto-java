@@ -10,20 +10,20 @@ public class Confirm implements BinaryCodec {
   private int setId;
   private long reportIndex;
   private int bizId;
-  private byte execType;
+  private String execType;
   private String bizPbu;
   private String clOrdId;
   private String securityId;
   private String account;
   private byte ownerType;
-  private byte side;
+  private String side;
   private long price;
   private long orderQty;
   private long leavesQty;
   private long cxlQty;
-  private byte ordType;
-  private byte timeInForce;
-  private byte ordStatus;
+  private String ordType;
+  private String timeInForce;
+  private String ordStatus;
   private String creditTag;
   private String origClOrdId;
   private String clearingFirm;
@@ -67,11 +67,11 @@ public class Confirm implements BinaryCodec {
     this.bizId = bizId;
   }
 
-  public byte getExecType() {
+  public String getExecType() {
     return this.execType;
   }
 
-  public void setExecType(byte execType) {
+  public void setExecType(String execType) {
     this.execType = execType;
   }
 
@@ -115,11 +115,11 @@ public class Confirm implements BinaryCodec {
     this.ownerType = ownerType;
   }
 
-  public byte getSide() {
+  public String getSide() {
     return this.side;
   }
 
-  public void setSide(byte side) {
+  public void setSide(String side) {
     this.side = side;
   }
 
@@ -155,27 +155,27 @@ public class Confirm implements BinaryCodec {
     this.cxlQty = cxlQty;
   }
 
-  public byte getOrdType() {
+  public String getOrdType() {
     return this.ordType;
   }
 
-  public void setOrdType(byte ordType) {
+  public void setOrdType(String ordType) {
     this.ordType = ordType;
   }
 
-  public byte getTimeInForce() {
+  public String getTimeInForce() {
     return this.timeInForce;
   }
 
-  public void setTimeInForce(byte timeInForce) {
+  public void setTimeInForce(String timeInForce) {
     this.timeInForce = timeInForce;
   }
 
-  public byte getOrdStatus() {
+  public String getOrdStatus() {
     return this.ordStatus;
   }
 
-  public void setOrdStatus(byte ordStatus) {
+  public void setOrdStatus(String ordStatus) {
     this.ordStatus = ordStatus;
   }
 
@@ -265,20 +265,20 @@ public class Confirm implements BinaryCodec {
     byteBuf.writeInt(this.setId);
     byteBuf.writeLong(this.reportIndex);
     byteBuf.writeInt(this.bizId);
-    byteBuf.writeByte(this.execType);
+    writeFixedString(byteBuf, this.execType, 1);
     writeFixedString(byteBuf, this.bizPbu, 8);
     writeFixedString(byteBuf, this.clOrdId, 10);
     writeFixedString(byteBuf, this.securityId, 12);
     writeFixedString(byteBuf, this.account, 13);
     byteBuf.writeByte(this.ownerType);
-    byteBuf.writeByte(this.side);
+    writeFixedString(byteBuf, this.side, 1);
     byteBuf.writeLong(this.price);
     byteBuf.writeLong(this.orderQty);
     byteBuf.writeLong(this.leavesQty);
     byteBuf.writeLong(this.cxlQty);
-    byteBuf.writeByte(this.ordType);
-    byteBuf.writeByte(this.timeInForce);
-    byteBuf.writeByte(this.ordStatus);
+    writeFixedString(byteBuf, this.ordType, 1);
+    writeFixedString(byteBuf, this.timeInForce, 1);
+    writeFixedString(byteBuf, this.ordStatus, 1);
     writeFixedString(byteBuf, this.creditTag, 2);
     writeFixedString(byteBuf, this.origClOrdId, 10);
     writeFixedString(byteBuf, this.clearingFirm, 8);
@@ -297,20 +297,20 @@ public class Confirm implements BinaryCodec {
     this.setId = byteBuf.readInt();
     this.reportIndex = byteBuf.readLong();
     this.bizId = byteBuf.readInt();
-    this.execType = byteBuf.readByte();
+    this.execType = readFixedString(byteBuf, 1);
     this.bizPbu = readFixedString(byteBuf, 8);
     this.clOrdId = readFixedString(byteBuf, 10);
     this.securityId = readFixedString(byteBuf, 12);
     this.account = readFixedString(byteBuf, 13);
     this.ownerType = byteBuf.readByte();
-    this.side = byteBuf.readByte();
+    this.side = readFixedString(byteBuf, 1);
     this.price = byteBuf.readLong();
     this.orderQty = byteBuf.readLong();
     this.leavesQty = byteBuf.readLong();
     this.cxlQty = byteBuf.readLong();
-    this.ordType = byteBuf.readByte();
-    this.timeInForce = byteBuf.readByte();
-    this.ordStatus = byteBuf.readByte();
+    this.ordType = readFixedString(byteBuf, 1);
+    this.timeInForce = readFixedString(byteBuf, 1);
+    this.ordStatus = readFixedString(byteBuf, 1);
     this.creditTag = readFixedString(byteBuf, 2);
     this.origClOrdId = readFixedString(byteBuf, 10);
     this.clearingFirm = readFixedString(byteBuf, 8);

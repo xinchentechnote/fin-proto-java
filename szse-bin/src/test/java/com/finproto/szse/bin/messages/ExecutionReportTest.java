@@ -24,18 +24,18 @@ public class ExecutionReportTest {
     original.setClOrdId("1111111111");
     original.setQuoteMsgId("1111111111");
     original.setExecId("1111111111111111");
-    original.setExecType((byte) 1);
-    original.setOrdStatus((byte) 1);
+    original.setExecType("1");
+    original.setOrdStatus("1");
     original.setLastPx(8L);
     original.setLastQty(8L);
     original.setLeavesQty(8L);
     original.setCumQty(8L);
-    original.setSide((byte) 1);
+    original.setSide("1");
     original.setAccountId("111111111111");
     original.setBranchId("1111");
     original.setApplId("010");
     Extend200115 extend200115 = new Extend200115();
-    extend200115.setCashMargin((byte) 1);
+    extend200115.setCashMargin("1");
     original.setApplExtend(extend200115);
 
     ByteBuf buffer = Unpooled.buffer();

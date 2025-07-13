@@ -12,7 +12,7 @@ public class BasicPacket implements BinaryCodec {
   private short fieldI16;
   private int fieldI32;
   private long fieldI64;
-  private byte fieldChar;
+  private String fieldChar;
   private byte fieldU8;
   private short fieldU16;
   private int fieldU32;
@@ -23,7 +23,7 @@ public class BasicPacket implements BinaryCodec {
   private List<Short> fieldI16List;
   private List<Integer> fieldI32List;
   private List<Long> fieldI64List;
-  private List<Byte> fieldCharList;
+  private List<String> fieldCharList;
   private List<Byte> fieldU8List;
   private List<Short> fieldU16List;
   private List<Integer> fieldU32List;
@@ -63,11 +63,11 @@ public class BasicPacket implements BinaryCodec {
     this.fieldI64 = fieldI64;
   }
 
-  public byte getFieldChar() {
+  public String getFieldChar() {
     return this.fieldChar;
   }
 
-  public void setFieldChar(byte fieldChar) {
+  public void setFieldChar(String fieldChar) {
     this.fieldChar = fieldChar;
   }
 
@@ -151,11 +151,11 @@ public class BasicPacket implements BinaryCodec {
     this.fieldI64List = fieldI64List;
   }
 
-  public List<Byte> getFieldCharList() {
+  public List<String> getFieldCharList() {
     return this.fieldCharList;
   }
 
-  public void setFieldCharList(List<Byte> fieldCharList) {
+  public void setFieldCharList(List<String> fieldCharList) {
     this.fieldCharList = fieldCharList;
   }
 
@@ -213,7 +213,7 @@ public class BasicPacket implements BinaryCodec {
     byteBuf.writeShortLE(this.fieldI16);
     byteBuf.writeIntLE(this.fieldI32);
     byteBuf.writeLongLE(this.fieldI64);
-    byteBuf.writeByte(this.fieldChar);
+    writeFixedString(byteBuf, this.fieldChar, 1);
     byteBuf.writeByte(this.fieldU8);
     byteBuf.writeShortLE(this.fieldU16);
     byteBuf.writeIntLE(this.fieldU32);
@@ -257,7 +257,7 @@ public class BasicPacket implements BinaryCodec {
     } else {
       byteBuf.writeShortLE((short) this.fieldCharList.size());
       for (int i = 0; i < this.fieldCharList.size(); i++) {
-        byteBuf.writeByte(this.fieldCharList.get(i));
+        writeFixedString(byteBuf, this.fieldCharList.get(i), 1);
       }
     }
     if (null == this.fieldU8List || this.fieldU8List.size() == 0) {
@@ -316,7 +316,7 @@ public class BasicPacket implements BinaryCodec {
     this.fieldI16 = byteBuf.readShortLE();
     this.fieldI32 = byteBuf.readIntLE();
     this.fieldI64 = byteBuf.readLongLE();
-    this.fieldChar = byteBuf.readByte();
+    this.fieldChar = readFixedString(byteBuf, 1);
     this.fieldU8 = byteBuf.readByte();
     this.fieldU16 = byteBuf.readShortLE();
     this.fieldU32 = byteBuf.readIntLE();
@@ -355,7 +355,7 @@ public class BasicPacket implements BinaryCodec {
     if (fieldCharListSize > 0) {
       this.fieldCharList = new ArrayList<>();
       for (int i = 0; i < fieldCharListSize; i++) {
-        this.fieldCharList.add(byteBuf.readByte());
+        this.fieldCharList.add(readFixedString(byteBuf, 1));
       }
     }
     short fieldU8ListSize = byteBuf.readShortLE();

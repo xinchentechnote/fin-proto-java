@@ -21,7 +21,7 @@ public class Extend204130 implements BinaryCodec {
   private short bidExecInstType;
   private short settlType;
   private byte settlPeriod;
-  private byte cashMargin;
+  private String cashMargin;
   private String memo;
 
   public String getMemberId() {
@@ -144,11 +144,11 @@ public class Extend204130 implements BinaryCodec {
     this.settlPeriod = settlPeriod;
   }
 
-  public byte getCashMargin() {
+  public String getCashMargin() {
     return this.cashMargin;
   }
 
-  public void setCashMargin(byte cashMargin) {
+  public void setCashMargin(String cashMargin) {
     this.cashMargin = cashMargin;
   }
 
@@ -177,7 +177,7 @@ public class Extend204130 implements BinaryCodec {
     byteBuf.writeShort(this.bidExecInstType);
     byteBuf.writeShort(this.settlType);
     byteBuf.writeByte(this.settlPeriod);
-    byteBuf.writeByte(this.cashMargin);
+    writeFixedString(byteBuf, this.cashMargin, 1);
     writeFixedString(byteBuf, this.memo, 160);
   }
 
@@ -198,7 +198,7 @@ public class Extend204130 implements BinaryCodec {
     this.bidExecInstType = byteBuf.readShort();
     this.settlType = byteBuf.readShort();
     this.settlPeriod = byteBuf.readByte();
-    this.cashMargin = byteBuf.readByte();
+    this.cashMargin = readFixedString(byteBuf, 1);
     this.memo = readFixedString(byteBuf, 160);
   }
 

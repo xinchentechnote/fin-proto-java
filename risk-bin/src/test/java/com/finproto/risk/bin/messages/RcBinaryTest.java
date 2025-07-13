@@ -15,10 +15,10 @@ public class RcBinaryTest {
     NewOrder newOrder = new NewOrder();
     newOrder.setClOrdId("example");
     newOrder.setSecurityId("example");
-    newOrder.setSide((byte) 1);
+    newOrder.setSide("1");
     newOrder.setPrice(8L);
     newOrder.setOrderQty(8L);
-    newOrder.setOrdType((byte) 1);
+    newOrder.setOrdType("1");
     newOrder.setAccount("example");
     original.setBody(newOrder);
 

@@ -6,16 +6,16 @@ import io.netty.buffer.ByteBuf;
 import java.util.Objects;
 
 public class Extend200415 implements BinaryCodec {
-  private byte positionEffect;
+  private String positionEffect;
   private byte coveredOrUncovered;
   private String contractAccountCode;
   private String secondaryOrderId;
 
-  public byte getPositionEffect() {
+  public String getPositionEffect() {
     return this.positionEffect;
   }
 
-  public void setPositionEffect(byte positionEffect) {
+  public void setPositionEffect(String positionEffect) {
     this.positionEffect = positionEffect;
   }
 
@@ -45,7 +45,7 @@ public class Extend200415 implements BinaryCodec {
 
   @Override
   public void encode(ByteBuf byteBuf) {
-    byteBuf.writeByte(this.positionEffect);
+    writeFixedString(byteBuf, this.positionEffect, 1);
     byteBuf.writeByte(this.coveredOrUncovered);
     writeFixedString(byteBuf, this.contractAccountCode, 6);
     writeFixedString(byteBuf, this.secondaryOrderId, 16);
@@ -53,7 +53,7 @@ public class Extend200415 implements BinaryCodec {
 
   @Override
   public void decode(ByteBuf byteBuf) {
-    this.positionEffect = byteBuf.readByte();
+    this.positionEffect = readFixedString(byteBuf, 1);
     this.coveredOrUncovered = byteBuf.readByte();
     this.contractAccountCode = readFixedString(byteBuf, 6);
     this.secondaryOrderId = readFixedString(byteBuf, 16);

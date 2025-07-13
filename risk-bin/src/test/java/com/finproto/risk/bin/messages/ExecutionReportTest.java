@@ -14,7 +14,7 @@ public class ExecutionReportTest {
     original.setOrdCnfmId("example");
     original.setLastPx(8L);
     original.setLastQty(8L);
-    original.setOrdStatus((byte) 1);
+    original.setOrdStatus("1");
 
     ByteBuf buffer = Unpooled.buffer();
     original.encode(buffer);

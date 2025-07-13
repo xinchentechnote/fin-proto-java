@@ -21,8 +21,8 @@ public class NewOrder implements BinaryCodec {
   private String accountId;
   private String branchId;
   private String orderRestrictions;
-  private byte side;
-  private byte ordType;
+  private String side;
+  private String ordType;
   private long orderQty;
   private long price;
   private BinaryCodec applExtend;
@@ -123,19 +123,19 @@ public class NewOrder implements BinaryCodec {
     this.orderRestrictions = orderRestrictions;
   }
 
-  public byte getSide() {
+  public String getSide() {
     return this.side;
   }
 
-  public void setSide(byte side) {
+  public void setSide(String side) {
     this.side = side;
   }
 
-  public byte getOrdType() {
+  public String getOrdType() {
     return this.ordType;
   }
 
-  public void setOrdType(byte ordType) {
+  public void setOrdType(String ordType) {
     this.ordType = ordType;
   }
 
@@ -177,8 +177,8 @@ public class NewOrder implements BinaryCodec {
     writeFixedString(byteBuf, this.accountId, 12);
     writeFixedString(byteBuf, this.branchId, 4);
     writeFixedString(byteBuf, this.orderRestrictions, 4);
-    byteBuf.writeByte(this.side);
-    byteBuf.writeByte(this.ordType);
+    writeFixedString(byteBuf, this.side, 1);
+    writeFixedString(byteBuf, this.ordType, 1);
     byteBuf.writeLong(this.orderQty);
     byteBuf.writeLong(this.price);
     if (null != this.applExtend) {
@@ -200,8 +200,8 @@ public class NewOrder implements BinaryCodec {
     this.accountId = readFixedString(byteBuf, 12);
     this.branchId = readFixedString(byteBuf, 4);
     this.orderRestrictions = readFixedString(byteBuf, 4);
-    this.side = byteBuf.readByte();
-    this.ordType = byteBuf.readByte();
+    this.side = readFixedString(byteBuf, 1);
+    this.ordType = readFixedString(byteBuf, 1);
     this.orderQty = byteBuf.readLong();
     this.price = byteBuf.readLong();
     this.applExtend = createApplExtend(this.applId);

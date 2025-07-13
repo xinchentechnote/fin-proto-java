@@ -7,7 +7,7 @@ import java.util.Objects;
 
 public class Extend100501 implements BinaryCodec {
   private String confirmId;
-  private byte cashMargin;
+  private String cashMargin;
 
   public String getConfirmId() {
     return this.confirmId;
@@ -17,24 +17,24 @@ public class Extend100501 implements BinaryCodec {
     this.confirmId = confirmId;
   }
 
-  public byte getCashMargin() {
+  public String getCashMargin() {
     return this.cashMargin;
   }
 
-  public void setCashMargin(byte cashMargin) {
+  public void setCashMargin(String cashMargin) {
     this.cashMargin = cashMargin;
   }
 
   @Override
   public void encode(ByteBuf byteBuf) {
     writeFixedString(byteBuf, this.confirmId, 8);
-    byteBuf.writeByte(this.cashMargin);
+    writeFixedString(byteBuf, this.cashMargin, 1);
   }
 
   @Override
   public void decode(ByteBuf byteBuf) {
     this.confirmId = readFixedString(byteBuf, 8);
-    this.cashMargin = byteBuf.readByte();
+    this.cashMargin = readFixedString(byteBuf, 1);
   }
 
   @Override

@@ -13,8 +13,8 @@ public class Extend200402Test {
     original.setStopPx(8L);
     original.setMinQty(8L);
     original.setMaxPriceLevels((short) 2);
-    original.setTimeInForce((byte) 1);
-    original.setPositionEffect((byte) 1);
+    original.setTimeInForce("1");
+    original.setPositionEffect("1");
     original.setCoveredOrUncovered((byte) 1);
     original.setContractAccountCode("111111");
     original.setSecondaryOrderId("1111111111111111");

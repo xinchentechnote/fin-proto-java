@@ -15,7 +15,7 @@ public class BasicPacketTest {
     original.setFieldI16((short) 2);
     original.setFieldI32(4);
     original.setFieldI64(8L);
-    original.setFieldChar((byte) 1);
+    original.setFieldChar("1");
     original.setFieldU8((byte) 1);
     original.setFieldU16((short) 2);
     original.setFieldU32(4);
@@ -26,7 +26,7 @@ public class BasicPacketTest {
     original.setFieldI16List(Arrays.asList((short) 2));
     original.setFieldI32List(Arrays.asList(4));
     original.setFieldI64List(Arrays.asList(8L));
-    original.setFieldCharList(Arrays.asList((byte) 1));
+    original.setFieldCharList(Arrays.asList("1"));
     original.setFieldU8List(Arrays.asList((byte) 1));
     original.setFieldU16List(Arrays.asList((short) 2));
     original.setFieldU32List(Arrays.asList(4));

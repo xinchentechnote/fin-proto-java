@@ -12,7 +12,7 @@ public class OrderCancel implements BinaryCodec {
   private String securityId;
   private String account;
   private byte ownerType;
-  private byte side;
+  private String side;
   private String origClOrdId;
   private long transactTime;
   private String branchId;
@@ -66,11 +66,11 @@ public class OrderCancel implements BinaryCodec {
     this.ownerType = ownerType;
   }
 
-  public byte getSide() {
+  public String getSide() {
     return this.side;
   }
 
-  public void setSide(byte side) {
+  public void setSide(String side) {
     this.side = side;
   }
 
@@ -114,7 +114,7 @@ public class OrderCancel implements BinaryCodec {
     writeFixedString(byteBuf, this.securityId, 12);
     writeFixedString(byteBuf, this.account, 13);
     byteBuf.writeByte(this.ownerType);
-    byteBuf.writeByte(this.side);
+    writeFixedString(byteBuf, this.side, 1);
     writeFixedString(byteBuf, this.origClOrdId, 10);
     byteBuf.writeLong(this.transactTime);
     writeFixedString(byteBuf, this.branchId, 8);
@@ -129,7 +129,7 @@ public class OrderCancel implements BinaryCodec {
     this.securityId = readFixedString(byteBuf, 12);
     this.account = readFixedString(byteBuf, 13);
     this.ownerType = byteBuf.readByte();
-    this.side = byteBuf.readByte();
+    this.side = readFixedString(byteBuf, 1);
     this.origClOrdId = readFixedString(byteBuf, 10);
     this.transactTime = byteBuf.readLong();
     this.branchId = readFixedString(byteBuf, 8);

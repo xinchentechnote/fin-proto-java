@@ -25,13 +25,13 @@ public class ExecutionConfirmTest {
     original.setQuoteMsgId("1111111111");
     original.setOrigClOrdId("1111111111");
     original.setExecId("1111111111111111");
-    original.setExecType((byte) 1);
-    original.setOrdStatus((byte) 1);
+    original.setExecType("1");
+    original.setOrdStatus("1");
     original.setOrdRejReason((short) 2);
     original.setLeavesQty(8L);
     original.setCumQty(8L);
-    original.setSide((byte) 1);
-    original.setOrdType((byte) 1);
+    original.setSide("1");
+    original.setOrdType("1");
     original.setOrderQty(8L);
     original.setPrice(8L);
     original.setAccountId("111111111111");
@@ -42,8 +42,8 @@ public class ExecutionConfirmTest {
     extend200102.setStopPx(8L);
     extend200102.setMinQty(8L);
     extend200102.setMaxPriceLevels((short) 2);
-    extend200102.setTimeInForce((byte) 1);
-    extend200102.setCashMargin((byte) 1);
+    extend200102.setTimeInForce("1");
+    extend200102.setCashMargin("1");
     original.setApplExtend(extend200102);
 
     ByteBuf buffer = Unpooled.buffer();

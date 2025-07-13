@@ -14,7 +14,7 @@ public class SzseBinaryTest {
     Logon logon = new Logon();
     logon.setSenderCompId("11111111111111111111");
     logon.setTargetCompId("11111111111111111111");
-    logon.setHeartBtInt(4);
+    logon.setHeartBtint(4);
     logon.setPassword("1111111111111111");
     logon.setDefaultApplVerId("11111111111111111111111111111111");
     original.setBody(logon);

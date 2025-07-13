@@ -10,7 +10,7 @@ public class Extend200415Test {
   @Test
   public void testEncodeDecode() {
     Extend200415 original = new Extend200415();
-    original.setPositionEffect((byte) 1);
+    original.setPositionEffect("1");
     original.setCoveredOrUncovered((byte) 1);
     original.setContractAccountCode("111111");
     original.setSecondaryOrderId("1111111111111111");

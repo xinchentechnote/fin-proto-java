@@ -10,7 +10,7 @@ public class Extend203702Test {
   @Test
   public void testEncodeDecode() {
     Extend203702 original = new Extend203702();
-    original.setCashMargin((byte) 1);
+    original.setCashMargin("1");
 
     ByteBuf buffer = Unpooled.buffer();
     original.encode(buffer);

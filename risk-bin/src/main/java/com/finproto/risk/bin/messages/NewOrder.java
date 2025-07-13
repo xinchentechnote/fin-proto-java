@@ -10,10 +10,10 @@ import java.util.Objects;
 public class NewOrder implements BinaryCodec {
   private String clOrdId;
   private String securityId;
-  private byte side;
+  private String side;
   private long price;
   private long orderQty;
-  private byte ordType;
+  private String ordType;
   private String account;
 
   public String getClOrdId() {
@@ -32,11 +32,11 @@ public class NewOrder implements BinaryCodec {
     this.securityId = securityId;
   }
 
-  public byte getSide() {
+  public String getSide() {
     return this.side;
   }
 
-  public void setSide(byte side) {
+  public void setSide(String side) {
     this.side = side;
   }
 
@@ -56,11 +56,11 @@ public class NewOrder implements BinaryCodec {
     this.orderQty = orderQty;
   }
 
-  public byte getOrdType() {
+  public String getOrdType() {
     return this.ordType;
   }
 
-  public void setOrdType(byte ordType) {
+  public void setOrdType(String ordType) {
     this.ordType = ordType;
   }
 
@@ -90,10 +90,10 @@ public class NewOrder implements BinaryCodec {
       byteBuf.writeBytes(bytes);
     }
 
-    byteBuf.writeByte(this.side);
+    writeFixedString(byteBuf, this.side, 1);
     byteBuf.writeLong(this.price);
     byteBuf.writeLong(this.orderQty);
-    byteBuf.writeByte(this.ordType);
+    writeFixedString(byteBuf, this.ordType, 1);
     if (StringUtil.isNullOrEmpty(this.account)) {
       byteBuf.writeInt(0);
     } else {
@@ -113,10 +113,10 @@ public class NewOrder implements BinaryCodec {
     if (securityIdLen > 0) {
       this.securityId = byteBuf.readCharSequence(securityIdLen, StandardCharsets.UTF_8).toString();
     }
-    this.side = byteBuf.readByte();
+    this.side = readFixedString(byteBuf, 1);
     this.price = byteBuf.readLong();
     this.orderQty = byteBuf.readLong();
-    this.ordType = byteBuf.readByte();
+    this.ordType = readFixedString(byteBuf, 1);
     int accountLen = byteBuf.readInt();
     if (accountLen > 0) {
       this.account = byteBuf.readCharSequence(accountLen, StandardCharsets.UTF_8).toString();

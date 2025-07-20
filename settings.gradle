@@ -11,6 +11,7 @@ plugins {
 
 rootProject.name = 'fin-proto-java'
 include('codec')
+// include('bjse-bin')
 include('risk-bin')
 include('sse-bin')
 include('szse-bin')

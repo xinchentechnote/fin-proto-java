@@ -135,7 +135,6 @@ public class SzseBinary implements BinaryCodec {
     bodyMap.put((int) 202302, ExecutionConfirm::new);
     bodyMap.put((int) 202702, ExecutionConfirm::new);
     bodyMap.put((int) 202802, ExecutionConfirm::new);
-    bodyMap.put((int) 202802, ExecutionConfirm::new);
     bodyMap.put((int) 202902, ExecutionConfirm::new);
     bodyMap.put((int) 203102, ExecutionConfirm::new);
     bodyMap.put((int) 206302, ExecutionConfirm::new);

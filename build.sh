@@ -1,6 +1,9 @@
 cd codec
 make
 cd -
+cd bjse-bin
+make
+cd -
 cd risk-bin
 make
 cd -

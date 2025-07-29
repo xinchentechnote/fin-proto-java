@@ -76,13 +76,12 @@ public class SseBinary implements BinaryCodec {
       byteBuf.writeBytes(bodyBuf);
       bodyBuf.release();
     }
+
     ChecksumService<ByteBuf, Integer> checksumService =
-        ChecksumServiceContext.getChecksumService("CRC32");
-    ;
+        ChecksumServiceContext.getChecksumService("SSE_BIN");
     if (checksumService != null) {
       this.checksum = (int) checksumService.calc(byteBuf);
     }
-
     byteBuf.writeInt(this.checksum);
   }
 

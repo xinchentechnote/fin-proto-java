@@ -26,7 +26,7 @@ public interface ChecksumService<T, R> {
   /**
    * checksum algorithm name
    *
-   * @return algorithm name: "sseBinCheckSum", "crc32" and so no.
+   * @return algorithm name: "SSE_BIN", "CRC32" and so no.
    */
   String algorithm();
 }

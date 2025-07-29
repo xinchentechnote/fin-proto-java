@@ -2,6 +2,8 @@
 package com.finproto.szse.bin.messages;
 
 import com.finproto.codec.BinaryCodec;
+import com.finproto.codec.ChecksumService;
+import com.finproto.codec.ChecksumServiceContext;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import java.util.HashMap;
@@ -65,6 +67,11 @@ public class SzseBinary implements BinaryCodec {
       bodyBuf.release();
     }
 
+    ChecksumService<ByteBuf, Integer> checksumService =
+        ChecksumServiceContext.getChecksumService("SZSE_BIN");
+    if (checksumService != null) {
+      this.checksum = (int) checksumService.calc(byteBuf);
+    }
     byteBuf.writeInt(this.checksum);
   }
 

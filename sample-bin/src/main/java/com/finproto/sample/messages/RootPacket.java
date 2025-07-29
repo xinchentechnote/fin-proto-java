@@ -2,6 +2,8 @@
 package com.finproto.sample.messages;
 
 import com.finproto.codec.BinaryCodec;
+import com.finproto.codec.ChecksumService;
+import com.finproto.codec.ChecksumServiceContext;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import java.util.HashMap;
@@ -65,6 +67,11 @@ public class RootPacket implements BinaryCodec {
       payloadBuf.release();
     }
 
+    ChecksumService<ByteBuf, Integer> checksumService =
+        ChecksumServiceContext.getChecksumService("CRC32");
+    if (checksumService != null) {
+      this.checksum = (int) checksumService.calc(byteBuf);
+    }
     byteBuf.writeIntLE(this.checksum);
   }
 

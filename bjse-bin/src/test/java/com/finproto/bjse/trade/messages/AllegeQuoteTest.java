@@ -39,7 +39,7 @@ public class AllegeQuoteTest {
         "111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111");
     original.setApplId("070");
     AllegeQuoteExtend070 allegeQuoteExtend070 = new AllegeQuoteExtend070();
-    allegeQuoteExtend070.setCashMargin((byte) 1);
+    allegeQuoteExtend070.setCashMargin("1");
     allegeQuoteExtend070.setCounterPartyPbuid("111111");
     original.setApplExtend(allegeQuoteExtend070);
 

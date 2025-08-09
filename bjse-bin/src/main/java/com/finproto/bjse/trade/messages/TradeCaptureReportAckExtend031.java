@@ -10,9 +10,9 @@ public class TradeCaptureReportAckExtend031 implements BinaryCodec {
   private String traderCode;
   private String counterPartyMemberId;
   private String counterPartyTraderCode;
-  private byte settlType;
-  private byte settlPeriod;
-  private byte cashMargin;
+  private String settlType;
+  private String settlPeriod;
+  private String cashMargin;
   private String memo;
 
   public String getMemberId() {
@@ -47,27 +47,27 @@ public class TradeCaptureReportAckExtend031 implements BinaryCodec {
     this.counterPartyTraderCode = counterPartyTraderCode;
   }
 
-  public byte getSettlType() {
+  public String getSettlType() {
     return this.settlType;
   }
 
-  public void setSettlType(byte settlType) {
+  public void setSettlType(String settlType) {
     this.settlType = settlType;
   }
 
-  public byte getSettlPeriod() {
+  public String getSettlPeriod() {
     return this.settlPeriod;
   }
 
-  public void setSettlPeriod(byte settlPeriod) {
+  public void setSettlPeriod(String settlPeriod) {
     this.settlPeriod = settlPeriod;
   }
 
-  public byte getCashMargin() {
+  public String getCashMargin() {
     return this.cashMargin;
   }
 
-  public void setCashMargin(byte cashMargin) {
+  public void setCashMargin(String cashMargin) {
     this.cashMargin = cashMargin;
   }
 
@@ -85,9 +85,9 @@ public class TradeCaptureReportAckExtend031 implements BinaryCodec {
     writeFixedString(byteBuf, this.traderCode, 5);
     writeFixedString(byteBuf, this.counterPartyMemberId, 6);
     writeFixedString(byteBuf, this.counterPartyTraderCode, 5);
-    byteBuf.writeByte(this.settlType);
-    byteBuf.writeByte(this.settlPeriod);
-    byteBuf.writeByte(this.cashMargin);
+    writeFixedString(byteBuf, this.settlType, 1);
+    writeFixedString(byteBuf, this.settlPeriod, 1);
+    writeFixedString(byteBuf, this.cashMargin, 1);
     writeFixedString(byteBuf, this.memo, 120);
   }
 
@@ -97,9 +97,9 @@ public class TradeCaptureReportAckExtend031 implements BinaryCodec {
     this.traderCode = readFixedString(byteBuf, 5);
     this.counterPartyMemberId = readFixedString(byteBuf, 6);
     this.counterPartyTraderCode = readFixedString(byteBuf, 5);
-    this.settlType = byteBuf.readByte();
-    this.settlPeriod = byteBuf.readByte();
-    this.cashMargin = byteBuf.readByte();
+    this.settlType = readFixedString(byteBuf, 1);
+    this.settlPeriod = readFixedString(byteBuf, 1);
+    this.cashMargin = readFixedString(byteBuf, 1);
     this.memo = readFixedString(byteBuf, 120);
   }
 

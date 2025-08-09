@@ -16,7 +16,7 @@ public class QuoteExtend070Test {
     original.setPrivateQuote((byte) 1);
     original.setValidUntilTime(8L);
     original.setPriceType((byte) 1);
-    original.setCashMargin((byte) 1);
+    original.setCashMargin("1");
     original.setCounterPartyPbuid("111111");
     original.setMemo(
         "111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111");

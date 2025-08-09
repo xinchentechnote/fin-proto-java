@@ -6,14 +6,14 @@ import io.netty.buffer.ByteBuf;
 import java.util.Objects;
 
 public class AllegeQuoteExtend070 implements BinaryCodec {
-  private byte cashMargin;
+  private String cashMargin;
   private String counterPartyPbuid;
 
-  public byte getCashMargin() {
+  public String getCashMargin() {
     return this.cashMargin;
   }
 
-  public void setCashMargin(byte cashMargin) {
+  public void setCashMargin(String cashMargin) {
     this.cashMargin = cashMargin;
   }
 
@@ -27,13 +27,13 @@ public class AllegeQuoteExtend070 implements BinaryCodec {
 
   @Override
   public void encode(ByteBuf byteBuf) {
-    byteBuf.writeByte(this.cashMargin);
+    writeFixedString(byteBuf, this.cashMargin, 1);
     writeFixedString(byteBuf, this.counterPartyPbuid, 6);
   }
 
   @Override
   public void decode(ByteBuf byteBuf) {
-    this.cashMargin = byteBuf.readByte();
+    this.cashMargin = readFixedString(byteBuf, 1);
     this.counterPartyPbuid = readFixedString(byteBuf, 6);
   }
 

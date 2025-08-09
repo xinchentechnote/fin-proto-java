@@ -10,7 +10,7 @@ public class AllegeQuoteExtend070Test {
   @Test
   public void testEncodeDecode() {
     AllegeQuoteExtend070 original = new AllegeQuoteExtend070();
-    original.setCashMargin((byte) 1);
+    original.setCashMargin("1");
     original.setCounterPartyPbuid("111111");
 
     ByteBuf buffer = Unpooled.buffer();

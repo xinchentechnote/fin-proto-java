@@ -12,7 +12,7 @@ public class QuoteExtend070 implements BinaryCodec {
   private byte privateQuote;
   private long validUntilTime;
   private byte priceType;
-  private byte cashMargin;
+  private String cashMargin;
   private String counterPartyPbuid;
   private String memo;
 
@@ -64,11 +64,11 @@ public class QuoteExtend070 implements BinaryCodec {
     this.priceType = priceType;
   }
 
-  public byte getCashMargin() {
+  public String getCashMargin() {
     return this.cashMargin;
   }
 
-  public void setCashMargin(byte cashMargin) {
+  public void setCashMargin(String cashMargin) {
     this.cashMargin = cashMargin;
   }
 
@@ -96,7 +96,7 @@ public class QuoteExtend070 implements BinaryCodec {
     byteBuf.writeByte(this.privateQuote);
     byteBuf.writeLongLE(this.validUntilTime);
     byteBuf.writeByte(this.priceType);
-    byteBuf.writeByte(this.cashMargin);
+    writeFixedString(byteBuf, this.cashMargin, 1);
     writeFixedString(byteBuf, this.counterPartyPbuid, 6);
     writeFixedString(byteBuf, this.memo, 120);
   }
@@ -109,7 +109,7 @@ public class QuoteExtend070 implements BinaryCodec {
     this.privateQuote = byteBuf.readByte();
     this.validUntilTime = byteBuf.readLongLE();
     this.priceType = byteBuf.readByte();
-    this.cashMargin = byteBuf.readByte();
+    this.cashMargin = readFixedString(byteBuf, 1);
     this.counterPartyPbuid = readFixedString(byteBuf, 6);
     this.memo = readFixedString(byteBuf, 120);
   }

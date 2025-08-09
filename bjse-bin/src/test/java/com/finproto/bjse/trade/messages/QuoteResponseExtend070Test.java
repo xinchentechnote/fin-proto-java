@@ -10,7 +10,7 @@ public class QuoteResponseExtend070Test {
   @Test
   public void testEncodeDecode() {
     QuoteResponseExtend070 original = new QuoteResponseExtend070();
-    original.setCashMargin((byte) 1);
+    original.setCashMargin("1");
 
     ByteBuf buffer = Unpooled.buffer();
     original.encode(buffer);

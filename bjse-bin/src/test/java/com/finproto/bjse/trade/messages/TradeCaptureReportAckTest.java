@@ -24,7 +24,7 @@ public class TradeCaptureReportAckTest {
     original.setTradeReportId("1111111111");
     original.setTradeReportType((byte) 1);
     original.setTradeReportTransType((byte) 1);
-    original.setTradeHandlingInstr((byte) 1);
+    original.setTradeHandlingInstr("1");
     original.setTradeReportRefId("1111111111");
     original.setTrdAckStatus((byte) 1);
     original.setTrdRptStatus((byte) 1);
@@ -35,7 +35,7 @@ public class TradeCaptureReportAckTest {
     original.setTrdSubType((short) 2);
     original.setConfirmId(4);
     original.setExecId("1111111111111111");
-    original.setSide((byte) 1);
+    original.setSide("1");
     original.setPbuid("111111");
     original.setAccountId("1111111111");
     original.setBranchId("11");
@@ -49,9 +49,9 @@ public class TradeCaptureReportAckTest {
     tradeCaptureReportAckExtend031.setTraderCode("11111");
     tradeCaptureReportAckExtend031.setCounterPartyMemberId("111111");
     tradeCaptureReportAckExtend031.setCounterPartyTraderCode("11111");
-    tradeCaptureReportAckExtend031.setSettlType((byte) 1);
-    tradeCaptureReportAckExtend031.setSettlPeriod((byte) 1);
-    tradeCaptureReportAckExtend031.setCashMargin((byte) 1);
+    tradeCaptureReportAckExtend031.setSettlType("1");
+    tradeCaptureReportAckExtend031.setSettlPeriod("1");
+    tradeCaptureReportAckExtend031.setCashMargin("1");
     tradeCaptureReportAckExtend031.setMemo(
         "111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111");
     original.setApplExtend(tradeCaptureReportAckExtend031);

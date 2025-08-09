@@ -37,18 +37,18 @@ public class QuoteStatusReportTest {
     quoteStatusReportExtend070.setExecId("1111111111111111");
     quoteStatusReportExtend070.setQuoteRespId("1111111111");
     quoteStatusReportExtend070.setPrivateQuote((byte) 1);
-    quoteStatusReportExtend070.setSide((byte) 1);
+    quoteStatusReportExtend070.setSide("1");
     quoteStatusReportExtend070.setPriceType((byte) 1);
     quoteStatusReportExtend070.setValidUntilTime(8L);
-    quoteStatusReportExtend070.setCashMargin((byte) 1);
+    quoteStatusReportExtend070.setCashMargin("1");
     quoteStatusReportExtend070.setCounterPartyPbuid("111111");
     quoteStatusReportExtend070.setMemo(
         "111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111");
-    QuoteStatusReportExtend070.NoQuote noQuote = new QuoteStatusReportExtend070.NoQuote();
-    noQuote.setQuoteId("1111111111");
-    noQuote.setQuotePrice(8L);
-    noQuote.setQuoteQty(8L);
-    quoteStatusReportExtend070.setNoQuote(Arrays.asList(noQuote));
+    QuoteStatusReportExtend070.Quote1 quote1 = new QuoteStatusReportExtend070.Quote1();
+    quote1.setQuoteId("1111111111");
+    quote1.setQuotePrice(8L);
+    quote1.setQuoteQty(8L);
+    quoteStatusReportExtend070.setQuote1(Arrays.asList(quote1));
     original.setApplExtend(quoteStatusReportExtend070);
 
     ByteBuf buffer = Unpooled.buffer();

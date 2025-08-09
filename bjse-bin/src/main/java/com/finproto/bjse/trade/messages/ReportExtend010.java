@@ -6,46 +6,46 @@ import io.netty.buffer.ByteBuf;
 import java.util.Objects;
 
 public class ReportExtend010 implements BinaryCodec {
-  private byte cashMargin;
-  private byte settlType;
-  private byte settlPeriod;
+  private String cashMargin;
+  private String settlType;
+  private String settlPeriod;
 
-  public byte getCashMargin() {
+  public String getCashMargin() {
     return this.cashMargin;
   }
 
-  public void setCashMargin(byte cashMargin) {
+  public void setCashMargin(String cashMargin) {
     this.cashMargin = cashMargin;
   }
 
-  public byte getSettlType() {
+  public String getSettlType() {
     return this.settlType;
   }
 
-  public void setSettlType(byte settlType) {
+  public void setSettlType(String settlType) {
     this.settlType = settlType;
   }
 
-  public byte getSettlPeriod() {
+  public String getSettlPeriod() {
     return this.settlPeriod;
   }
 
-  public void setSettlPeriod(byte settlPeriod) {
+  public void setSettlPeriod(String settlPeriod) {
     this.settlPeriod = settlPeriod;
   }
 
   @Override
   public void encode(ByteBuf byteBuf) {
-    byteBuf.writeByte(this.cashMargin);
-    byteBuf.writeByte(this.settlType);
-    byteBuf.writeByte(this.settlPeriod);
+    writeFixedString(byteBuf, this.cashMargin, 1);
+    writeFixedString(byteBuf, this.settlType, 1);
+    writeFixedString(byteBuf, this.settlPeriod, 1);
   }
 
   @Override
   public void decode(ByteBuf byteBuf) {
-    this.cashMargin = byteBuf.readByte();
-    this.settlType = byteBuf.readByte();
-    this.settlPeriod = byteBuf.readByte();
+    this.cashMargin = readFixedString(byteBuf, 1);
+    this.settlType = readFixedString(byteBuf, 1);
+    this.settlPeriod = readFixedString(byteBuf, 1);
   }
 
   @Override

@@ -10,7 +10,7 @@ public class TradeCaptureReportAckExtend062Test {
   @Test
   public void testEncodeDecode() {
     TradeCaptureReportAckExtend062 original = new TradeCaptureReportAckExtend062();
-    original.setCashMargin((byte) 1);
+    original.setCashMargin("1");
 
     ByteBuf buffer = Unpooled.buffer();
     original.encode(buffer);

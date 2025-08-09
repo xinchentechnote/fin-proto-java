@@ -23,13 +23,13 @@ public class ExecutionReport implements BinaryCodec {
   private String orderId;
   private String clOrdId;
   private String execId;
-  private byte execType;
-  private byte ordStatus;
+  private String execType;
+  private String ordStatus;
   private long lastPx;
   private long lastQty;
   private long leavesQty;
   private long cumQty;
-  private byte side;
+  private String side;
   private String accountId;
   private String branchId;
   private BinaryCodec applExtend;
@@ -146,19 +146,19 @@ public class ExecutionReport implements BinaryCodec {
     this.execId = execId;
   }
 
-  public byte getExecType() {
+  public String getExecType() {
     return this.execType;
   }
 
-  public void setExecType(byte execType) {
+  public void setExecType(String execType) {
     this.execType = execType;
   }
 
-  public byte getOrdStatus() {
+  public String getOrdStatus() {
     return this.ordStatus;
   }
 
-  public void setOrdStatus(byte ordStatus) {
+  public void setOrdStatus(String ordStatus) {
     this.ordStatus = ordStatus;
   }
 
@@ -194,11 +194,11 @@ public class ExecutionReport implements BinaryCodec {
     this.cumQty = cumQty;
   }
 
-  public byte getSide() {
+  public String getSide() {
     return this.side;
   }
 
-  public void setSide(byte side) {
+  public void setSide(String side) {
     this.side = side;
   }
 
@@ -242,13 +242,13 @@ public class ExecutionReport implements BinaryCodec {
     writeFixedString(byteBuf, this.orderId, 16);
     writeFixedString(byteBuf, this.clOrdId, 10);
     writeFixedString(byteBuf, this.execId, 16);
-    byteBuf.writeByte(this.execType);
-    byteBuf.writeByte(this.ordStatus);
+    writeFixedString(byteBuf, this.execType, 1);
+    writeFixedString(byteBuf, this.ordStatus, 1);
     byteBuf.writeLongLE(this.lastPx);
     byteBuf.writeLongLE(this.lastQty);
     byteBuf.writeLongLE(this.leavesQty);
     byteBuf.writeLongLE(this.cumQty);
-    byteBuf.writeByte(this.side);
+    writeFixedString(byteBuf, this.side, 1);
     writeFixedString(byteBuf, this.accountId, 10);
     writeFixedString(byteBuf, this.branchId, 2);
     if (null != this.applExtend) {
@@ -272,13 +272,13 @@ public class ExecutionReport implements BinaryCodec {
     this.orderId = readFixedString(byteBuf, 16);
     this.clOrdId = readFixedString(byteBuf, 10);
     this.execId = readFixedString(byteBuf, 16);
-    this.execType = byteBuf.readByte();
-    this.ordStatus = byteBuf.readByte();
+    this.execType = readFixedString(byteBuf, 1);
+    this.ordStatus = readFixedString(byteBuf, 1);
     this.lastPx = byteBuf.readLongLE();
     this.lastQty = byteBuf.readLongLE();
     this.leavesQty = byteBuf.readLongLE();
     this.cumQty = byteBuf.readLongLE();
-    this.side = byteBuf.readByte();
+    this.side = readFixedString(byteBuf, 1);
     this.accountId = readFixedString(byteBuf, 10);
     this.branchId = readFixedString(byteBuf, 2);
     this.applExtend = createApplExtend(this.applId);

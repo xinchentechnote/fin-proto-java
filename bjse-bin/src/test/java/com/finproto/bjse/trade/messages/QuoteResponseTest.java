@@ -24,18 +24,18 @@ public class QuoteResponseTest {
     original.setBranchId("11");
     original.setQuoteRespId("1111111111");
     original.setQuoteRespType((byte) 1);
-    original.setSide((byte) 1);
+    original.setSide("1");
     original.setValidUntilTime(8L);
     original.setQuoteType((byte) 1);
     original.setPriceType((byte) 1);
-    QuoteResponse.NoQuote noQuote = new QuoteResponse.NoQuote();
-    noQuote.setQuoteId("1111111111");
-    noQuote.setQuotePrice(8L);
-    noQuote.setQuoteQty(8L);
-    original.setNoQuote(Arrays.asList(noQuote));
+    QuoteResponse.Quote2 quote2 = new QuoteResponse.Quote2();
+    quote2.setQuoteId("1111111111");
+    quote2.setQuotePrice(8L);
+    quote2.setQuoteQty(8L);
+    original.setQuote2(Arrays.asList(quote2));
     original.setApplId("070");
     QuoteResponseExtend070 quoteResponseExtend070 = new QuoteResponseExtend070();
-    quoteResponseExtend070.setCashMargin((byte) 1);
+    quoteResponseExtend070.setCashMargin("1");
     original.setApplExtend(quoteResponseExtend070);
 
     ByteBuf buffer = Unpooled.buffer();

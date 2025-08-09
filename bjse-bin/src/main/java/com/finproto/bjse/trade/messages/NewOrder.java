@@ -21,8 +21,8 @@ public class NewOrder implements BinaryCodec {
   private String accountId;
   private String branchId;
   private String orderRestrictions;
-  private byte side;
-  private byte ordType;
+  private String side;
+  private String ordType;
   private long orderQty;
   private long price;
   private BinaryCodec applExtend;
@@ -123,19 +123,19 @@ public class NewOrder implements BinaryCodec {
     this.orderRestrictions = orderRestrictions;
   }
 
-  public byte getSide() {
+  public String getSide() {
     return this.side;
   }
 
-  public void setSide(byte side) {
+  public void setSide(String side) {
     this.side = side;
   }
 
-  public byte getOrdType() {
+  public String getOrdType() {
     return this.ordType;
   }
 
-  public void setOrdType(byte ordType) {
+  public void setOrdType(String ordType) {
     this.ordType = ordType;
   }
 
@@ -177,8 +177,8 @@ public class NewOrder implements BinaryCodec {
     writeFixedString(byteBuf, this.accountId, 10);
     writeFixedString(byteBuf, this.branchId, 2);
     writeFixedString(byteBuf, this.orderRestrictions, 4);
-    byteBuf.writeByte(this.side);
-    byteBuf.writeByte(this.ordType);
+    writeFixedString(byteBuf, this.side, 1);
+    writeFixedString(byteBuf, this.ordType, 1);
     byteBuf.writeLongLE(this.orderQty);
     byteBuf.writeLongLE(this.price);
     if (null != this.applExtend) {
@@ -200,8 +200,8 @@ public class NewOrder implements BinaryCodec {
     this.accountId = readFixedString(byteBuf, 10);
     this.branchId = readFixedString(byteBuf, 2);
     this.orderRestrictions = readFixedString(byteBuf, 4);
-    this.side = byteBuf.readByte();
-    this.ordType = byteBuf.readByte();
+    this.side = readFixedString(byteBuf, 1);
+    this.ordType = readFixedString(byteBuf, 1);
     this.orderQty = byteBuf.readLongLE();
     this.price = byteBuf.readLongLE();
     this.applExtend = createApplExtend(this.applId);
@@ -211,14 +211,14 @@ public class NewOrder implements BinaryCodec {
   private static final Map<String, Supplier<BinaryCodec>> applExtendMap = new HashMap<>();
 
   static {
-    applExtendMap.put("010", Extend010::new);
-    applExtendMap.put("040", Extend040::new);
-    applExtendMap.put("041", Extend041::new);
-    applExtendMap.put("042", Extend042::new);
-    applExtendMap.put("043", Extend043::new);
-    applExtendMap.put("044", Extend044::new);
-    applExtendMap.put("045", Extend045::new);
-    applExtendMap.put("050", Extend050::new);
+    applExtendMap.put("010", ExtendNewOrder010::new);
+    applExtendMap.put("040", ExtendNewOrder040::new);
+    applExtendMap.put("041", ExtendNewOrder041::new);
+    applExtendMap.put("042", ExtendNewOrder042::new);
+    applExtendMap.put("043", ExtendNewOrder043::new);
+    applExtendMap.put("044", ExtendNewOrder044::new);
+    applExtendMap.put("045", ExtendNewOrder045::new);
+    applExtendMap.put("050", ExtendNewOrder050::new);
   }
 
   private BinaryCodec createApplExtend(String applId) {

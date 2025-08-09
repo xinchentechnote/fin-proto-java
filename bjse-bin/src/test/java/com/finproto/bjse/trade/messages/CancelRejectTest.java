@@ -25,7 +25,7 @@ public class CancelRejectTest {
     original.setOrigClOrdId("1111111111");
     original.setAccountId("1111111111");
     original.setBranchId("11");
-    original.setOrdStatus((byte) 1);
+    original.setOrdStatus("1");
     original.setCxlRejReason((short) 2);
     original.setRejectText("1111111111111111");
     original.setOrderId("1111111111111111");

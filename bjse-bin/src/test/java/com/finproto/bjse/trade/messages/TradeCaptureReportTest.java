@@ -20,14 +20,14 @@ public class TradeCaptureReportTest {
     original.setTradeReportId("1111111111");
     original.setTradeReportType((byte) 1);
     original.setTradeReportTransType((byte) 1);
-    original.setTradeHandlingInstr((byte) 1);
+    original.setTradeHandlingInstr("1");
     original.setTradeReportRefId("1111111111");
     original.setLastPx(8L);
     original.setLastQty(8L);
     original.setTrdType((short) 2);
     original.setTrdSubType((short) 2);
     original.setConfirmId(4);
-    original.setSide((byte) 1);
+    original.setSide("1");
     original.setPbuid("111111");
     original.setAccountId("1111111111");
     original.setBranchId("11");
@@ -40,9 +40,9 @@ public class TradeCaptureReportTest {
     tradeCaptureReportExtend031.setTraderCode("11111");
     tradeCaptureReportExtend031.setCounterPartyMemberId("111111");
     tradeCaptureReportExtend031.setCounterPartyTraderCode("11111");
-    tradeCaptureReportExtend031.setSettlType((byte) 1);
-    tradeCaptureReportExtend031.setSettlPeriod((byte) 1);
-    tradeCaptureReportExtend031.setCashMargin((byte) 1);
+    tradeCaptureReportExtend031.setSettlType("1");
+    tradeCaptureReportExtend031.setSettlPeriod("1");
+    tradeCaptureReportExtend031.setCashMargin("1");
     tradeCaptureReportExtend031.setMemo(
         "111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111");
     original.setApplExtend(tradeCaptureReportExtend031);

@@ -24,7 +24,7 @@ public class TradeCaptureReportAck implements BinaryCodec {
   private String tradeReportId;
   private byte tradeReportType;
   private byte tradeReportTransType;
-  private byte tradeHandlingInstr;
+  private String tradeHandlingInstr;
   private String tradeReportRefId;
   private byte trdAckStatus;
   private byte trdRptStatus;
@@ -35,7 +35,7 @@ public class TradeCaptureReportAck implements BinaryCodec {
   private short trdSubType;
   private int confirmId;
   private String execId;
-  private byte side;
+  private String side;
   private String pbuid;
   private String accountId;
   private String branchId;
@@ -164,11 +164,11 @@ public class TradeCaptureReportAck implements BinaryCodec {
     this.tradeReportTransType = tradeReportTransType;
   }
 
-  public byte getTradeHandlingInstr() {
+  public String getTradeHandlingInstr() {
     return this.tradeHandlingInstr;
   }
 
-  public void setTradeHandlingInstr(byte tradeHandlingInstr) {
+  public void setTradeHandlingInstr(String tradeHandlingInstr) {
     this.tradeHandlingInstr = tradeHandlingInstr;
   }
 
@@ -252,11 +252,11 @@ public class TradeCaptureReportAck implements BinaryCodec {
     this.execId = execId;
   }
 
-  public byte getSide() {
+  public String getSide() {
     return this.side;
   }
 
-  public void setSide(byte side) {
+  public void setSide(String side) {
     this.side = side;
   }
 
@@ -333,7 +333,7 @@ public class TradeCaptureReportAck implements BinaryCodec {
     writeFixedString(byteBuf, this.tradeReportId, 10);
     byteBuf.writeByte(this.tradeReportType);
     byteBuf.writeByte(this.tradeReportTransType);
-    byteBuf.writeByte(this.tradeHandlingInstr);
+    writeFixedString(byteBuf, this.tradeHandlingInstr, 1);
     writeFixedString(byteBuf, this.tradeReportRefId, 10);
     byteBuf.writeByte(this.trdAckStatus);
     byteBuf.writeByte(this.trdRptStatus);
@@ -344,7 +344,7 @@ public class TradeCaptureReportAck implements BinaryCodec {
     byteBuf.writeShortLE(this.trdSubType);
     byteBuf.writeIntLE(this.confirmId);
     writeFixedString(byteBuf, this.execId, 16);
-    byteBuf.writeByte(this.side);
+    writeFixedString(byteBuf, this.side, 1);
     writeFixedString(byteBuf, this.pbuid, 6);
     writeFixedString(byteBuf, this.accountId, 10);
     writeFixedString(byteBuf, this.branchId, 2);
@@ -373,7 +373,7 @@ public class TradeCaptureReportAck implements BinaryCodec {
     this.tradeReportId = readFixedString(byteBuf, 10);
     this.tradeReportType = byteBuf.readByte();
     this.tradeReportTransType = byteBuf.readByte();
-    this.tradeHandlingInstr = byteBuf.readByte();
+    this.tradeHandlingInstr = readFixedString(byteBuf, 1);
     this.tradeReportRefId = readFixedString(byteBuf, 10);
     this.trdAckStatus = byteBuf.readByte();
     this.trdRptStatus = byteBuf.readByte();
@@ -384,7 +384,7 @@ public class TradeCaptureReportAck implements BinaryCodec {
     this.trdSubType = byteBuf.readShortLE();
     this.confirmId = byteBuf.readIntLE();
     this.execId = readFixedString(byteBuf, 16);
-    this.side = byteBuf.readByte();
+    this.side = readFixedString(byteBuf, 1);
     this.pbuid = readFixedString(byteBuf, 6);
     this.accountId = readFixedString(byteBuf, 10);
     this.branchId = readFixedString(byteBuf, 2);

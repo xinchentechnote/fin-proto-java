@@ -14,9 +14,9 @@ public class TradeCaptureReportExtend031Test {
     original.setTraderCode("11111");
     original.setCounterPartyMemberId("111111");
     original.setCounterPartyTraderCode("11111");
-    original.setSettlType((byte) 1);
-    original.setSettlPeriod((byte) 1);
-    original.setCashMargin((byte) 1);
+    original.setSettlType("1");
+    original.setSettlPeriod("1");
+    original.setCashMargin("1");
     original.setMemo(
         "111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111");
 

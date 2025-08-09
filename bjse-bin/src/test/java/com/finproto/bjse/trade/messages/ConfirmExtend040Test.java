@@ -13,8 +13,8 @@ public class ConfirmExtend040Test {
     original.setStopPx(8L);
     original.setMinQty(8L);
     original.setMaxPriceLevels((short) 2);
-    original.setTimeInForce((byte) 1);
-    original.setCashMargin((byte) 1);
+    original.setTimeInForce("1");
+    original.setCashMargin("1");
 
     ByteBuf buffer = Unpooled.buffer();
     original.encode(buffer);

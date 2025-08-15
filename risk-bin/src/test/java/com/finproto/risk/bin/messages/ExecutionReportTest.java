@@ -10,6 +10,7 @@ public class ExecutionReportTest {
   @Test
   public void testEncodeDecode() {
     ExecutionReport original = new ExecutionReport();
+    original.setUniqueOrderId("example");
     original.setClOrdId("example");
     original.setOrdCnfmId("example");
     original.setLastPx(8L);

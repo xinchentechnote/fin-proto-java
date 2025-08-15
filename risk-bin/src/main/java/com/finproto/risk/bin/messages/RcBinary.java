@@ -3,7 +3,6 @@ package com.finproto.risk.bin.messages;
 
 import com.finproto.codec.BinaryCodec;
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -51,20 +50,16 @@ public class RcBinary implements BinaryCodec {
   public void encode(ByteBuf byteBuf) {
     byteBuf.writeInt(this.msgType);
     byteBuf.writeInt(this.version);
-    ByteBuf bodyBuf = null;
-    if (this.body != null) {
-      bodyBuf = Unpooled.buffer();
-      this.body.encode(bodyBuf);
-      this.msgBodyLen = (int) bodyBuf.readableBytes();
-    } else {
-      this.msgBodyLen = 0;
-    }
-    byteBuf.writeInt(this.msgBodyLen);
+    int msgBodyLenPos = byteBuf.writerIndex();
+    byteBuf.writeInt(0);
 
-    if (bodyBuf != null) {
-      byteBuf.writeBytes(bodyBuf);
-      bodyBuf.release();
+    int bodyStart = byteBuf.writerIndex();
+    if (this.body != null) {
+      this.body.encode(byteBuf);
     }
+    int bodyEnd = byteBuf.writerIndex();
+    this.msgBodyLen = (int) (bodyEnd - bodyStart);
+    byteBuf.setInt(msgBodyLenPos, this.msgBodyLen);
   }
 
   @Override
@@ -84,6 +79,7 @@ public class RcBinary implements BinaryCodec {
     bodyMap.put((int) 200115, ExecutionReport::new);
     bodyMap.put((int) 190007, OrderCancel::new);
     bodyMap.put((int) 290008, CancelReject::new);
+    bodyMap.put((int) 800001, RiskResult::new);
   }
 
   private BinaryCodec createBody(Integer msgType) {

@@ -49,10 +49,16 @@ public class BjseBinary implements BinaryCodec {
   @Override
   public void encode(ByteBuf byteBuf) {
     byteBuf.writeIntLE(this.msgType);
-    byteBuf.writeIntLE(this.bodyLength);
-    if (null != this.body) {
+    int bodyLengthPos = byteBuf.writerIndex();
+    byteBuf.writeIntLE(0);
+
+    int bodyStart = byteBuf.writerIndex();
+    if (this.body != null) {
       this.body.encode(byteBuf);
     }
+    int bodyEnd = byteBuf.writerIndex();
+    this.bodyLength = (int) (bodyEnd - bodyStart);
+    byteBuf.setIntLE(bodyLengthPos, this.bodyLength);
     byteBuf.writeIntLE(this.checksum);
   }
 

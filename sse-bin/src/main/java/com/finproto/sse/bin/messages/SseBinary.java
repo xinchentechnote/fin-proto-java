@@ -63,12 +63,13 @@ public class SseBinary implements BinaryCodec {
     byteBuf.writeLong(this.msgSeqNum);
     int msgBodyLenPos = byteBuf.writerIndex();
     byteBuf.writeInt(0);
+
     int bodyStart = byteBuf.writerIndex();
     if (this.body != null) {
       this.body.encode(byteBuf);
     }
     int bodyEnd = byteBuf.writerIndex();
-    this.msgBodyLen = bodyEnd - bodyStart;
+    this.msgBodyLen = (int) (bodyEnd - bodyStart);
     byteBuf.setInt(msgBodyLenPos, this.msgBodyLen);
     ChecksumService<ByteBuf, Integer> checksumService =
         ChecksumServiceContext.getChecksumService("SSE_BIN");

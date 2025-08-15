@@ -8,6 +8,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 public class NewOrder implements BinaryCodec {
+  private String uniqueOrderId;
   private String clOrdId;
   private String securityId;
   private String side;
@@ -15,6 +16,14 @@ public class NewOrder implements BinaryCodec {
   private long orderQty;
   private String ordType;
   private String account;
+
+  public String getUniqueOrderId() {
+    return this.uniqueOrderId;
+  }
+
+  public void setUniqueOrderId(String uniqueOrderId) {
+    this.uniqueOrderId = uniqueOrderId;
+  }
 
   public String getClOrdId() {
     return this.clOrdId;
@@ -74,6 +83,14 @@ public class NewOrder implements BinaryCodec {
 
   @Override
   public void encode(ByteBuf byteBuf) {
+    if (StringUtil.isNullOrEmpty(this.uniqueOrderId)) {
+      byteBuf.writeInt(0);
+    } else {
+      byte[] bytes = this.uniqueOrderId.getBytes(StandardCharsets.UTF_8);
+      byteBuf.writeInt(bytes.length);
+      byteBuf.writeBytes(bytes);
+    }
+
     if (StringUtil.isNullOrEmpty(this.clOrdId)) {
       byteBuf.writeInt(0);
     } else {
@@ -105,6 +122,11 @@ public class NewOrder implements BinaryCodec {
 
   @Override
   public void decode(ByteBuf byteBuf) {
+    int uniqueOrderIdLen = byteBuf.readInt();
+    if (uniqueOrderIdLen > 0) {
+      this.uniqueOrderId =
+          byteBuf.readCharSequence(uniqueOrderIdLen, StandardCharsets.UTF_8).toString();
+    }
     int clOrdIdLen = byteBuf.readInt();
     if (clOrdIdLen > 0) {
       this.clOrdId = byteBuf.readCharSequence(clOrdIdLen, StandardCharsets.UTF_8).toString();
@@ -125,7 +147,8 @@ public class NewOrder implements BinaryCodec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(clOrdId, securityId, side, price, orderQty, ordType, account);
+    return Objects.hash(
+        uniqueOrderId, clOrdId, securityId, side, price, orderQty, ordType, account);
   }
 
   @Override
@@ -137,7 +160,8 @@ public class NewOrder implements BinaryCodec {
       return false;
     }
     NewOrder orther_ = (NewOrder) obj;
-    return Objects.equals(clOrdId, orther_.clOrdId)
+    return Objects.equals(uniqueOrderId, orther_.uniqueOrderId)
+        && Objects.equals(clOrdId, orther_.clOrdId)
         && Objects.equals(securityId, orther_.securityId)
         && Objects.equals(side, orther_.side)
         && Objects.equals(price, orther_.price)
@@ -149,7 +173,9 @@ public class NewOrder implements BinaryCodec {
   @Override
   public String toString() {
     return "NewOrder ["
-        + "clOrdId="
+        + "uniqueOrderId="
+        + this.uniqueOrderId
+        + ", clOrdId="
         + this.clOrdId
         + ", securityId="
         + this.securityId

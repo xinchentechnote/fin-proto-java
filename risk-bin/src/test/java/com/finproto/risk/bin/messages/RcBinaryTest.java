@@ -13,6 +13,7 @@ public class RcBinaryTest {
     original.setVersion(4);
     original.setMsgType((int) 100101);
     NewOrder newOrder = new NewOrder();
+    newOrder.setUniqueOrderId("example");
     newOrder.setClOrdId("example");
     newOrder.setSecurityId("example");
     newOrder.setSide("1");

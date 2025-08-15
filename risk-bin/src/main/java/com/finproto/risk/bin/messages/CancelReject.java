@@ -8,9 +8,27 @@ import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 public class CancelReject implements BinaryCodec {
+  private String uniqueOrderId;
+  private String uniqueOrigOrderId;
   private String clOrdId;
   private String origClOrdId;
   private int cxlRejReason;
+
+  public String getUniqueOrderId() {
+    return this.uniqueOrderId;
+  }
+
+  public void setUniqueOrderId(String uniqueOrderId) {
+    this.uniqueOrderId = uniqueOrderId;
+  }
+
+  public String getUniqueOrigOrderId() {
+    return this.uniqueOrigOrderId;
+  }
+
+  public void setUniqueOrigOrderId(String uniqueOrigOrderId) {
+    this.uniqueOrigOrderId = uniqueOrigOrderId;
+  }
 
   public String getClOrdId() {
     return this.clOrdId;
@@ -38,6 +56,22 @@ public class CancelReject implements BinaryCodec {
 
   @Override
   public void encode(ByteBuf byteBuf) {
+    if (StringUtil.isNullOrEmpty(this.uniqueOrderId)) {
+      byteBuf.writeInt(0);
+    } else {
+      byte[] bytes = this.uniqueOrderId.getBytes(StandardCharsets.UTF_8);
+      byteBuf.writeInt(bytes.length);
+      byteBuf.writeBytes(bytes);
+    }
+
+    if (StringUtil.isNullOrEmpty(this.uniqueOrigOrderId)) {
+      byteBuf.writeInt(0);
+    } else {
+      byte[] bytes = this.uniqueOrigOrderId.getBytes(StandardCharsets.UTF_8);
+      byteBuf.writeInt(bytes.length);
+      byteBuf.writeBytes(bytes);
+    }
+
     if (StringUtil.isNullOrEmpty(this.clOrdId)) {
       byteBuf.writeInt(0);
     } else {
@@ -59,6 +93,16 @@ public class CancelReject implements BinaryCodec {
 
   @Override
   public void decode(ByteBuf byteBuf) {
+    int uniqueOrderIdLen = byteBuf.readInt();
+    if (uniqueOrderIdLen > 0) {
+      this.uniqueOrderId =
+          byteBuf.readCharSequence(uniqueOrderIdLen, StandardCharsets.UTF_8).toString();
+    }
+    int uniqueOrigOrderIdLen = byteBuf.readInt();
+    if (uniqueOrigOrderIdLen > 0) {
+      this.uniqueOrigOrderId =
+          byteBuf.readCharSequence(uniqueOrigOrderIdLen, StandardCharsets.UTF_8).toString();
+    }
     int clOrdIdLen = byteBuf.readInt();
     if (clOrdIdLen > 0) {
       this.clOrdId = byteBuf.readCharSequence(clOrdIdLen, StandardCharsets.UTF_8).toString();
@@ -73,7 +117,7 @@ public class CancelReject implements BinaryCodec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(clOrdId, origClOrdId, cxlRejReason);
+    return Objects.hash(uniqueOrderId, uniqueOrigOrderId, clOrdId, origClOrdId, cxlRejReason);
   }
 
   @Override
@@ -85,7 +129,9 @@ public class CancelReject implements BinaryCodec {
       return false;
     }
     CancelReject orther_ = (CancelReject) obj;
-    return Objects.equals(clOrdId, orther_.clOrdId)
+    return Objects.equals(uniqueOrderId, orther_.uniqueOrderId)
+        && Objects.equals(uniqueOrigOrderId, orther_.uniqueOrigOrderId)
+        && Objects.equals(clOrdId, orther_.clOrdId)
         && Objects.equals(origClOrdId, orther_.origClOrdId)
         && Objects.equals(cxlRejReason, orther_.cxlRejReason);
   }
@@ -93,7 +139,11 @@ public class CancelReject implements BinaryCodec {
   @Override
   public String toString() {
     return "CancelReject ["
-        + "clOrdId="
+        + "uniqueOrderId="
+        + this.uniqueOrderId
+        + ", uniqueOrigOrderId="
+        + this.uniqueOrigOrderId
+        + ", clOrdId="
         + this.clOrdId
         + ", origClOrdId="
         + this.origClOrdId

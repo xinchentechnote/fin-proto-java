@@ -10,6 +10,8 @@ public class CancelRejectTest {
   @Test
   public void testEncodeDecode() {
     CancelReject original = new CancelReject();
+    original.setUniqueOrderId("example");
+    original.setUniqueOrigOrderId("example");
     original.setClOrdId("example");
     original.setOrigClOrdId("example");
     original.setCxlRejReason(4);

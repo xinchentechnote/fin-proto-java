@@ -5,7 +5,6 @@ import com.finproto.codec.BinaryCodec;
 import com.finproto.codec.ChecksumService;
 import com.finproto.codec.ChecksumServiceContext;
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -52,21 +51,16 @@ public class RootPacket implements BinaryCodec {
   @Override
   public void encode(ByteBuf byteBuf) {
     byteBuf.writeShortLE(this.msgType);
-    ByteBuf payloadBuf = null;
+    int payloadLenPos = byteBuf.writerIndex();
+    byteBuf.writeIntLE(0);
+
+    int payloadStart = byteBuf.writerIndex();
     if (this.payload != null) {
-      payloadBuf = Unpooled.buffer();
-      this.payload.encode(payloadBuf);
-      this.payloadLen = (int) payloadBuf.readableBytes();
-    } else {
-      this.payloadLen = 0;
+      this.payload.encode(byteBuf);
     }
-    byteBuf.writeIntLE(this.payloadLen);
-
-    if (payloadBuf != null) {
-      byteBuf.writeBytes(payloadBuf);
-      payloadBuf.release();
-    }
-
+    int payloadEnd = byteBuf.writerIndex();
+    this.payloadLen = (int) (payloadEnd - payloadStart);
+    byteBuf.setIntLE(payloadLenPos, this.payloadLen);
     ChecksumService<ByteBuf, Integer> checksumService =
         ChecksumServiceContext.getChecksumService("CRC32");
     if (checksumService != null) {

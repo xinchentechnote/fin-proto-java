@@ -10,6 +10,7 @@ public class NewOrderTest {
   @Test
   public void testEncodeDecode() {
     NewOrder original = new NewOrder();
+    original.setUniqueOrderId("example");
     original.setClOrdId("example");
     original.setSecurityId("example");
     original.setSide("1");

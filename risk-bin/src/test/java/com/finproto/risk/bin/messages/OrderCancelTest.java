@@ -10,6 +10,8 @@ public class OrderCancelTest {
   @Test
   public void testEncodeDecode() {
     OrderCancel original = new OrderCancel();
+    original.setUniqueOrderId("example");
+    original.setUniqueOrigOrderId("example");
     original.setClOrdId("example");
     original.setOrigClOrdId("example");
     original.setSecurityId("example");

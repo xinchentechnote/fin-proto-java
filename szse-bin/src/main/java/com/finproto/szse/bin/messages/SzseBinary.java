@@ -5,7 +5,6 @@ import com.finproto.codec.BinaryCodec;
 import com.finproto.codec.ChecksumService;
 import com.finproto.codec.ChecksumServiceContext;
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -52,21 +51,16 @@ public class SzseBinary implements BinaryCodec {
   @Override
   public void encode(ByteBuf byteBuf) {
     byteBuf.writeInt(this.msgType);
-    ByteBuf bodyBuf = null;
+    int bodyLengthPos = byteBuf.writerIndex();
+    byteBuf.writeInt(0);
+
+    int bodyStart = byteBuf.writerIndex();
     if (this.body != null) {
-      bodyBuf = Unpooled.buffer();
-      this.body.encode(bodyBuf);
-      this.bodyLength = (int) bodyBuf.readableBytes();
-    } else {
-      this.bodyLength = 0;
+      this.body.encode(byteBuf);
     }
-    byteBuf.writeInt(this.bodyLength);
-
-    if (bodyBuf != null) {
-      byteBuf.writeBytes(bodyBuf);
-      bodyBuf.release();
-    }
-
+    int bodyEnd = byteBuf.writerIndex();
+    this.bodyLength = (int) (bodyEnd - bodyStart);
+    byteBuf.setInt(bodyLengthPos, this.bodyLength);
     ChecksumService<ByteBuf, Integer> checksumService =
         ChecksumServiceContext.getChecksumService("SZSE_BIN");
     if (checksumService != null) {

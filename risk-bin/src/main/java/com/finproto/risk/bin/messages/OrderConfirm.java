@@ -8,10 +8,28 @@ import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 public class OrderConfirm implements BinaryCodec {
+  private String uniqueOrderId;
+  private String uniqueOrigOrderId;
   private String clOrdId;
   private String execType;
   private int ordRejReason;
   private String ordCnfmId;
+
+  public String getUniqueOrderId() {
+    return this.uniqueOrderId;
+  }
+
+  public void setUniqueOrderId(String uniqueOrderId) {
+    this.uniqueOrderId = uniqueOrderId;
+  }
+
+  public String getUniqueOrigOrderId() {
+    return this.uniqueOrigOrderId;
+  }
+
+  public void setUniqueOrigOrderId(String uniqueOrigOrderId) {
+    this.uniqueOrigOrderId = uniqueOrigOrderId;
+  }
 
   public String getClOrdId() {
     return this.clOrdId;
@@ -47,6 +65,22 @@ public class OrderConfirm implements BinaryCodec {
 
   @Override
   public void encode(ByteBuf byteBuf) {
+    if (StringUtil.isNullOrEmpty(this.uniqueOrderId)) {
+      byteBuf.writeInt(0);
+    } else {
+      byte[] bytes = this.uniqueOrderId.getBytes(StandardCharsets.UTF_8);
+      byteBuf.writeInt(bytes.length);
+      byteBuf.writeBytes(bytes);
+    }
+
+    if (StringUtil.isNullOrEmpty(this.uniqueOrigOrderId)) {
+      byteBuf.writeInt(0);
+    } else {
+      byte[] bytes = this.uniqueOrigOrderId.getBytes(StandardCharsets.UTF_8);
+      byteBuf.writeInt(bytes.length);
+      byteBuf.writeBytes(bytes);
+    }
+
     if (StringUtil.isNullOrEmpty(this.clOrdId)) {
       byteBuf.writeInt(0);
     } else {
@@ -68,6 +102,16 @@ public class OrderConfirm implements BinaryCodec {
 
   @Override
   public void decode(ByteBuf byteBuf) {
+    int uniqueOrderIdLen = byteBuf.readInt();
+    if (uniqueOrderIdLen > 0) {
+      this.uniqueOrderId =
+          byteBuf.readCharSequence(uniqueOrderIdLen, StandardCharsets.UTF_8).toString();
+    }
+    int uniqueOrigOrderIdLen = byteBuf.readInt();
+    if (uniqueOrigOrderIdLen > 0) {
+      this.uniqueOrigOrderId =
+          byteBuf.readCharSequence(uniqueOrigOrderIdLen, StandardCharsets.UTF_8).toString();
+    }
     int clOrdIdLen = byteBuf.readInt();
     if (clOrdIdLen > 0) {
       this.clOrdId = byteBuf.readCharSequence(clOrdIdLen, StandardCharsets.UTF_8).toString();
@@ -82,7 +126,8 @@ public class OrderConfirm implements BinaryCodec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(clOrdId, execType, ordRejReason, ordCnfmId);
+    return Objects.hash(
+        uniqueOrderId, uniqueOrigOrderId, clOrdId, execType, ordRejReason, ordCnfmId);
   }
 
   @Override
@@ -94,7 +139,9 @@ public class OrderConfirm implements BinaryCodec {
       return false;
     }
     OrderConfirm orther_ = (OrderConfirm) obj;
-    return Objects.equals(clOrdId, orther_.clOrdId)
+    return Objects.equals(uniqueOrderId, orther_.uniqueOrderId)
+        && Objects.equals(uniqueOrigOrderId, orther_.uniqueOrigOrderId)
+        && Objects.equals(clOrdId, orther_.clOrdId)
         && Objects.equals(execType, orther_.execType)
         && Objects.equals(ordRejReason, orther_.ordRejReason)
         && Objects.equals(ordCnfmId, orther_.ordCnfmId);
@@ -103,7 +150,11 @@ public class OrderConfirm implements BinaryCodec {
   @Override
   public String toString() {
     return "OrderConfirm ["
-        + "clOrdId="
+        + "uniqueOrderId="
+        + this.uniqueOrderId
+        + ", uniqueOrigOrderId="
+        + this.uniqueOrigOrderId
+        + ", clOrdId="
         + this.clOrdId
         + ", execType="
         + this.execType

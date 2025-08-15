@@ -8,11 +8,20 @@ import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 public class ExecutionReport implements BinaryCodec {
+  private String uniqueOrderId;
   private String clOrdId;
   private String ordCnfmId;
   private long lastPx;
   private long lastQty;
   private String ordStatus;
+
+  public String getUniqueOrderId() {
+    return this.uniqueOrderId;
+  }
+
+  public void setUniqueOrderId(String uniqueOrderId) {
+    this.uniqueOrderId = uniqueOrderId;
+  }
 
   public String getClOrdId() {
     return this.clOrdId;
@@ -56,6 +65,14 @@ public class ExecutionReport implements BinaryCodec {
 
   @Override
   public void encode(ByteBuf byteBuf) {
+    if (StringUtil.isNullOrEmpty(this.uniqueOrderId)) {
+      byteBuf.writeInt(0);
+    } else {
+      byte[] bytes = this.uniqueOrderId.getBytes(StandardCharsets.UTF_8);
+      byteBuf.writeInt(bytes.length);
+      byteBuf.writeBytes(bytes);
+    }
+
     if (StringUtil.isNullOrEmpty(this.clOrdId)) {
       byteBuf.writeInt(0);
     } else {
@@ -79,6 +96,11 @@ public class ExecutionReport implements BinaryCodec {
 
   @Override
   public void decode(ByteBuf byteBuf) {
+    int uniqueOrderIdLen = byteBuf.readInt();
+    if (uniqueOrderIdLen > 0) {
+      this.uniqueOrderId =
+          byteBuf.readCharSequence(uniqueOrderIdLen, StandardCharsets.UTF_8).toString();
+    }
     int clOrdIdLen = byteBuf.readInt();
     if (clOrdIdLen > 0) {
       this.clOrdId = byteBuf.readCharSequence(clOrdIdLen, StandardCharsets.UTF_8).toString();
@@ -94,7 +116,7 @@ public class ExecutionReport implements BinaryCodec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(clOrdId, ordCnfmId, lastPx, lastQty, ordStatus);
+    return Objects.hash(uniqueOrderId, clOrdId, ordCnfmId, lastPx, lastQty, ordStatus);
   }
 
   @Override
@@ -106,7 +128,8 @@ public class ExecutionReport implements BinaryCodec {
       return false;
     }
     ExecutionReport orther_ = (ExecutionReport) obj;
-    return Objects.equals(clOrdId, orther_.clOrdId)
+    return Objects.equals(uniqueOrderId, orther_.uniqueOrderId)
+        && Objects.equals(clOrdId, orther_.clOrdId)
         && Objects.equals(ordCnfmId, orther_.ordCnfmId)
         && Objects.equals(lastPx, orther_.lastPx)
         && Objects.equals(lastQty, orther_.lastQty)
@@ -116,7 +139,9 @@ public class ExecutionReport implements BinaryCodec {
   @Override
   public String toString() {
     return "ExecutionReport ["
-        + "clOrdId="
+        + "uniqueOrderId="
+        + this.uniqueOrderId
+        + ", clOrdId="
         + this.clOrdId
         + ", ordCnfmId="
         + this.ordCnfmId

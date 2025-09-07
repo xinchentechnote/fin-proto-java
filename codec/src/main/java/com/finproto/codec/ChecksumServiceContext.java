@@ -15,7 +15,7 @@ public class ChecksumServiceContext {
     CACHE.remove(name);
   }
 
-  public static void clearAllChecksumService(String name) {
+  public static void clearAllChecksumService() {
     CACHE.clear();
   }
 

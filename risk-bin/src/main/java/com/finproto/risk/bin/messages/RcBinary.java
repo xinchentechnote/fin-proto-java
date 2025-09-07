@@ -67,7 +67,7 @@ public class RcBinary implements BinaryCodec {
     this.msgType = byteBuf.readInt();
     this.version = byteBuf.readInt();
     this.msgBodyLen = byteBuf.readInt();
-    this.body = MessageFactory.getInstance().create(this.msgType);
+    this.body = BodyMessageFactory.getInstance().create(this.msgType);
     this.body.decode(byteBuf);
   }
 
@@ -105,38 +105,37 @@ public class RcBinary implements BinaryCodec {
         + "]";
   }
 
-  public static enum MessageFactory {
+  public static enum BodyMessageFactory {
     INSTANCE;
-
-    private final Map<Integer, Supplier<BinaryCodec>> codecMap = new HashMap<>();
-
-    public void register(int msgType, Supplier<BinaryCodec> codec) {
-        codecMap.put(msgType, codec);
-    }
+    private final Map<Integer, Supplier<BinaryCodec>> bodyMap = new HashMap<>();
 
     static {
-        getInstance().register((int) 100101, NewOrder::new);
-        getInstance().register((int) 200102, OrderConfirm::new);
-        getInstance().register((int) 200115, ExecutionReport::new);
-        getInstance().register((int) 190007, OrderCancel::new);
-        getInstance().register((int) 290008, CancelReject::new);
-        getInstance().register((int) 800001, RiskResult::new);
+      getInstance().register((int) 100101, NewOrder::new);
+      getInstance().register((int) 200102, OrderConfirm::new);
+      getInstance().register((int) 200115, ExecutionReport::new);
+      getInstance().register((int) 190007, OrderCancel::new);
+      getInstance().register((int) 290008, CancelReject::new);
+      getInstance().register((int) 800001, RiskResult::new);
     }
 
-    public BinaryCodec create(int msgType) {
-        Supplier<BinaryCodec> supplier = codecMap.get(msgType);
-        if (null == supplier) {
-            throw new IllegalArgumentException("Unsupported MsgType:" + msgType);
-        }
-        return supplier.get();
+    public BinaryCodec create(Integer msgType) {
+      Supplier<BinaryCodec> supplier = bodyMap.get(msgType);
+      if (null == supplier) {
+        throw new IllegalArgumentException("Unsupported MsgType:" + msgType);
+      }
+      return supplier.get();
     }
 
-    public boolean remove(int msgType) {
-        return codecMap.remove(msgType) != null;
+    public void register(Integer msgType, Supplier<BinaryCodec> supplier) {
+      bodyMap.put(msgType, supplier);
     }
 
-    public static MessageFactory getInstance() {
-        return INSTANCE;
+    public boolean remove(Integer msgType) {
+      return null != bodyMap.remove(msgType);
     }
-}
+
+    public static BodyMessageFactory getInstance() {
+      return INSTANCE;
+    }
+  }
 }

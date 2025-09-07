@@ -281,24 +281,8 @@ public class ExecutionReport implements BinaryCodec {
     this.side = readFixedString(byteBuf, 1);
     this.accountId = readFixedString(byteBuf, 10);
     this.branchId = readFixedString(byteBuf, 2);
-    this.applExtend = createApplExtend(this.applId);
+    this.applExtend = ApplExtendMessageFactory.getInstance().create(this.applId);
     this.applExtend.decode(byteBuf);
-  }
-
-  private static final Map<String, Supplier<BinaryCodec>> applExtendMap = new HashMap<>();
-
-  static {
-    applExtendMap.put("010", ReportExtend010::new);
-    applExtendMap.put("040", ReportExtend040::new);
-    applExtendMap.put("050", ReportExtend050::new);
-  }
-
-  private BinaryCodec createApplExtend(String applId) {
-    Supplier<BinaryCodec> supplier = applExtendMap.get(applId);
-    if (null == supplier) {
-      throw new IllegalArgumentException("Unsupported ApplID:" + applId);
-    }
-    return supplier.get();
   }
 
   @Override
@@ -417,5 +401,36 @@ public class ExecutionReport implements BinaryCodec {
         + ", applExtend="
         + this.applExtend
         + "]";
+  }
+
+  public static enum ApplExtendMessageFactory {
+    INSTANCE;
+    private final Map<String, Supplier<BinaryCodec>> applExtendMap = new HashMap<>();
+
+    static {
+      getInstance().register("010", ReportExtend010::new);
+      getInstance().register("040", ReportExtend040::new);
+      getInstance().register("050", ReportExtend050::new);
+    }
+
+    public BinaryCodec create(String applId) {
+      Supplier<BinaryCodec> supplier = applExtendMap.get(applId);
+      if (null == supplier) {
+        throw new IllegalArgumentException("Unsupported ApplID:" + applId);
+      }
+      return supplier.get();
+    }
+
+    public void register(String applId, Supplier<BinaryCodec> supplier) {
+      applExtendMap.put(applId, supplier);
+    }
+
+    public boolean remove(String applId) {
+      return null != applExtendMap.remove(applId);
+    }
+
+    public static ApplExtendMessageFactory getInstance() {
+      return INSTANCE;
+    }
   }
 }

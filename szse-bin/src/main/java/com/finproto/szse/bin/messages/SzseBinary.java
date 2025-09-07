@@ -73,99 +73,9 @@ public class SzseBinary implements BinaryCodec {
   public void decode(ByteBuf byteBuf) {
     this.msgType = byteBuf.readInt();
     this.bodyLength = byteBuf.readInt();
-    this.body = createBody(this.msgType);
+    this.body = BodyMessageFactory.getInstance().create(this.msgType);
     this.body.decode(byteBuf);
     this.checksum = byteBuf.readInt();
-  }
-
-  private static final Map<Integer, Supplier<BinaryCodec>> bodyMap = new HashMap<>();
-
-  static {
-    bodyMap.put((int) 1, Logon::new);
-    bodyMap.put((int) 2, Logout::new);
-    bodyMap.put((int) 3, Heartbeat::new);
-    bodyMap.put((int) 4, BusinessReject::new);
-    bodyMap.put((int) 5, ReportSynchronization::new);
-    bodyMap.put((int) 6, PlatformStateInfo::new);
-    bodyMap.put((int) 7, ReportFinished::new);
-    bodyMap.put((int) 9, PlatformPartition::new);
-    bodyMap.put((int) 10, TradingSessionStatus::new);
-    bodyMap.put((int) 100101, NewOrder::new);
-    bodyMap.put((int) 100201, NewOrder::new);
-    bodyMap.put((int) 100301, NewOrder::new);
-    bodyMap.put((int) 100401, NewOrder::new);
-    bodyMap.put((int) 100501, NewOrder::new);
-    bodyMap.put((int) 100601, NewOrder::new);
-    bodyMap.put((int) 100701, NewOrder::new);
-    bodyMap.put((int) 101201, NewOrder::new);
-    bodyMap.put((int) 101301, NewOrder::new);
-    bodyMap.put((int) 101401, NewOrder::new);
-    bodyMap.put((int) 101501, NewOrder::new);
-    bodyMap.put((int) 101601, NewOrder::new);
-    bodyMap.put((int) 101701, NewOrder::new);
-    bodyMap.put((int) 101801, NewOrder::new);
-    bodyMap.put((int) 101901, NewOrder::new);
-    bodyMap.put((int) 102301, NewOrder::new);
-    bodyMap.put((int) 102701, NewOrder::new);
-    bodyMap.put((int) 102801, NewOrder::new);
-    bodyMap.put((int) 102901, NewOrder::new);
-    bodyMap.put((int) 103101, NewOrder::new);
-    bodyMap.put((int) 106301, NewOrder::new);
-    bodyMap.put((int) 103301, NewOrder::new);
-    bodyMap.put((int) 103501, NewOrder::new);
-    bodyMap.put((int) 103701, NewOrder::new);
-    bodyMap.put((int) 104101, NewOrder::new);
-    bodyMap.put((int) 104128, NewOrder::new);
-    bodyMap.put((int) 104701, NewOrder::new);
-    bodyMap.put((int) 200102, ExecutionConfirm::new);
-    bodyMap.put((int) 200202, ExecutionConfirm::new);
-    bodyMap.put((int) 200302, ExecutionConfirm::new);
-    bodyMap.put((int) 200402, ExecutionConfirm::new);
-    bodyMap.put((int) 200502, ExecutionConfirm::new);
-    bodyMap.put((int) 200602, ExecutionConfirm::new);
-    bodyMap.put((int) 200702, ExecutionConfirm::new);
-    bodyMap.put((int) 201202, ExecutionConfirm::new);
-    bodyMap.put((int) 201302, ExecutionConfirm::new);
-    bodyMap.put((int) 201402, ExecutionConfirm::new);
-    bodyMap.put((int) 201502, ExecutionConfirm::new);
-    bodyMap.put((int) 201602, ExecutionConfirm::new);
-    bodyMap.put((int) 201702, ExecutionConfirm::new);
-    bodyMap.put((int) 201802, ExecutionConfirm::new);
-    bodyMap.put((int) 201902, ExecutionConfirm::new);
-    bodyMap.put((int) 202202, ExecutionConfirm::new);
-    bodyMap.put((int) 202302, ExecutionConfirm::new);
-    bodyMap.put((int) 202702, ExecutionConfirm::new);
-    bodyMap.put((int) 202802, ExecutionConfirm::new);
-    bodyMap.put((int) 202902, ExecutionConfirm::new);
-    bodyMap.put((int) 203102, ExecutionConfirm::new);
-    bodyMap.put((int) 206302, ExecutionConfirm::new);
-    bodyMap.put((int) 203302, ExecutionConfirm::new);
-    bodyMap.put((int) 203502, ExecutionConfirm::new);
-    bodyMap.put((int) 203702, ExecutionConfirm::new);
-    bodyMap.put((int) 204102, ExecutionConfirm::new);
-    bodyMap.put((int) 204129, ExecutionConfirm::new);
-    bodyMap.put((int) 204702, ExecutionConfirm::new);
-    bodyMap.put((int) 200115, ExecutionReport::new);
-    bodyMap.put((int) 200215, ExecutionReport::new);
-    bodyMap.put((int) 200315, ExecutionReport::new);
-    bodyMap.put((int) 200415, ExecutionReport::new);
-    bodyMap.put((int) 200515, ExecutionReport::new);
-    bodyMap.put((int) 200615, ExecutionReport::new);
-    bodyMap.put((int) 200715, ExecutionReport::new);
-    bodyMap.put((int) 206315, ExecutionReport::new);
-    bodyMap.put((int) 203715, ExecutionReport::new);
-    bodyMap.put((int) 204115, ExecutionReport::new);
-    bodyMap.put((int) 204130, ExecutionReport::new);
-    bodyMap.put((int) 190007, OrderCancelRequest::new);
-    bodyMap.put((int) 290008, CancelReject::new);
-  }
-
-  private BinaryCodec createBody(Integer msgType) {
-    Supplier<BinaryCodec> supplier = bodyMap.get(msgType);
-    if (null == supplier) {
-      throw new IllegalArgumentException("Unsupported MsgType:" + msgType);
-    }
-    return supplier.get();
   }
 
   @Override
@@ -200,5 +110,110 @@ public class SzseBinary implements BinaryCodec {
         + ", checksum="
         + this.checksum
         + "]";
+  }
+
+  public static enum BodyMessageFactory {
+    INSTANCE;
+    private final Map<Integer, Supplier<BinaryCodec>> bodyMap = new HashMap<>();
+
+    static {
+      getInstance().register((int) 1, Logon::new);
+      getInstance().register((int) 2, Logout::new);
+      getInstance().register((int) 3, Heartbeat::new);
+      getInstance().register((int) 4, BusinessReject::new);
+      getInstance().register((int) 5, ReportSynchronization::new);
+      getInstance().register((int) 6, PlatformStateInfo::new);
+      getInstance().register((int) 7, ReportFinished::new);
+      getInstance().register((int) 9, PlatformPartition::new);
+      getInstance().register((int) 10, TradingSessionStatus::new);
+      getInstance().register((int) 100101, NewOrder::new);
+      getInstance().register((int) 100201, NewOrder::new);
+      getInstance().register((int) 100301, NewOrder::new);
+      getInstance().register((int) 100401, NewOrder::new);
+      getInstance().register((int) 100501, NewOrder::new);
+      getInstance().register((int) 100601, NewOrder::new);
+      getInstance().register((int) 100701, NewOrder::new);
+      getInstance().register((int) 101201, NewOrder::new);
+      getInstance().register((int) 101301, NewOrder::new);
+      getInstance().register((int) 101401, NewOrder::new);
+      getInstance().register((int) 101501, NewOrder::new);
+      getInstance().register((int) 101601, NewOrder::new);
+      getInstance().register((int) 101701, NewOrder::new);
+      getInstance().register((int) 101801, NewOrder::new);
+      getInstance().register((int) 101901, NewOrder::new);
+      getInstance().register((int) 102301, NewOrder::new);
+      getInstance().register((int) 102701, NewOrder::new);
+      getInstance().register((int) 102801, NewOrder::new);
+      getInstance().register((int) 102901, NewOrder::new);
+      getInstance().register((int) 103101, NewOrder::new);
+      getInstance().register((int) 106301, NewOrder::new);
+      getInstance().register((int) 103301, NewOrder::new);
+      getInstance().register((int) 103501, NewOrder::new);
+      getInstance().register((int) 103701, NewOrder::new);
+      getInstance().register((int) 104101, NewOrder::new);
+      getInstance().register((int) 104128, NewOrder::new);
+      getInstance().register((int) 104701, NewOrder::new);
+      getInstance().register((int) 200102, ExecutionConfirm::new);
+      getInstance().register((int) 200202, ExecutionConfirm::new);
+      getInstance().register((int) 200302, ExecutionConfirm::new);
+      getInstance().register((int) 200402, ExecutionConfirm::new);
+      getInstance().register((int) 200502, ExecutionConfirm::new);
+      getInstance().register((int) 200602, ExecutionConfirm::new);
+      getInstance().register((int) 200702, ExecutionConfirm::new);
+      getInstance().register((int) 201202, ExecutionConfirm::new);
+      getInstance().register((int) 201302, ExecutionConfirm::new);
+      getInstance().register((int) 201402, ExecutionConfirm::new);
+      getInstance().register((int) 201502, ExecutionConfirm::new);
+      getInstance().register((int) 201602, ExecutionConfirm::new);
+      getInstance().register((int) 201702, ExecutionConfirm::new);
+      getInstance().register((int) 201802, ExecutionConfirm::new);
+      getInstance().register((int) 201902, ExecutionConfirm::new);
+      getInstance().register((int) 202202, ExecutionConfirm::new);
+      getInstance().register((int) 202302, ExecutionConfirm::new);
+      getInstance().register((int) 202702, ExecutionConfirm::new);
+      getInstance().register((int) 202802, ExecutionConfirm::new);
+      getInstance().register((int) 202902, ExecutionConfirm::new);
+      getInstance().register((int) 203102, ExecutionConfirm::new);
+      getInstance().register((int) 206302, ExecutionConfirm::new);
+      getInstance().register((int) 203302, ExecutionConfirm::new);
+      getInstance().register((int) 203502, ExecutionConfirm::new);
+      getInstance().register((int) 203702, ExecutionConfirm::new);
+      getInstance().register((int) 204102, ExecutionConfirm::new);
+      getInstance().register((int) 204129, ExecutionConfirm::new);
+      getInstance().register((int) 204702, ExecutionConfirm::new);
+      getInstance().register((int) 200115, ExecutionReport::new);
+      getInstance().register((int) 200215, ExecutionReport::new);
+      getInstance().register((int) 200315, ExecutionReport::new);
+      getInstance().register((int) 200415, ExecutionReport::new);
+      getInstance().register((int) 200515, ExecutionReport::new);
+      getInstance().register((int) 200615, ExecutionReport::new);
+      getInstance().register((int) 200715, ExecutionReport::new);
+      getInstance().register((int) 206315, ExecutionReport::new);
+      getInstance().register((int) 203715, ExecutionReport::new);
+      getInstance().register((int) 204115, ExecutionReport::new);
+      getInstance().register((int) 204130, ExecutionReport::new);
+      getInstance().register((int) 190007, OrderCancelRequest::new);
+      getInstance().register((int) 290008, CancelReject::new);
+    }
+
+    public BinaryCodec create(Integer msgType) {
+      Supplier<BinaryCodec> supplier = bodyMap.get(msgType);
+      if (null == supplier) {
+        throw new IllegalArgumentException("Unsupported MsgType:" + msgType);
+      }
+      return supplier.get();
+    }
+
+    public void register(Integer msgType, Supplier<BinaryCodec> supplier) {
+      bodyMap.put(msgType, supplier);
+    }
+
+    public boolean remove(Integer msgType) {
+      return null != bodyMap.remove(msgType);
+    }
+
+    public static BodyMessageFactory getInstance() {
+      return INSTANCE;
+    }
   }
 }

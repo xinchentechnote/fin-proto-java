@@ -73,26 +73,9 @@ public class RootPacket implements BinaryCodec {
   public void decode(ByteBuf byteBuf) {
     this.msgType = byteBuf.readShortLE();
     this.payloadLen = byteBuf.readIntLE();
-    this.payload = createPayload(this.msgType);
+    this.payload = PayloadMessageFactory.getInstance().create(this.msgType);
     this.payload.decode(byteBuf);
     this.checksum = byteBuf.readIntLE();
-  }
-
-  private static final Map<Short, Supplier<BinaryCodec>> payloadMap = new HashMap<>();
-
-  static {
-    payloadMap.put((short) 1, BasicPacket::new);
-    payloadMap.put((short) 2, StringPacket::new);
-    payloadMap.put((short) 3, NestedPacket::new);
-    payloadMap.put((short) 4, EmptyPacket::new);
-  }
-
-  private BinaryCodec createPayload(Short msgType) {
-    Supplier<BinaryCodec> supplier = payloadMap.get(msgType);
-    if (null == supplier) {
-      throw new IllegalArgumentException("Unsupported MsgType:" + msgType);
-    }
-    return supplier.get();
   }
 
   @Override
@@ -127,5 +110,37 @@ public class RootPacket implements BinaryCodec {
         + ", checksum="
         + this.checksum
         + "]";
+  }
+
+  public static enum PayloadMessageFactory {
+    INSTANCE;
+    private final Map<Short, Supplier<BinaryCodec>> payloadMap = new HashMap<>();
+
+    static {
+      getInstance().register((short) 1, BasicPacket::new);
+      getInstance().register((short) 2, StringPacket::new);
+      getInstance().register((short) 3, NestedPacket::new);
+      getInstance().register((short) 4, EmptyPacket::new);
+    }
+
+    public BinaryCodec create(Short msgType) {
+      Supplier<BinaryCodec> supplier = payloadMap.get(msgType);
+      if (null == supplier) {
+        throw new IllegalArgumentException("Unsupported MsgType:" + msgType);
+      }
+      return supplier.get();
+    }
+
+    public void register(Short msgType, Supplier<BinaryCodec> supplier) {
+      payloadMap.put(msgType, supplier);
+    }
+
+    public boolean remove(Short msgType) {
+      return null != payloadMap.remove(msgType);
+    }
+
+    public static PayloadMessageFactory getInstance() {
+      return INSTANCE;
+    }
   }
 }

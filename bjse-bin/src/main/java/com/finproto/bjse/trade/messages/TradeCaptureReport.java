@@ -303,26 +303,8 @@ public class TradeCaptureReport implements BinaryCodec {
     this.counterPartyPbuid = readFixedString(byteBuf, 6);
     this.counterPartyAccountId = readFixedString(byteBuf, 10);
     this.counterPartyBranchId = readFixedString(byteBuf, 2);
-    this.applExtend = createApplExtend(this.applId);
+    this.applExtend = ApplExtendMessageFactory.getInstance().create(this.applId);
     this.applExtend.decode(byteBuf);
-  }
-
-  private static final Map<String, Supplier<BinaryCodec>> applExtendMap = new HashMap<>();
-
-  static {
-    applExtendMap.put("031", TradeCaptureReportExtend031::new);
-    applExtendMap.put("051", TradeCaptureReportExtend051::new);
-    applExtendMap.put("060", TradeCaptureReportExtend060::new);
-    applExtendMap.put("061", TradeCaptureReportExtend061::new);
-    applExtendMap.put("062", TradeCaptureReportExtend062::new);
-  }
-
-  private BinaryCodec createApplExtend(String applId) {
-    Supplier<BinaryCodec> supplier = applExtendMap.get(applId);
-    if (null == supplier) {
-      throw new IllegalArgumentException("Unsupported ApplID:" + applId);
-    }
-    return supplier.get();
   }
 
   @Override
@@ -449,5 +431,38 @@ public class TradeCaptureReport implements BinaryCodec {
         + ", applExtend="
         + this.applExtend
         + "]";
+  }
+
+  public static enum ApplExtendMessageFactory {
+    INSTANCE;
+    private final Map<String, Supplier<BinaryCodec>> applExtendMap = new HashMap<>();
+
+    static {
+      getInstance().register("031", TradeCaptureReportExtend031::new);
+      getInstance().register("051", TradeCaptureReportExtend051::new);
+      getInstance().register("060", TradeCaptureReportExtend060::new);
+      getInstance().register("061", TradeCaptureReportExtend061::new);
+      getInstance().register("062", TradeCaptureReportExtend062::new);
+    }
+
+    public BinaryCodec create(String applId) {
+      Supplier<BinaryCodec> supplier = applExtendMap.get(applId);
+      if (null == supplier) {
+        throw new IllegalArgumentException("Unsupported ApplID:" + applId);
+      }
+      return supplier.get();
+    }
+
+    public void register(String applId, Supplier<BinaryCodec> supplier) {
+      applExtendMap.put(applId, supplier);
+    }
+
+    public boolean remove(String applId) {
+      return null != applExtendMap.remove(applId);
+    }
+
+    public static ApplExtendMessageFactory getInstance() {
+      return INSTANCE;
+    }
   }
 }

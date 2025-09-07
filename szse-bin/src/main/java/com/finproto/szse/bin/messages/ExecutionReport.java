@@ -292,40 +292,8 @@ public class ExecutionReport implements BinaryCodec {
     this.side = readFixedString(byteBuf, 1);
     this.accountId = readFixedString(byteBuf, 12);
     this.branchId = readFixedString(byteBuf, 4);
-    this.applExtend = createApplExtend(this.applId);
+    this.applExtend = ApplExtendMessageFactory.getInstance().create(this.applId);
     this.applExtend.decode(byteBuf);
-  }
-
-  private static final Map<String, Supplier<BinaryCodec>> applExtendMap = new HashMap<>();
-
-  static {
-    applExtendMap.put("010", Extend200115::new);
-    applExtendMap.put("020", Extend200215::new);
-    applExtendMap.put("030", Extend200315::new);
-    applExtendMap.put("051", Extend200515::new);
-    applExtendMap.put("052", Extend200515::new);
-    applExtendMap.put("056", Extend200515::new);
-    applExtendMap.put("057", Extend200515::new);
-    applExtendMap.put("060", Extend200615::new);
-    applExtendMap.put("061", Extend200615::new);
-    applExtendMap.put("070", Extend200715::new);
-    applExtendMap.put("630", Extend206315::new);
-    applExtendMap.put("370", Extend203715::new);
-    applExtendMap.put("410", Extend204115::new);
-    applExtendMap.put("412", Extend204115::new);
-    applExtendMap.put("413", Extend204115::new);
-    applExtendMap.put("415", Extend204115::new);
-    applExtendMap.put("416", Extend204115::new);
-    applExtendMap.put("417", Extend204130::new);
-    applExtendMap.put("470", Extend204715::new);
-  }
-
-  private BinaryCodec createApplExtend(String applId) {
-    Supplier<BinaryCodec> supplier = applExtendMap.get(applId);
-    if (null == supplier) {
-      throw new IllegalArgumentException("Unsupported ApplID:" + applId);
-    }
-    return supplier.get();
   }
 
   @Override
@@ -448,5 +416,52 @@ public class ExecutionReport implements BinaryCodec {
         + ", applExtend="
         + this.applExtend
         + "]";
+  }
+
+  public static enum ApplExtendMessageFactory {
+    INSTANCE;
+    private final Map<String, Supplier<BinaryCodec>> applExtendMap = new HashMap<>();
+
+    static {
+      getInstance().register("010", Extend200115::new);
+      getInstance().register("020", Extend200215::new);
+      getInstance().register("030", Extend200315::new);
+      getInstance().register("051", Extend200515::new);
+      getInstance().register("052", Extend200515::new);
+      getInstance().register("056", Extend200515::new);
+      getInstance().register("057", Extend200515::new);
+      getInstance().register("060", Extend200615::new);
+      getInstance().register("061", Extend200615::new);
+      getInstance().register("070", Extend200715::new);
+      getInstance().register("630", Extend206315::new);
+      getInstance().register("370", Extend203715::new);
+      getInstance().register("410", Extend204115::new);
+      getInstance().register("412", Extend204115::new);
+      getInstance().register("413", Extend204115::new);
+      getInstance().register("415", Extend204115::new);
+      getInstance().register("416", Extend204115::new);
+      getInstance().register("417", Extend204130::new);
+      getInstance().register("470", Extend204715::new);
+    }
+
+    public BinaryCodec create(String applId) {
+      Supplier<BinaryCodec> supplier = applExtendMap.get(applId);
+      if (null == supplier) {
+        throw new IllegalArgumentException("Unsupported ApplID:" + applId);
+      }
+      return supplier.get();
+    }
+
+    public void register(String applId, Supplier<BinaryCodec> supplier) {
+      applExtendMap.put(applId, supplier);
+    }
+
+    public boolean remove(String applId) {
+      return null != applExtendMap.remove(applId);
+    }
+
+    public static ApplExtendMessageFactory getInstance() {
+      return INSTANCE;
+    }
   }
 }

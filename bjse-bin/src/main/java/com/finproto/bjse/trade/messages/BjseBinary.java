@@ -66,33 +66,9 @@ public class BjseBinary implements BinaryCodec {
   public void decode(ByteBuf byteBuf) {
     this.msgType = byteBuf.readIntLE();
     this.bodyLength = byteBuf.readIntLE();
-    this.body = createBody(this.msgType);
+    this.body = BodyMessageFactory.getInstance().create(this.msgType);
     this.body.decode(byteBuf);
     this.checksum = byteBuf.readIntLE();
-  }
-
-  private static final Map<Integer, Supplier<BinaryCodec>> bodyMap = new HashMap<>();
-
-  static {
-    bodyMap.put((int) 1, Logon::new);
-    bodyMap.put((int) 2, Logout::new);
-    bodyMap.put((int) 3, Heartbeat::new);
-    bodyMap.put((int) 101000, NewOrder::new);
-    bodyMap.put((int) 102000, OrderCancelRequest::new);
-    bodyMap.put((int) 201000, CancelReject::new);
-    bodyMap.put((int) 202010, ExecutionConfirm::new);
-    bodyMap.put((int) 203010, ExecutionReport::new);
-    bodyMap.put((int) 5, ReportSynchronization::new);
-    bodyMap.put((int) 6, PlatformStateInfo::new);
-    bodyMap.put((int) 7, ReportFinished::new);
-  }
-
-  private BinaryCodec createBody(Integer msgType) {
-    Supplier<BinaryCodec> supplier = bodyMap.get(msgType);
-    if (null == supplier) {
-      throw new IllegalArgumentException("Unsupported MsgType:" + msgType);
-    }
-    return supplier.get();
   }
 
   @Override
@@ -127,5 +103,44 @@ public class BjseBinary implements BinaryCodec {
         + ", checksum="
         + this.checksum
         + "]";
+  }
+
+  public static enum BodyMessageFactory {
+    INSTANCE;
+    private final Map<Integer, Supplier<BinaryCodec>> bodyMap = new HashMap<>();
+
+    static {
+      getInstance().register((int) 1, Logon::new);
+      getInstance().register((int) 2, Logout::new);
+      getInstance().register((int) 3, Heartbeat::new);
+      getInstance().register((int) 101000, NewOrder::new);
+      getInstance().register((int) 102000, OrderCancelRequest::new);
+      getInstance().register((int) 201000, CancelReject::new);
+      getInstance().register((int) 202010, ExecutionConfirm::new);
+      getInstance().register((int) 203010, ExecutionReport::new);
+      getInstance().register((int) 5, ReportSynchronization::new);
+      getInstance().register((int) 6, PlatformStateInfo::new);
+      getInstance().register((int) 7, ReportFinished::new);
+    }
+
+    public BinaryCodec create(Integer msgType) {
+      Supplier<BinaryCodec> supplier = bodyMap.get(msgType);
+      if (null == supplier) {
+        throw new IllegalArgumentException("Unsupported MsgType:" + msgType);
+      }
+      return supplier.get();
+    }
+
+    public void register(Integer msgType, Supplier<BinaryCodec> supplier) {
+      bodyMap.put(msgType, supplier);
+    }
+
+    public boolean remove(Integer msgType) {
+      return null != bodyMap.remove(msgType);
+    }
+
+    public static BodyMessageFactory getInstance() {
+      return INSTANCE;
+    }
   }
 }

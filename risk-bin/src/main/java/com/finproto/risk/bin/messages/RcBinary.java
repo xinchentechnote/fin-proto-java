@@ -67,27 +67,8 @@ public class RcBinary implements BinaryCodec {
     this.msgType = byteBuf.readInt();
     this.version = byteBuf.readInt();
     this.msgBodyLen = byteBuf.readInt();
-    this.body = createBody(this.msgType);
+    this.body = RcBinaryMessageFactory.getInstance().create(this.msgType);
     this.body.decode(byteBuf);
-  }
-
-  private static final Map<Integer, Supplier<BinaryCodec>> bodyMap = new HashMap<>();
-
-  static {
-    bodyMap.put((int) 100101, NewOrder::new);
-    bodyMap.put((int) 200102, OrderConfirm::new);
-    bodyMap.put((int) 200115, ExecutionReport::new);
-    bodyMap.put((int) 190007, OrderCancel::new);
-    bodyMap.put((int) 290008, CancelReject::new);
-    bodyMap.put((int) 800001, RiskResult::new);
-  }
-
-  private BinaryCodec createBody(Integer msgType) {
-    Supplier<BinaryCodec> supplier = bodyMap.get(msgType);
-    if (null == supplier) {
-      throw new IllegalArgumentException("Unsupported MsgType:" + msgType);
-    }
-    return supplier.get();
   }
 
   @Override

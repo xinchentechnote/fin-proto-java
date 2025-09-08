@@ -3,23 +3,29 @@ package com.finproto.codec;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ChecksumServiceContext {
-  private static final Map<String, ChecksumService<?, ?>> CACHE = new HashMap<>();
+public enum ChecksumServiceFactory {
+  INSTANCE;
 
-  static {
+  public static ChecksumServiceFactory getInstance() {
+    return INSTANCE;
+  }
+
+  private final Map<String, ChecksumService<?, ?>> CACHE = new HashMap<>();
+
+  private ChecksumServiceFactory() {
     registry(new Crc16ChecksumService());
     registry(new Crc32ChecksumService());
   }
 
-  public static void removeChecksumService(String name) {
+  public void removeChecksumService(String name) {
     CACHE.remove(name);
   }
 
-  public static void clearAllChecksumService() {
+  public void clearAllChecksumService() {
     CACHE.clear();
   }
 
-  public static boolean registry(ChecksumService<?, ?> checksumService) {
+  public boolean registry(ChecksumService<?, ?> checksumService) {
     if (CACHE.containsKey(checksumService.algorithm())) {
       return false;
     }
@@ -28,7 +34,7 @@ public class ChecksumServiceContext {
   }
 
   @SuppressWarnings("unchecked")
-  public static <T, R> ChecksumService<T, R> getChecksumService(String name) {
+  public <T, R> ChecksumService<T, R> getChecksumService(String name) {
     return (ChecksumService<T, R>) CACHE.get(name);
   }
 }

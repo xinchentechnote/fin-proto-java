@@ -4,7 +4,6 @@ package com.finproto.sample.messages;
 import com.finproto.codec.BinaryCodec;
 import com.finproto.codec.ChecksumService;
 import com.finproto.codec.ChecksumServiceFactory;
-
 import io.netty.buffer.ByteBuf;
 import java.util.HashMap;
 import java.util.Map;

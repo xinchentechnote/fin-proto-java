@@ -3,7 +3,7 @@ package com.finproto.sse.bin.messages;
 
 import com.finproto.codec.BinaryCodec;
 import com.finproto.codec.ChecksumService;
-import com.finproto.codec.ChecksumServiceContext;
+import com.finproto.codec.ChecksumServiceFactory;
 import io.netty.buffer.ByteBuf;
 import java.util.HashMap;
 import java.util.Map;
@@ -72,7 +72,7 @@ public class SseBinary implements BinaryCodec {
     this.msgBodyLen = (int) (bodyEnd - bodyStart);
     byteBuf.setInt(msgBodyLenPos, this.msgBodyLen);
     ChecksumService<ByteBuf, Integer> checksumService =
-        ChecksumServiceContext.getChecksumService("SSE_BIN");
+        ChecksumServiceFactory.getInstance().getChecksumService("SSE_BIN");
     if (checksumService != null) {
       this.checksum = (int) checksumService.calc(byteBuf);
     }

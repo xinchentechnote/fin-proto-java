@@ -10,6 +10,7 @@ public class BjseBinaryTest {
   @Test
   public void testEncodeDecode() {
     BjseBinary original = new BjseBinary();
+    original.setBodyLength(4);
     original.setMsgType((int) 1);
     Logon logon = new Logon();
     logon.setSenderCompId("11111111111111111111");

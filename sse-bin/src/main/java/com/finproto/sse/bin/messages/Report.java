@@ -16,21 +16,19 @@ public class Report implements BinaryCodec {
   private String securityId;
   private String account;
   private byte ownerType;
+  private long orderEntryTime;
+  private long lastPx;
+  private long lastQty;
+  private long grossTradeAmt;
   private String side;
-  private long price;
   private long orderQty;
   private long leavesQty;
-  private long cxlQty;
-  private String ordType;
-  private String timeInForce;
   private String ordStatus;
   private String creditTag;
-  private String origClOrdId;
   private String clearingFirm;
   private String branchId;
-  private int ordRejReason;
+  private String trdCnfmId;
   private String ordCnfmId;
-  private String origOrdCnfmId;
   private int tradeDate;
   private long transactTime;
   private String userInfo;
@@ -115,20 +113,44 @@ public class Report implements BinaryCodec {
     this.ownerType = ownerType;
   }
 
+  public long getOrderEntryTime() {
+    return this.orderEntryTime;
+  }
+
+  public void setOrderEntryTime(long orderEntryTime) {
+    this.orderEntryTime = orderEntryTime;
+  }
+
+  public long getLastPx() {
+    return this.lastPx;
+  }
+
+  public void setLastPx(long lastPx) {
+    this.lastPx = lastPx;
+  }
+
+  public long getLastQty() {
+    return this.lastQty;
+  }
+
+  public void setLastQty(long lastQty) {
+    this.lastQty = lastQty;
+  }
+
+  public long getGrossTradeAmt() {
+    return this.grossTradeAmt;
+  }
+
+  public void setGrossTradeAmt(long grossTradeAmt) {
+    this.grossTradeAmt = grossTradeAmt;
+  }
+
   public String getSide() {
     return this.side;
   }
 
   public void setSide(String side) {
     this.side = side;
-  }
-
-  public long getPrice() {
-    return this.price;
-  }
-
-  public void setPrice(long price) {
-    this.price = price;
   }
 
   public long getOrderQty() {
@@ -147,30 +169,6 @@ public class Report implements BinaryCodec {
     this.leavesQty = leavesQty;
   }
 
-  public long getCxlQty() {
-    return this.cxlQty;
-  }
-
-  public void setCxlQty(long cxlQty) {
-    this.cxlQty = cxlQty;
-  }
-
-  public String getOrdType() {
-    return this.ordType;
-  }
-
-  public void setOrdType(String ordType) {
-    this.ordType = ordType;
-  }
-
-  public String getTimeInForce() {
-    return this.timeInForce;
-  }
-
-  public void setTimeInForce(String timeInForce) {
-    this.timeInForce = timeInForce;
-  }
-
   public String getOrdStatus() {
     return this.ordStatus;
   }
@@ -185,14 +183,6 @@ public class Report implements BinaryCodec {
 
   public void setCreditTag(String creditTag) {
     this.creditTag = creditTag;
-  }
-
-  public String getOrigClOrdId() {
-    return this.origClOrdId;
-  }
-
-  public void setOrigClOrdId(String origClOrdId) {
-    this.origClOrdId = origClOrdId;
   }
 
   public String getClearingFirm() {
@@ -211,12 +201,12 @@ public class Report implements BinaryCodec {
     this.branchId = branchId;
   }
 
-  public int getOrdRejReason() {
-    return this.ordRejReason;
+  public String getTrdCnfmId() {
+    return this.trdCnfmId;
   }
 
-  public void setOrdRejReason(int ordRejReason) {
-    this.ordRejReason = ordRejReason;
+  public void setTrdCnfmId(String trdCnfmId) {
+    this.trdCnfmId = trdCnfmId;
   }
 
   public String getOrdCnfmId() {
@@ -225,14 +215,6 @@ public class Report implements BinaryCodec {
 
   public void setOrdCnfmId(String ordCnfmId) {
     this.ordCnfmId = ordCnfmId;
-  }
-
-  public String getOrigOrdCnfmId() {
-    return this.origOrdCnfmId;
-  }
-
-  public void setOrigOrdCnfmId(String origOrdCnfmId) {
-    this.origOrdCnfmId = origOrdCnfmId;
   }
 
   public int getTradeDate() {
@@ -271,21 +253,19 @@ public class Report implements BinaryCodec {
     writeFixedString(byteBuf, this.securityId, 12);
     writeFixedString(byteBuf, this.account, 13);
     byteBuf.writeByte(this.ownerType);
+    byteBuf.writeLong(this.orderEntryTime);
+    byteBuf.writeLong(this.lastPx);
+    byteBuf.writeLong(this.lastQty);
+    byteBuf.writeLong(this.grossTradeAmt);
     writeFixedString(byteBuf, this.side, 1);
-    byteBuf.writeLong(this.price);
     byteBuf.writeLong(this.orderQty);
     byteBuf.writeLong(this.leavesQty);
-    byteBuf.writeLong(this.cxlQty);
-    writeFixedString(byteBuf, this.ordType, 1);
-    writeFixedString(byteBuf, this.timeInForce, 1);
     writeFixedString(byteBuf, this.ordStatus, 1);
     writeFixedString(byteBuf, this.creditTag, 2);
-    writeFixedString(byteBuf, this.origClOrdId, 10);
     writeFixedString(byteBuf, this.clearingFirm, 8);
     writeFixedString(byteBuf, this.branchId, 8);
-    byteBuf.writeInt(this.ordRejReason);
+    writeFixedString(byteBuf, this.trdCnfmId, 16);
     writeFixedString(byteBuf, this.ordCnfmId, 16);
-    writeFixedString(byteBuf, this.origOrdCnfmId, 16);
     byteBuf.writeInt(this.tradeDate);
     byteBuf.writeLong(this.transactTime);
     writeFixedString(byteBuf, this.userInfo, 32);
@@ -303,21 +283,19 @@ public class Report implements BinaryCodec {
     this.securityId = readFixedString(byteBuf, 12);
     this.account = readFixedString(byteBuf, 13);
     this.ownerType = byteBuf.readByte();
+    this.orderEntryTime = byteBuf.readLong();
+    this.lastPx = byteBuf.readLong();
+    this.lastQty = byteBuf.readLong();
+    this.grossTradeAmt = byteBuf.readLong();
     this.side = readFixedString(byteBuf, 1);
-    this.price = byteBuf.readLong();
     this.orderQty = byteBuf.readLong();
     this.leavesQty = byteBuf.readLong();
-    this.cxlQty = byteBuf.readLong();
-    this.ordType = readFixedString(byteBuf, 1);
-    this.timeInForce = readFixedString(byteBuf, 1);
     this.ordStatus = readFixedString(byteBuf, 1);
     this.creditTag = readFixedString(byteBuf, 2);
-    this.origClOrdId = readFixedString(byteBuf, 10);
     this.clearingFirm = readFixedString(byteBuf, 8);
     this.branchId = readFixedString(byteBuf, 8);
-    this.ordRejReason = byteBuf.readInt();
+    this.trdCnfmId = readFixedString(byteBuf, 16);
     this.ordCnfmId = readFixedString(byteBuf, 16);
-    this.origOrdCnfmId = readFixedString(byteBuf, 16);
     this.tradeDate = byteBuf.readInt();
     this.transactTime = byteBuf.readLong();
     this.userInfo = readFixedString(byteBuf, 32);
@@ -336,21 +314,19 @@ public class Report implements BinaryCodec {
         securityId,
         account,
         ownerType,
+        orderEntryTime,
+        lastPx,
+        lastQty,
+        grossTradeAmt,
         side,
-        price,
         orderQty,
         leavesQty,
-        cxlQty,
-        ordType,
-        timeInForce,
         ordStatus,
         creditTag,
-        origClOrdId,
         clearingFirm,
         branchId,
-        ordRejReason,
+        trdCnfmId,
         ordCnfmId,
-        origOrdCnfmId,
         tradeDate,
         transactTime,
         userInfo);
@@ -375,21 +351,19 @@ public class Report implements BinaryCodec {
         && Objects.equals(securityId, orther_.securityId)
         && Objects.equals(account, orther_.account)
         && Objects.equals(ownerType, orther_.ownerType)
+        && Objects.equals(orderEntryTime, orther_.orderEntryTime)
+        && Objects.equals(lastPx, orther_.lastPx)
+        && Objects.equals(lastQty, orther_.lastQty)
+        && Objects.equals(grossTradeAmt, orther_.grossTradeAmt)
         && Objects.equals(side, orther_.side)
-        && Objects.equals(price, orther_.price)
         && Objects.equals(orderQty, orther_.orderQty)
         && Objects.equals(leavesQty, orther_.leavesQty)
-        && Objects.equals(cxlQty, orther_.cxlQty)
-        && Objects.equals(ordType, orther_.ordType)
-        && Objects.equals(timeInForce, orther_.timeInForce)
         && Objects.equals(ordStatus, orther_.ordStatus)
         && Objects.equals(creditTag, orther_.creditTag)
-        && Objects.equals(origClOrdId, orther_.origClOrdId)
         && Objects.equals(clearingFirm, orther_.clearingFirm)
         && Objects.equals(branchId, orther_.branchId)
-        && Objects.equals(ordRejReason, orther_.ordRejReason)
+        && Objects.equals(trdCnfmId, orther_.trdCnfmId)
         && Objects.equals(ordCnfmId, orther_.ordCnfmId)
-        && Objects.equals(origOrdCnfmId, orther_.origOrdCnfmId)
         && Objects.equals(tradeDate, orther_.tradeDate)
         && Objects.equals(transactTime, orther_.transactTime)
         && Objects.equals(userInfo, orther_.userInfo);
@@ -418,36 +392,32 @@ public class Report implements BinaryCodec {
         + this.account
         + ", ownerType="
         + this.ownerType
+        + ", orderEntryTime="
+        + this.orderEntryTime
+        + ", lastPx="
+        + this.lastPx
+        + ", lastQty="
+        + this.lastQty
+        + ", grossTradeAmt="
+        + this.grossTradeAmt
         + ", side="
         + this.side
-        + ", price="
-        + this.price
         + ", orderQty="
         + this.orderQty
         + ", leavesQty="
         + this.leavesQty
-        + ", cxlQty="
-        + this.cxlQty
-        + ", ordType="
-        + this.ordType
-        + ", timeInForce="
-        + this.timeInForce
         + ", ordStatus="
         + this.ordStatus
         + ", creditTag="
         + this.creditTag
-        + ", origClOrdId="
-        + this.origClOrdId
         + ", clearingFirm="
         + this.clearingFirm
         + ", branchId="
         + this.branchId
-        + ", ordRejReason="
-        + this.ordRejReason
+        + ", trdCnfmId="
+        + this.trdCnfmId
         + ", ordCnfmId="
         + this.ordCnfmId
-        + ", origOrdCnfmId="
-        + this.origOrdCnfmId
         + ", tradeDate="
         + this.tradeDate
         + ", transactTime="

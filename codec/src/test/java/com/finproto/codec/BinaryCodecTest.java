@@ -35,7 +35,7 @@ public class BinaryCodecTest {
     assertEquals(8, buffer.readableBytes());
     byte[] result = new byte[8];
     buffer.readBytes(result);
-    assertArrayEquals(new byte[] {'h', 'e', 'l', 'l', 'o', 0, 0, 0}, result);
+    assertArrayEquals(new byte[] {'h', 'e', 'l', 'l', 'o', ' ', ' ', ' '}, result);
   }
 
   @Test
@@ -48,7 +48,7 @@ public class BinaryCodecTest {
     assertEquals(5, buffer.readableBytes());
     byte[] result = new byte[5];
     buffer.readBytes(result);
-    assertArrayEquals(new byte[] {0, 0, 0, 0, 0}, result);
+    assertArrayEquals(new byte[] {' ', ' ', ' ', ' ', ' '}, result);
   }
 
   @Test
@@ -61,7 +61,7 @@ public class BinaryCodecTest {
     assertEquals(4, buffer.readableBytes());
     byte[] result = new byte[4];
     buffer.readBytes(result);
-    assertArrayEquals(new byte[] {0, 0, 0, 0}, result);
+    assertArrayEquals(new byte[] {' ', ' ', ' ', ' '}, result);
   }
 
   @Test

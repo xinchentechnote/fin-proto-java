@@ -11,15 +11,29 @@ public interface BinaryCodec {
   void decode(ByteBuf byteBuf);
 
   default void writeFixedString(ByteBuf byteBuf, String value, int len) {
+    writeFixedString(byteBuf, value, len, ' ', false);
+  }
+
+  default void writeFixedString(
+      ByteBuf byteBuf, String value, int len, char padding, boolean left) {
     int writedLen = 0;
     if (!StringUtil.isNullOrEmpty(value)) {
       byte[] bytes = value.getBytes(StandardCharsets.UTF_8);
       writedLen = Math.min(bytes.length, len);
+      if (left && writedLen < len) {
+        padding(byteBuf, len - writedLen, padding);
+      }
       byteBuf.writeBytes(bytes, 0, writedLen);
     }
-    while (writedLen < len) {
-      byteBuf.writeByte(0);
-      writedLen++;
+    if (!left && writedLen < len) {
+      padding(byteBuf, len - writedLen, padding);
+    }
+  }
+
+  private void padding(ByteBuf byteBuf, int len, char pading) {
+    while (len > 0) {
+      byteBuf.writeByte(pading);
+      len--;
     }
   }
 

@@ -15,17 +15,17 @@ public interface BinaryCodec {
   }
 
   default void writeFixedString(
-      ByteBuf byteBuf, String value, int len, char padding, boolean left) {
+      ByteBuf byteBuf, String value, int len, char padding, boolean fromLeft) {
     int writedLen = 0;
     if (!StringUtil.isNullOrEmpty(value)) {
       byte[] bytes = value.getBytes(StandardCharsets.UTF_8);
       writedLen = Math.min(bytes.length, len);
-      if (left && writedLen < len) {
+      if (fromLeft && writedLen < len) {
         padding(byteBuf, len - writedLen, padding);
       }
       byteBuf.writeBytes(bytes, 0, writedLen);
     }
-    if (!left && writedLen < len) {
+    if (!fromLeft && writedLen < len) {
       padding(byteBuf, len - writedLen, padding);
     }
   }
@@ -37,7 +37,34 @@ public interface BinaryCodec {
     }
   }
 
+  public static String trimByChar(String s, char ch, boolean fromLeft) {
+    int len = s.length();
+    int start = 0;
+    int end = len;
+
+    if (fromLeft) {
+      while (start < len && s.charAt(start) == ch) {
+        start++;
+      }
+    } else {
+      while (end > 0 && s.charAt(end - 1) == ch) {
+        end--;
+      }
+    }
+
+    return s.substring(start, end);
+  }
+
   default String readFixedString(ByteBuf byteBuf, int len) {
-    return byteBuf.readCharSequence(len, StandardCharsets.UTF_8).toString().trim();
+    return readFixedString(byteBuf, len, ' ', false);
+  }
+
+  default String readFixedString(ByteBuf byteBuf, int len, char trimPadding, boolean fromLeft) {
+    String value = byteBuf.readCharSequence(len, StandardCharsets.UTF_8).toString();
+    if (fromLeft) {
+      return trimByChar(value, trimPadding, true);
+    } else {
+      return trimByChar(value, trimPadding, false);
+    }
   }
 }

@@ -119,8 +119,8 @@ public class StringPacket implements BinaryCodec {
       byteBuf.writeBytes(bytes);
     }
 
-    writeFixedString(byteBuf, this.fieldFixedString1, 1);
-    writeFixedString(byteBuf, this.fieldFixedString10, 10);
+    writeFixedString(byteBuf, this.fieldFixedString1, 1, '0', true);
+    writeFixedString(byteBuf, this.fieldFixedString10, 10, '0', true);
     writeFixedString(byteBuf, this.fieldFixedString10Pad, 10, ' ', true);
     if (null == this.fieldDynamicStringList || this.fieldDynamicStringList.size() == 0) {
       byteBuf.writeShort(0);
@@ -155,7 +155,7 @@ public class StringPacket implements BinaryCodec {
     } else {
       byteBuf.writeShortLE((short) this.fieldFixedString1List.size());
       for (int i = 0; i < this.fieldFixedString1List.size(); i++) {
-        writeFixedString(byteBuf, this.fieldFixedString1List.get(i), 1);
+        writeFixedString(byteBuf, this.fieldFixedString1List.get(i), 1, '0', true);
       }
     }
     if (null == this.fieldFixedString10List || this.fieldFixedString10List.size() == 0) {
@@ -163,7 +163,7 @@ public class StringPacket implements BinaryCodec {
     } else {
       byteBuf.writeShortLE((short) this.fieldFixedString10List.size());
       for (int i = 0; i < this.fieldFixedString10List.size(); i++) {
-        writeFixedString(byteBuf, this.fieldFixedString10List.get(i), 10);
+        writeFixedString(byteBuf, this.fieldFixedString10List.get(i), 10, '0', true);
       }
     }
     if (null == this.fieldFixedString10ListPad || this.fieldFixedString10ListPad.size() == 0) {
@@ -188,8 +188,8 @@ public class StringPacket implements BinaryCodec {
       this.fieldDynamicString1 =
           byteBuf.readCharSequence(fieldDynamicString1Len, StandardCharsets.UTF_8).toString();
     }
-    this.fieldFixedString1 = readFixedString(byteBuf, 1);
-    this.fieldFixedString10 = readFixedString(byteBuf, 10);
+    this.fieldFixedString1 = readFixedString(byteBuf, 1, '0', true);
+    this.fieldFixedString10 = readFixedString(byteBuf, 10, '0', true);
     this.fieldFixedString10Pad = readFixedString(byteBuf, 10, ' ', true);
     short fieldDynamicStringListSize = byteBuf.readShortLE();
     if (fieldDynamicStringListSize > 0) {
@@ -221,14 +221,14 @@ public class StringPacket implements BinaryCodec {
     if (fieldFixedString1ListSize > 0) {
       this.fieldFixedString1List = new ArrayList<>();
       for (int i = 0; i < fieldFixedString1ListSize; i++) {
-        this.fieldFixedString1List.add(readFixedString(byteBuf, 1));
+        this.fieldFixedString1List.add(readFixedString(byteBuf, 1, '0', true));
       }
     }
     short fieldFixedString10ListSize = byteBuf.readShortLE();
     if (fieldFixedString10ListSize > 0) {
       this.fieldFixedString10List = new ArrayList<>();
       for (int i = 0; i < fieldFixedString10ListSize; i++) {
-        this.fieldFixedString10List.add(readFixedString(byteBuf, 10));
+        this.fieldFixedString10List.add(readFixedString(byteBuf, 10, '0', true));
       }
     }
     short fieldFixedString10ListPadSize = byteBuf.readShortLE();

@@ -15,34 +15,34 @@ public interface BinaryCodec {
   }
 
   default void writeFixedString(
-      ByteBuf byteBuf, String value, int len, char padding, boolean fromLeft) {
+      ByteBuf byteBuf, String value, int len, char padChar, boolean padLeft) {
     int writedLen = 0;
     if (!StringUtil.isNullOrEmpty(value)) {
       byte[] bytes = value.getBytes(StandardCharsets.UTF_8);
       writedLen = Math.min(bytes.length, len);
-      if (fromLeft && writedLen < len) {
-        padding(byteBuf, len - writedLen, padding);
+      if (padLeft && writedLen < len) {
+        padChar(byteBuf, len - writedLen, padChar);
       }
       byteBuf.writeBytes(bytes, 0, writedLen);
     }
-    if (!fromLeft && writedLen < len) {
-      padding(byteBuf, len - writedLen, padding);
+    if (!padLeft && writedLen < len) {
+      padChar(byteBuf, len - writedLen, padChar);
     }
   }
 
-  private void padding(ByteBuf byteBuf, int len, char pading) {
+  private void padChar(ByteBuf byteBuf, int len, char padChar) {
     while (len > 0) {
-      byteBuf.writeByte(pading);
+      byteBuf.writeByte(padChar);
       len--;
     }
   }
 
-  public static String trimByChar(String s, char ch, boolean fromLeft) {
+  public static String trimByChar(String s, char ch, boolean padLeft) {
     int len = s.length();
     int start = 0;
     int end = len;
 
-    if (fromLeft) {
+    if (padLeft) {
       while (start < len && s.charAt(start) == ch) {
         start++;
       }
@@ -59,12 +59,12 @@ public interface BinaryCodec {
     return readFixedString(byteBuf, len, ' ', false);
   }
 
-  default String readFixedString(ByteBuf byteBuf, int len, char trimPadding, boolean fromLeft) {
+  default String readFixedString(ByteBuf byteBuf, int len, char trimPadChar, boolean padLeft) {
     String value = byteBuf.readCharSequence(len, StandardCharsets.UTF_8).toString();
-    if (fromLeft) {
-      return trimByChar(value, trimPadding, true);
+    if (padLeft) {
+      return trimByChar(value, trimPadChar, true);
     } else {
-      return trimByChar(value, trimPadding, false);
+      return trimByChar(value, trimPadChar, false);
     }
   }
 }

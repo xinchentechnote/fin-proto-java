@@ -15,11 +15,13 @@ public class StringPacket implements BinaryCodec {
   private String fieldFixedString1;
   private String fieldFixedString10;
   private String fieldFixedString10Pad;
+  private String fieldFixedString10PadWithNullTerminator;
   private List<String> fieldDynamicStringList;
   private List<String> fieldDynamicString1List;
   private List<String> fieldFixedString1List;
   private List<String> fieldFixedString10List;
   private List<String> fieldFixedString10ListPad;
+  private List<String> fieldFixedString10PadWithNullTerminatorList;
 
   public String getFieldDynamicString() {
     return this.fieldDynamicString;
@@ -59,6 +61,15 @@ public class StringPacket implements BinaryCodec {
 
   public void setFieldFixedString10Pad(String fieldFixedString10Pad) {
     this.fieldFixedString10Pad = fieldFixedString10Pad;
+  }
+
+  public String getFieldFixedString10PadWithNullTerminator() {
+    return this.fieldFixedString10PadWithNullTerminator;
+  }
+
+  public void setFieldFixedString10PadWithNullTerminator(
+      String fieldFixedString10PadWithNullTerminator) {
+    this.fieldFixedString10PadWithNullTerminator = fieldFixedString10PadWithNullTerminator;
   }
 
   public List<String> getFieldDynamicStringList() {
@@ -101,6 +112,15 @@ public class StringPacket implements BinaryCodec {
     this.fieldFixedString10ListPad = fieldFixedString10ListPad;
   }
 
+  public List<String> getFieldFixedString10PadWithNullTerminatorList() {
+    return this.fieldFixedString10PadWithNullTerminatorList;
+  }
+
+  public void setFieldFixedString10PadWithNullTerminatorList(
+      List<String> fieldFixedString10PadWithNullTerminatorList) {
+    this.fieldFixedString10PadWithNullTerminatorList = fieldFixedString10PadWithNullTerminatorList;
+  }
+
   @Override
   public void encode(ByteBuf byteBuf) {
     if (StringUtil.isNullOrEmpty(this.fieldDynamicString)) {
@@ -122,6 +142,7 @@ public class StringPacket implements BinaryCodec {
     writeFixedString(byteBuf, this.fieldFixedString1, 1, '0', true);
     writeFixedString(byteBuf, this.fieldFixedString10, 10, '0', true);
     writeFixedString(byteBuf, this.fieldFixedString10Pad, 10, ' ', true);
+    writeFixedString(byteBuf, this.fieldFixedString10PadWithNullTerminator, 10, '\0', false);
     if (null == this.fieldDynamicStringList || this.fieldDynamicStringList.size() == 0) {
       byteBuf.writeShort(0);
     } else {
@@ -174,6 +195,16 @@ public class StringPacket implements BinaryCodec {
         writeFixedString(byteBuf, this.fieldFixedString10ListPad.get(i), 10, '0', false);
       }
     }
+    if (null == this.fieldFixedString10PadWithNullTerminatorList
+        || this.fieldFixedString10PadWithNullTerminatorList.size() == 0) {
+      byteBuf.writeShort(0);
+    } else {
+      byteBuf.writeShortLE((short) this.fieldFixedString10PadWithNullTerminatorList.size());
+      for (int i = 0; i < this.fieldFixedString10PadWithNullTerminatorList.size(); i++) {
+        writeFixedString(
+            byteBuf, this.fieldFixedString10PadWithNullTerminatorList.get(i), 10, '\0', false);
+      }
+    }
   }
 
   @Override
@@ -191,6 +222,7 @@ public class StringPacket implements BinaryCodec {
     this.fieldFixedString1 = readFixedString(byteBuf, 1, '0', true);
     this.fieldFixedString10 = readFixedString(byteBuf, 10, '0', true);
     this.fieldFixedString10Pad = readFixedString(byteBuf, 10, ' ', true);
+    this.fieldFixedString10PadWithNullTerminator = readFixedString(byteBuf, 10, '\0', false);
     short fieldDynamicStringListSize = byteBuf.readShortLE();
     if (fieldDynamicStringListSize > 0) {
       this.fieldDynamicStringList = new ArrayList<>();
@@ -238,6 +270,14 @@ public class StringPacket implements BinaryCodec {
         this.fieldFixedString10ListPad.add(readFixedString(byteBuf, 10, '0', false));
       }
     }
+    short fieldFixedString10PadWithNullTerminatorListSize = byteBuf.readShortLE();
+    if (fieldFixedString10PadWithNullTerminatorListSize > 0) {
+      this.fieldFixedString10PadWithNullTerminatorList = new ArrayList<>();
+      for (int i = 0; i < fieldFixedString10PadWithNullTerminatorListSize; i++) {
+        this.fieldFixedString10PadWithNullTerminatorList.add(
+            readFixedString(byteBuf, 10, '\0', false));
+      }
+    }
   }
 
   @Override
@@ -248,11 +288,13 @@ public class StringPacket implements BinaryCodec {
         fieldFixedString1,
         fieldFixedString10,
         fieldFixedString10Pad,
+        fieldFixedString10PadWithNullTerminator,
         fieldDynamicStringList,
         fieldDynamicString1List,
         fieldFixedString1List,
         fieldFixedString10List,
-        fieldFixedString10ListPad);
+        fieldFixedString10ListPad,
+        fieldFixedString10PadWithNullTerminatorList);
   }
 
   @Override
@@ -269,11 +311,17 @@ public class StringPacket implements BinaryCodec {
         && Objects.equals(fieldFixedString1, orther_.fieldFixedString1)
         && Objects.equals(fieldFixedString10, orther_.fieldFixedString10)
         && Objects.equals(fieldFixedString10Pad, orther_.fieldFixedString10Pad)
+        && Objects.equals(
+            fieldFixedString10PadWithNullTerminator,
+            orther_.fieldFixedString10PadWithNullTerminator)
         && Objects.equals(fieldDynamicStringList, orther_.fieldDynamicStringList)
         && Objects.equals(fieldDynamicString1List, orther_.fieldDynamicString1List)
         && Objects.equals(fieldFixedString1List, orther_.fieldFixedString1List)
         && Objects.equals(fieldFixedString10List, orther_.fieldFixedString10List)
-        && Objects.equals(fieldFixedString10ListPad, orther_.fieldFixedString10ListPad);
+        && Objects.equals(fieldFixedString10ListPad, orther_.fieldFixedString10ListPad)
+        && Objects.equals(
+            fieldFixedString10PadWithNullTerminatorList,
+            orther_.fieldFixedString10PadWithNullTerminatorList);
   }
 
   @Override
@@ -289,6 +337,8 @@ public class StringPacket implements BinaryCodec {
         + this.fieldFixedString10
         + ", fieldFixedString10Pad="
         + this.fieldFixedString10Pad
+        + ", fieldFixedString10PadWithNullTerminator="
+        + this.fieldFixedString10PadWithNullTerminator
         + ", fieldDynamicStringList="
         + this.fieldDynamicStringList
         + ", fieldDynamicString1List="
@@ -299,6 +349,8 @@ public class StringPacket implements BinaryCodec {
         + this.fieldFixedString10List
         + ", fieldFixedString10ListPad="
         + this.fieldFixedString10ListPad
+        + ", fieldFixedString10PadWithNullTerminatorList="
+        + this.fieldFixedString10PadWithNullTerminatorList
         + "]";
   }
 }

@@ -16,11 +16,13 @@ public class StringPacketTest {
     original.setFieldFixedString1("1");
     original.setFieldFixedString10("1111111111");
     original.setFieldFixedString10Pad("1111111111");
+    original.setFieldFixedString10PadWithNullTerminator("1111111111");
     original.setFieldDynamicStringList(Arrays.asList("example"));
     original.setFieldDynamicString1List(Arrays.asList("example"));
     original.setFieldFixedString1List(Arrays.asList("1"));
     original.setFieldFixedString10List(Arrays.asList("1111111111"));
     original.setFieldFixedString10ListPad(Arrays.asList("1111111111"));
+    original.setFieldFixedString10PadWithNullTerminatorList(Arrays.asList("1111111111"));
 
     ByteBuf buffer = Unpooled.buffer();
     original.encode(buffer);

@@ -30,7 +30,7 @@ public interface BinaryCodec {
     }
   }
 
-  private void padChar(ByteBuf byteBuf, int len, char padChar) {
+  public default void padChar(ByteBuf byteBuf, int len, char padChar) {
     while (len > 0) {
       byteBuf.writeByte(padChar);
       len--;

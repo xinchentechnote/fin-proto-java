@@ -9,17 +9,21 @@ allprojects {
     }
 
     repositories {
-        // AliCloud Mirror (for main dependencies)
-        maven { url 'https://maven.aliyun.com/repository/public' }
-        // Huawei Mirror (backup)
-        maven { url 'https://repo.huaweicloud.com/repository/maven' }
-        // Central fallback
+        // 阿里云镜像（主镜像源）
+        maven {
+            url 'https://maven.aliyun.com/repository/public'
+        }
+        // 华为云镜像（备用镜像源）
+        maven {
+            url 'https://repo.huaweicloud.com/repository/maven'
+        }
+        // Maven Central 官方仓库（备用）
         mavenCentral()
     }
 
     dependencies {
         testImplementation 'junit:junit:4.13.2'
-        testImplementation 'org.hamcrest:hamcrest-core:2.2' // Recommended with JUnit 4
+        testImplementation 'org.hamcrest:hamcrest-core:2.2' // 推荐与 JUnit 4 一起使用
     }
 
     tasks.named('test') {
@@ -29,5 +33,76 @@ allprojects {
 
 subprojects {
     version = '1.0.0'
-    group = 'com.finproto'
+    group = 'com.xinchentechnote.finproto'
+
+    // 为每个子项目创建源码和文档 JAR
+    tasks.register('sourcesJar', Jar) {
+        archiveClassifier = 'sources'
+        from sourceSets.main.allSource
+    }
+
+    tasks.register('javadocJar', Jar) {
+        archiveClassifier = 'javadoc'
+        from javadoc.destinationDir
+    }
+
+    // 配置发布到本地 Maven 仓库
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                from components.java
+
+                // 包含源码 JAR
+                artifact tasks.named('sourcesJar').get()
+
+                // 包含 JavaDoc JAR
+                artifact tasks.named('javadocJar').get()
+
+                // 配置 POM 文件（可选，但建议）
+                pom {
+                    name = project.name
+                    description = "Financial Protocol Library - ${project.name}"
+                    url = 'https://github.com/your-org/fin-proto-java'
+
+                    licenses {
+                        license {
+                            name = 'The Apache License, Version 2.0'
+                            url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id = 'xinchentechnote'
+                            name = 'FinProto Development Team'
+                            email = 'xinchentechnote@163.com'
+                        }
+                    }
+
+                    scm {
+                        connection = 'scm:git:git://github.com/xinchentechnote/fin-proto-java.git'
+                        developerConnection = 'scm:git:ssh://github.com/xinchentechnote/fin-proto-java.git'
+                        url = 'https://github.com/xinchentechnote/fin-proto-java'
+                    }
+                }
+            }
+        }
+
+        repositories {
+            // 1. 本地 Maven 仓库（~/.m2/repository）
+            mavenLocal()
+
+            // 2. 可选：你也可以配置发布到阿里云或华为云的私有仓库
+            /*
+            maven {
+                name = 'aliyunRelease'
+                url = 'https://your-repo.aliyun.com/repository/maven-releases/'
+                credentials {
+                    username = project.findProperty('aliyunUsername')
+                    password = project.findProperty('aliyunPassword')
+                }
+            }
+            */
+        }
+    }
 }

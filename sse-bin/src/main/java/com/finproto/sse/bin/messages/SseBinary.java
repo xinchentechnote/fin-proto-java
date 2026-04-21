@@ -129,22 +129,59 @@ public class SseBinary implements BinaryCodec {
   public static enum BodyMessageFactory {
     INSTANCE;
     private final Map<Integer, Supplier<BinaryCodec>> bodyMap = new HashMap<>();
+    private final Map<Class<?>, Integer> reverseMap = new HashMap<>();
+
+    public enum MessageType {
+      HEARTBEAT(33),
+      LOGON(40),
+      LOGOUT(41),
+      NEW_ORDER_SINGLE(58),
+      ORDER_CANCEL(61),
+      CONFIRM(32),
+      CANCEL_REJECT(59),
+      REPORT(103),
+      ORDER_REJECT(204),
+      PLATFORM_STATE(209),
+      EXEC_RPT_INFO(208),
+      EXEC_RPT_SYNC(206),
+      EXEC_RPT_SYNC_RSP(207),
+      EXEC_RPT_END_OF_STREAM(210);
+
+      private final int value;
+
+      MessageType(int value) {
+        this.value = value;
+      }
+
+      public int getValue() {
+        return value;
+      }
+
+      public static MessageType fromValue(int value) {
+        for (MessageType type : values()) {
+          if (type.value == value) {
+            return type;
+          }
+        }
+        throw new IllegalArgumentException("Unknown MessageType value: " + value);
+      }
+    }
 
     static {
-      getInstance().register((int) 33, Heartbeat::new);
-      getInstance().register((int) 40, Logon::new);
-      getInstance().register((int) 41, Logout::new);
-      getInstance().register((int) 58, NewOrderSingle::new);
-      getInstance().register((int) 61, OrderCancel::new);
-      getInstance().register((int) 32, Confirm::new);
-      getInstance().register((int) 59, CancelReject::new);
-      getInstance().register((int) 103, Report::new);
-      getInstance().register((int) 204, OrderReject::new);
-      getInstance().register((int) 209, PlatformState::new);
-      getInstance().register((int) 208, ExecRptInfo::new);
-      getInstance().register((int) 206, ExecRptSync::new);
-      getInstance().register((int) 207, ExecRptSyncRsp::new);
-      getInstance().register((int) 210, ExecRptEndOfStream::new);
+      getInstance().register(Heartbeat.class, MessageType.HEARTBEAT.getValue(), Heartbeat::new);
+      getInstance().register(Logon.class, MessageType.LOGON.getValue(), Logon::new);
+      getInstance().register(Logout.class, MessageType.LOGOUT.getValue(), Logout::new);
+      getInstance().register(NewOrderSingle.class, MessageType.NEW_ORDER_SINGLE.getValue(), NewOrderSingle::new);
+      getInstance().register(OrderCancel.class, MessageType.ORDER_CANCEL.getValue(), OrderCancel::new);
+      getInstance().register(Confirm.class, MessageType.CONFIRM.getValue(), Confirm::new);
+      getInstance().register(CancelReject.class, MessageType.CANCEL_REJECT.getValue(), CancelReject::new);
+      getInstance().register(Report.class, MessageType.REPORT.getValue(), Report::new);
+      getInstance().register(OrderReject.class, MessageType.ORDER_REJECT.getValue(), OrderReject::new);
+      getInstance().register(PlatformState.class, MessageType.PLATFORM_STATE.getValue(), PlatformState::new);
+      getInstance().register(ExecRptInfo.class, MessageType.EXEC_RPT_INFO.getValue(), ExecRptInfo::new);
+      getInstance().register(ExecRptSync.class, MessageType.EXEC_RPT_SYNC.getValue(), ExecRptSync::new);
+      getInstance().register(ExecRptSyncRsp.class, MessageType.EXEC_RPT_SYNC_RSP.getValue(), ExecRptSyncRsp::new);
+      getInstance().register(ExecRptEndOfStream.class, MessageType.EXEC_RPT_END_OF_STREAM.getValue(), ExecRptEndOfStream::new);
     }
 
     public BinaryCodec create(Integer msgType) {
@@ -155,12 +192,17 @@ public class SseBinary implements BinaryCodec {
       return supplier.get();
     }
 
-    public void register(Integer msgType, Supplier<BinaryCodec> supplier) {
+    public void register(Class<?> clazz, Integer msgType, Supplier<BinaryCodec> supplier) {
       bodyMap.put(msgType, supplier);
+      reverseMap.put(clazz, msgType);
     }
 
     public boolean remove(Integer msgType) {
       return null != bodyMap.remove(msgType);
+    }
+
+    public Integer getMsgType(Class<?> clazz) {
+      return reverseMap.get(clazz);
     }
 
     public static BodyMessageFactory getInstance() {

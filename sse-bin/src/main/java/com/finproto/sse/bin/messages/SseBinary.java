@@ -171,17 +171,31 @@ public class SseBinary implements BinaryCodec {
       getInstance().register(Heartbeat.class, MessageType.HEARTBEAT.getValue(), Heartbeat::new);
       getInstance().register(Logon.class, MessageType.LOGON.getValue(), Logon::new);
       getInstance().register(Logout.class, MessageType.LOGOUT.getValue(), Logout::new);
-      getInstance().register(NewOrderSingle.class, MessageType.NEW_ORDER_SINGLE.getValue(), NewOrderSingle::new);
-      getInstance().register(OrderCancel.class, MessageType.ORDER_CANCEL.getValue(), OrderCancel::new);
+      getInstance()
+          .register(
+              NewOrderSingle.class, MessageType.NEW_ORDER_SINGLE.getValue(), NewOrderSingle::new);
+      getInstance()
+          .register(OrderCancel.class, MessageType.ORDER_CANCEL.getValue(), OrderCancel::new);
       getInstance().register(Confirm.class, MessageType.CONFIRM.getValue(), Confirm::new);
-      getInstance().register(CancelReject.class, MessageType.CANCEL_REJECT.getValue(), CancelReject::new);
+      getInstance()
+          .register(CancelReject.class, MessageType.CANCEL_REJECT.getValue(), CancelReject::new);
       getInstance().register(Report.class, MessageType.REPORT.getValue(), Report::new);
-      getInstance().register(OrderReject.class, MessageType.ORDER_REJECT.getValue(), OrderReject::new);
-      getInstance().register(PlatformState.class, MessageType.PLATFORM_STATE.getValue(), PlatformState::new);
-      getInstance().register(ExecRptInfo.class, MessageType.EXEC_RPT_INFO.getValue(), ExecRptInfo::new);
-      getInstance().register(ExecRptSync.class, MessageType.EXEC_RPT_SYNC.getValue(), ExecRptSync::new);
-      getInstance().register(ExecRptSyncRsp.class, MessageType.EXEC_RPT_SYNC_RSP.getValue(), ExecRptSyncRsp::new);
-      getInstance().register(ExecRptEndOfStream.class, MessageType.EXEC_RPT_END_OF_STREAM.getValue(), ExecRptEndOfStream::new);
+      getInstance()
+          .register(OrderReject.class, MessageType.ORDER_REJECT.getValue(), OrderReject::new);
+      getInstance()
+          .register(PlatformState.class, MessageType.PLATFORM_STATE.getValue(), PlatformState::new);
+      getInstance()
+          .register(ExecRptInfo.class, MessageType.EXEC_RPT_INFO.getValue(), ExecRptInfo::new);
+      getInstance()
+          .register(ExecRptSync.class, MessageType.EXEC_RPT_SYNC.getValue(), ExecRptSync::new);
+      getInstance()
+          .register(
+              ExecRptSyncRsp.class, MessageType.EXEC_RPT_SYNC_RSP.getValue(), ExecRptSyncRsp::new);
+      getInstance()
+          .register(
+              ExecRptEndOfStream.class,
+              MessageType.EXEC_RPT_END_OF_STREAM.getValue(),
+              ExecRptEndOfStream::new);
     }
 
     public BinaryCodec create(Integer msgType) {
